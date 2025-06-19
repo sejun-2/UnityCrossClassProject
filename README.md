@@ -43,8 +43,13 @@
 - main에는 실제로 플레이 가능한 버전만 PullRequest를 진행하도록 한다.
 - PullReaquest가 통과되어 merge 되었을 때에는 모든 팀원이 알 수 있도록 공지한다.
 ## 개인 브랜치 생성
+- 브랜치 생성 전에 Notion에서 이번에 진행할 Task를 작업 중으로 옮기고, 제목의 자신의 이름을 기재한다.
 - 개발을 위한 개인 브랜치는 develop 브랜치에서 생성한다.
 - 브랜치 생성시 "이름이니셜3글자_작업내용"과 같은 형식으로 이름을 작성한다.
+- 작업을 완료하였다면, develop 브랜치에 PullRequest를 한다.
+- PullRequest가 성공적으로 마무리되었다면, 개인 작업을 진행한 브랜치를 삭제한다.
+- Notion에서 이번에 진행한 Task를 완료로 옮긴다.
+- 처음으로 돌아가서 과정을 반복한다.
 ## 개인 개발 커밋 규칙
 - 커밋 시 최대한 1기능마다 커밋을 진행하도록 한다.
   - 예) [Feat] PlayerController 스크립트추가, [Feat] SimpleEnemy 프리팹 추가, [Feat] PlayerMovement에 Jump 기능 추가
