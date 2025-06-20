@@ -41,7 +41,7 @@
 - main과 develop 브랜치에는 PullRequest를 선행해야 한다.
 - PullRequest의 경우 팀장의 승인을 받아서 진행한다.
 - main에는 실제로 플레이 가능한 버전만 PullRequest를 진행하도록 한다.
-- PullReaquest가 통과되어 merge 되었을 때에는 모든 팀원이 알 수 있도록 공지한다.
+- PullRequest가 통과되어 merge 되었을 때에는 모든 팀원이 알 수 있도록 공지한다.
 ## 개인 브랜치 생성
 - 브랜치 생성 전에 Notion에서 이번에 진행할 Task를 작업 중으로 옮기고, 제목의 자신의 이름을 기재한다.
 - 개발을 위한 개인 브랜치는 develop 브랜치에서 생성한다.
