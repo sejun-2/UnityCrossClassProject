@@ -9,18 +9,20 @@ public class Slot
     public Item CurItem => _curItem;
     private int _itemCount;
     public int ItemCount => _itemCount;
+    private int _maxItemCount = 4;
     public bool IsEmpty => _curItem == null;
 
     public event Action<Item> OnItemChanged;
 
-    public Slot()
+    public Slot(int maxItemCount = 4)
     {
-        
+        _maxItemCount = maxItemCount;
     }
 
     // 테스트용 코드
     public Slot(Item item)
     {
+        _maxItemCount = 4;
         Debug.Log(AddItem(item));
     }
 
@@ -29,7 +31,7 @@ public class Slot
         _curItem.Use();
 
 
-        // TODO : 아이템 타입에 따른 변동사항 적용
+        // TODO : 아이템 Type에 따른 변동사항 적용
         _itemCount--;
         if(_itemCount <= 0)
         {
@@ -41,12 +43,15 @@ public class Slot
     {
         if(IsEmpty || _curItem.Name == item.Name)
         {
+            // TODO : Type에 따른 최대 개수 제한 설정
+            if (_itemCount >= _maxItemCount) return false;
+
             if (IsEmpty)
             {
                 _curItem = item;
+                OnItemChanged?.Invoke(_curItem);
             }
 
-            OnItemChanged?.Invoke(_curItem);
             _itemCount++;
             return true;
         }
