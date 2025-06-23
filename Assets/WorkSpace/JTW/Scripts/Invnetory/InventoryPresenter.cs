@@ -28,7 +28,11 @@ public class InventoryPresenter : BaseUI
         }
 
         MoveInventory();
-        GetUseInput();
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            UseItem();
+        }
     }
 
     public void SetInventory(Inventory inven)
@@ -61,12 +65,9 @@ public class InventoryPresenter : BaseUI
         ChangeSelectSlot(_selectedSlotPos);
     }
 
-    private void GetUseInput()
+    private void UseItem()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            _selectedSlot.UseItem();
-        }
+        _selectedSlot.UseItem();
     }
 
     private void MoveInventory()

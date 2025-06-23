@@ -21,7 +21,7 @@ public class Slot
     // 테스트용 코드
     public Slot(Item item)
     {
-        Debug.Log(GetItem(item));
+        Debug.Log(AddItem(item));
     }
 
     public void UseItem()
@@ -37,7 +37,7 @@ public class Slot
         }
     }
 
-    public bool GetItem(Item item)
+    public bool AddItem(Item item)
     {
         if(IsEmpty || _curItem.Name == item.Name)
         {

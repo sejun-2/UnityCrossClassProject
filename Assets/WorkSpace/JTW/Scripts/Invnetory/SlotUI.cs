@@ -18,7 +18,7 @@ public class SlotUI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            _slot.GetItem(_testItem);
+            _slot.AddItem(_testItem);
             UpdateSlotData();
         }
     }
