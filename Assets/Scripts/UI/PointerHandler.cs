@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class PointerHandler : MonoBehaviour
-    , IPointerEnterHandler
-    , IPointerExitHandler
+    , IPointerEnterHandler  // 모바일에서는 OnPointerEnter가 호출되지 않음
+    , IPointerExitHandler   // 모바일에서는 OnPointerExit가 호출되지 않음
     , IPointerUpHandler
     , IPointerDownHandler
     , IPointerClickHandler

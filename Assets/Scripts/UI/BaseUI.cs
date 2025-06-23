@@ -1,24 +1,24 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class BaseUI : MonoBehaviour
 {
-    private Dictionary<string, GameObject> gameObjectDic;   // °ÔÀÓ¿ÀºêÁ§Æ®¸¦ ÀÌ¸§À¸·Î Ã£±â À§ÇÑ µñ¼Å³Ê¸®
-    private Dictionary<string, Component> componentDic; // ÄÄÆ÷³ÍÆ®¸¦ ÀÌ¸§°ú Å¸ÀÔÀ¸·Î Ã£±â À§ÇÑ µñ¼Å³Ê¸®
+    private Dictionary<string, GameObject> gameObjectDic;   // ê²Œì„ì˜¤ë¸Œì íŠ¸ë¥¼ ì´ë¦„ìœ¼ë¡œ ì°¾ê¸° ìœ„í•œ ë”•ì…”ë„ˆë¦¬
+    private Dictionary<string, Component> componentDic; // ì»´í¬ë„ŒíŠ¸ë¥¼ ì´ë¦„ê³¼ íƒ€ì…ìœ¼ë¡œ ì°¾ê¸° ìœ„í•œ ë”•ì…”ë„ˆë¦¬
 
     private void Awake()
     {
-        // BaseUI¸¦ ±âÁØÀ¸·Î ¸ğµç ÀÚ½Ä °ÔÀÓ¿ÀºêÁ§Æ®ÀÇ ÄÄÆ÷³ÍÆ®¸¦ °¡Á®¿À±â (ºñÈ°¼ºÈ­µÈ ¿ÀºêÁ§Æ®µµ Æ÷ÇÔ)
-        RectTransform[] transforms = GetComponentsInChildren<RectTransform>(true);  // GetComponents ¸ğµç ÄÄÆ÷³ÍÆ®¸¦ °¡Á®¿ÀÁö¸¸, RectTransformÀº UI ¿ä¼Ò¿¡¸¸ ÇØ´çµÇ¹Ç·Î ¼º´ÉÀ» À§ÇØ RectTransformÀ» »ç¿ëÇÕ´Ï´Ù.
-        gameObjectDic = new Dictionary<string, GameObject>(transforms.Length * 4);  // transforms.Length * 4´Â ÃÊ±â ¿ë·®À» ¼³Á¤ÇÏ¿© ¼º´ÉÀ» Çâ»ó½ÃÅµ´Ï´Ù.
-        foreach (RectTransform child in transforms) // RectTransformÀ» »ç¿ëÇÏ¿© UI ¿ä¼ÒÀÇ ÀÚ½Ä ¿ÀºêÁ§Æ®¸¦ °¡Á®¿É´Ï´Ù.
+        // BaseUIë¥¼ ê¸°ì¤€ìœ¼ë¡œ ëª¨ë“  ìì‹ ê²Œì„ì˜¤ë¸Œì íŠ¸ì˜ ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì ¸ì˜¤ê¸° (ë¹„í™œì„±í™”ëœ ì˜¤ë¸Œì íŠ¸ë„ í¬í•¨)
+        RectTransform[] transforms = GetComponentsInChildren<RectTransform>(true);  // GetComponents ëª¨ë“  ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì ¸ì˜¤ì§€ë§Œ, RectTransformì€ UI ìš”ì†Œì—ë§Œ í•´ë‹¹ë˜ë¯€ë¡œ ì„±ëŠ¥ì„ ìœ„í•´ RectTransformì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
+        gameObjectDic = new Dictionary<string, GameObject>(transforms.Length * 4);  // transforms.Length * 4ëŠ” ì´ˆê¸° ìš©ëŸ‰ì„ ì„¤ì •í•˜ì—¬ ì„±ëŠ¥ì„ í–¥ìƒì‹œí‚µë‹ˆë‹¤.
+        foreach (RectTransform child in transforms) // RectTransformì„ ì‚¬ìš©í•˜ì—¬ UI ìš”ì†Œì˜ ìì‹ ì˜¤ë¸Œì íŠ¸ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤.
         {
-            gameObjectDic.TryAdd(child.gameObject.name, child.gameObject);  // °ÔÀÓ¿ÀºêÁ§Æ®ÀÇ ÀÌ¸§À» Å°·Î »ç¿ëÇÏ¿© µñ¼Å³Ê¸®¿¡ Ãß°¡ÇÕ´Ï´Ù.
+            gameObjectDic.TryAdd(child.gameObject.name, child.gameObject);  // ê²Œì„ì˜¤ë¸Œì íŠ¸ì˜ ì´ë¦„ì„ í‚¤ë¡œ ì‚¬ìš©í•˜ì—¬ ë”•ì…”ë„ˆë¦¬ì— ì¶”ê°€í•©ë‹ˆë‹¤.
         }
 
-        Component[] components = GetComponentsInChildren<Component>(true);  // GetComponentsInChildren ¸ğµç ÄÄÆ÷³ÍÆ®¸¦ °¡Á®¿ÀÁö¸¸, ºñÈ°¼ºÈ­µÈ ¿ÀºêÁ§Æ®µµ Æ÷ÇÔµÇ¹Ç·Î true¸¦ »ç¿ëÇÕ´Ï´Ù.
+        Component[] components = GetComponentsInChildren<Component>(true);  // GetComponentsInChildren ëª¨ë“  ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì ¸ì˜¤ì§€ë§Œ, ë¹„í™œì„±í™”ëœ ì˜¤ë¸Œì íŠ¸ë„ í¬í•¨ë˜ë¯€ë¡œ trueë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
         componentDic = new Dictionary<string, Component>(components.Length * 4);
         foreach (Component child in components)
         {
@@ -26,33 +26,33 @@ public class BaseUI : MonoBehaviour
         }
     }
 
-    public GameObject GetUI(in string name) // °ÔÀÓ¿ÀºêÁ§Æ®¸¦ ÀÌ¸§À¸·Î °¡Á®¿À´Â ¸Ş¼­µå
+    public GameObject GetUI(in string name) // ê²Œì„ì˜¤ë¸Œì íŠ¸ë¥¼ ì´ë¦„ìœ¼ë¡œ ê°€ì ¸ì˜¤ëŠ” ë©”ì„œë“œ
     {
-        gameObjectDic.TryGetValue(name, out GameObject gameObject); // µñ¼Å³Ê¸®¿¡¼­ ÀÌ¸§À¸·Î °ÔÀÓ¿ÀºêÁ§Æ®¸¦ Ã£½À´Ï´Ù.
-        return gameObject;  // °ÔÀÓ¿ÀºêÁ§Æ®°¡ Á¸ÀçÇÏ¸é ¹İÈ¯ÇÏ°í, ¾øÀ¸¸é nullÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+        gameObjectDic.TryGetValue(name, out GameObject gameObject); // ë”•ì…”ë„ˆë¦¬ì—ì„œ ì´ë¦„ìœ¼ë¡œ ê²Œì„ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ìŠµë‹ˆë‹¤.
+        return gameObject;  // ê²Œì„ì˜¤ë¸Œì íŠ¸ê°€ ì¡´ì¬í•˜ë©´ ë°˜í™˜í•˜ê³ , ì—†ìœ¼ë©´ nullì„ ë°˜í™˜í•©ë‹ˆë‹¤.
     }
 
-    public T GetUI<T>(in string name) where T : Component   // Á¦³×¸¯ ¸Ş¼­µå·Î, Æ¯Á¤ Å¸ÀÔÀÇ ÄÄÆ÷³ÍÆ®¸¦ ÀÌ¸§À¸·Î °¡Á®¿À´Â ¸Ş¼­µå
+    public T GetUI<T>(in string name) where T : Component   // ì œë„¤ë¦­ ë©”ì„œë“œë¡œ, íŠ¹ì • íƒ€ì…ì˜ ì»´í¬ë„ŒíŠ¸ë¥¼ ì´ë¦„ìœ¼ë¡œ ê°€ì ¸ì˜¤ëŠ” ë©”ì„œë“œ
     {
-        componentDic.TryGetValue($"{name}_{typeof(T).Name}", out Component component);  // µñ¼Å³Ê¸®¿¡¼­ ÀÌ¸§°ú Å¸ÀÔÀ» Á¶ÇÕÇÏ¿© ÄÄÆ÷³ÍÆ®¸¦ Ã£½À´Ï´Ù.
+        componentDic.TryGetValue($"{name}_{typeof(T).Name}", out Component component);  // ë”•ì…”ë„ˆë¦¬ì—ì„œ ì´ë¦„ê³¼ íƒ€ì…ì„ ì¡°í•©í•˜ì—¬ ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ìŠµë‹ˆë‹¤.
         if (component != null)
-            return component as T;  // Ä³½ÃµÈ ÄÄÆ÷³ÍÆ®°¡ Á¸ÀçÇÏ¸é ÇØ´ç Å¸ÀÔÀ¸·Î Ä³½ºÆÃÇÏ¿© ¹İÈ¯ÇÕ´Ï´Ù.
+            return component as T;  // ìºì‹œëœ ì»´í¬ë„ŒíŠ¸ê°€ ì¡´ì¬í•˜ë©´ í•´ë‹¹ íƒ€ì…ìœ¼ë¡œ ìºìŠ¤íŒ…í•˜ì—¬ ë°˜í™˜í•©ë‹ˆë‹¤.
 
-        GameObject gameObject = GetUI(name);    // °ÔÀÓ¿ÀºêÁ§Æ®¸¦ ÀÌ¸§À¸·Î °¡Á®¿É´Ï´Ù.
+        GameObject gameObject = GetUI(name);    // ê²Œì„ì˜¤ë¸Œì íŠ¸ë¥¼ ì´ë¦„ìœ¼ë¡œ ê°€ì ¸ì˜µë‹ˆë‹¤.
         if (gameObject == null)
             return null;
 
-        component = gameObject.GetComponent<T>();   // °ÔÀÓ¿ÀºêÁ§Æ®¿¡¼­ ÇØ´ç Å¸ÀÔÀÇ ÄÄÆ÷³ÍÆ®¸¦ °¡Á®¿É´Ï´Ù.
+        component = gameObject.GetComponent<T>();   // ê²Œì„ì˜¤ë¸Œì íŠ¸ì—ì„œ í•´ë‹¹ íƒ€ì…ì˜ ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤.
         if (component == null)
             return null;
 
-        componentDic.TryAdd($"{name}_{typeof(T).Name}", component); // µñ¼Å³Ê¸®¿¡ »õ·Î Ã£Àº ÄÄÆ÷³ÍÆ®¸¦ Ãß°¡ÇÕ´Ï´Ù.
+        componentDic.TryAdd($"{name}_{typeof(T).Name}", component); // ë”•ì…”ë„ˆë¦¬ì— ìƒˆë¡œ ì°¾ì€ ì»´í¬ë„ŒíŠ¸ë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
         return component as T;
     }
 
-    public PointerHandler GetEvent(in string name)  // PointerHandler ÄÄÆ÷³ÍÆ®¸¦ ÀÌ¸§À¸·Î °¡Á®¿À´Â ¸Ş¼­µå
+    public PointerHandler GetEvent(in string name)  // PointerHandler ì»´í¬ë„ŒíŠ¸ë¥¼ ì´ë¦„ìœ¼ë¡œ ê°€ì ¸ì˜¤ëŠ” ë©”ì„œë“œ
     {
-        GameObject gameObject = GetUI(name);    // °ÔÀÓ¿ÀºêÁ§Æ®¸¦ ÀÌ¸§À¸·Î °¡Á®¿É´Ï´Ù.
-        return gameObject.GetOrAddComponent<PointerHandler>();  // °ÔÀÓ¿ÀºêÁ§Æ®¿¡¼­ PointerHandler ÄÄÆ÷³ÍÆ®¸¦ °¡Á®¿À°Å³ª Ãß°¡ÇÕ´Ï´Ù.
+        GameObject gameObject = GetUI(name);    // ê²Œì„ì˜¤ë¸Œì íŠ¸ë¥¼ ì´ë¦„ìœ¼ë¡œ ê°€ì ¸ì˜µë‹ˆë‹¤.
+        return gameObject.GetOrAddComponent<PointerHandler>();  // ê²Œì„ì˜¤ë¸Œì íŠ¸ì—ì„œ PointerHandler ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì ¸ì˜¤ê±°ë‚˜ ì¶”ê°€í•©ë‹ˆë‹¤.
     }
 }
