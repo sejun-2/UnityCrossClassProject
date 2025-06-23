@@ -29,4 +29,17 @@ public class Inventory
             }
         }
     }
+
+    public bool AddItem(Item item)
+    {
+        foreach(Slot slot in SlotList)
+        {
+            if (slot.AddItem(item))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
