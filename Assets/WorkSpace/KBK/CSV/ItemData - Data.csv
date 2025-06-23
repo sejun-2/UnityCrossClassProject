@@ -1,0 +1,4 @@
+name,type,iconName,description,hpRestore,hungerRestore,thirstRestore,addAttackpower,addDefensepower,durability,cureStatusEffect,ItemCount
+Pill,Potion,,,10,,,,,,,
+Rice,Food,,,,10,,,,,,
+Water,Drink,,,,,10,,,,,
