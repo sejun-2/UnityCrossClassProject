@@ -19,6 +19,7 @@ public class Inventory
         }
     }
 
+    // 테스트용 코드
     public Inventory(Item item)
     {
         for (int i = 0; i < _slotList.GetLength(0); i++)
