@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class InventoryPresenter : BaseUI
@@ -99,6 +100,25 @@ public class InventoryPresenter : BaseUI
             _selectedSlotPos = movePos;
             _selectedSlot = _slotUIs[(int)movePos.y, (int)movePos.x];
             _selectedSlot.Selected();
+
+            Item item = _selectedSlot.GetItemData();
+
+            UpdateItemInfo(item);
+            _selectedSlot.Slot.OnItemChanged += UpdateItemInfo;
+        }
+    }
+
+    private void UpdateItemInfo(Item item)
+    {
+        if (item != null)
+        {
+            GetUI<TextMeshProUGUI>("ItemNameText").text = item.Name;
+            GetUI<TextMeshProUGUI>("ItemDescriptionText").text = item.Description;
+        }
+        else
+        {
+            GetUI<TextMeshProUGUI>("ItemNameText").text = "";
+            GetUI<TextMeshProUGUI>("ItemDescriptionText").text = "";
         }
     }
 

@@ -1,6 +1,6 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
 using UnityEngine;
 
 public class Slot
@@ -10,6 +10,8 @@ public class Slot
     private int _itemCount;
     public int ItemCount => _itemCount;
     public bool IsEmpty => _curItem == null;
+
+    public event Action<Item> OnItemChanged;
 
     public Slot()
     {
@@ -37,14 +39,14 @@ public class Slot
 
     public bool GetItem(Item item)
     {
-        if (IsEmpty)
+        if(IsEmpty || _curItem.Name == item.Name)
         {
-            _curItem = item;
-            _itemCount++;
-            return true;
-        }
-        else if(_curItem.Name == item.Name)
-        {
+            if (IsEmpty)
+            {
+                _curItem = item;
+            }
+
+            OnItemChanged?.Invoke(_curItem);
             _itemCount++;
             return true;
         }
@@ -56,5 +58,6 @@ public class Slot
     {
         _curItem = null;
         _itemCount = 0;
+        OnItemChanged?.Invoke(_curItem);
     }
 }

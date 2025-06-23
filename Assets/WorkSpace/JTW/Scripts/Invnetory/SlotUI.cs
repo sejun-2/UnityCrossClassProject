@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class SlotUI : MonoBehaviour
@@ -13,6 +12,7 @@ public class SlotUI : MonoBehaviour
 
     [SerializeField] private Item _testItem;
     private Slot _slot = new();
+    public Slot Slot => _slot;
 
     private void Update()
     {
@@ -60,6 +60,12 @@ public class SlotUI : MonoBehaviour
         _slot.UseItem();
         UpdateSlotData();
     }
+
+    public Item GetItemData()
+    {
+        return _slot.CurItem;
+    }
+
     public void Selected()
     {
         _outLine.gameObject.SetActive(true);
