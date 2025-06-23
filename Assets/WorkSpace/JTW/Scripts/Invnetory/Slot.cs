@@ -25,6 +25,9 @@ public class Slot
     public void UseItem()
     {
         _curItem.Use();
+
+
+        // TODO : 아이템 타입에 따른 변동사항 적용
         _itemCount--;
         if(_itemCount <= 0)
         {

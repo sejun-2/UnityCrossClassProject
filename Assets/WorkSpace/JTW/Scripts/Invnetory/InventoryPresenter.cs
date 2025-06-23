@@ -18,6 +18,7 @@ public class InventoryPresenter : BaseUI
 
     private void Update()
     {
+        // 테스트용 코드
         if (Input.GetKeyDown(KeyCode.I))
         {
             SetInventory(new Inventory(_testItemPrefab));
