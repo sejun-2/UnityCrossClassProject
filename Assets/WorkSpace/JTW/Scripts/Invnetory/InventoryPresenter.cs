@@ -5,9 +5,11 @@ using UnityEngine;
 public class InventoryPresenter : BaseUI
 {
     [SerializeField] private Item _testItemPrefab;
-
     [SerializeField] private GameObject _slotUIPrefab;
-    [SerializeField] private Inventory _inven = new();
+
+    [SerializeField] private Transform _itemSlots;
+
+    private Inventory _inven = new();
 
     private Vector2 _slotStartPos = new Vector2(30, -30);
     private float _interval = 120f;
@@ -41,7 +43,7 @@ public class InventoryPresenter : BaseUI
         {
             for(int j = 0; j < _inven.SlotList.GetLength(1); j++)
             {
-                RectTransform rt = Instantiate(_slotUIPrefab, transform).GetComponent<RectTransform>();
+                RectTransform rt = Instantiate(_slotUIPrefab, _itemSlots).GetComponent<RectTransform>();
                 rt.anchoredPosition = _slotStartPos;
                 SlotUI slot = rt.GetComponent<SlotUI>();
                 slot.SetSlot(_inven.SlotList[i, j]);
@@ -55,7 +57,7 @@ public class InventoryPresenter : BaseUI
 
         _selectedSlot = _slotUIs[0, 0];
         _selectedSlotPos = Vector2.zero;
-        _selectedSlot.Selected();
+        ChangeSelectSlot(_selectedSlotPos);
     }
 
     private void GetUseInput()
