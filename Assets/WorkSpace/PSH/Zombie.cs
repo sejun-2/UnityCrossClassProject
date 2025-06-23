@@ -86,6 +86,14 @@ public class Zombie : MonoBehaviour
 
     void Chase()
     {
+        if (Mathf.Abs(player.position.y - transform.position.y) > 2f)
+        {
+            _currentState = State.Patrol;
+            _targetPos = _spawnPos + _direction * _patrolRange;
+            Debug.Log("플레이어가 Y축 벗어남. 추격 중단");
+            return;
+        }
+
         if (Vector3.Distance(transform.position, player.position) <= _attackRange)//공격 사정거리 안에 들어오면 공격
         {
             _currentState = State.Attack;
@@ -140,8 +148,16 @@ public class Zombie : MonoBehaviour
     void MoveTowards(Vector3 target, float speed)
     {
         Vector3 moveDir = (target - transform.position).normalized;
-        transform.position += moveDir * speed * Time.deltaTime;
-        transform.forward = moveDir;
+
+        // 수평 방향만 추출 (Y값 0)
+        Vector3 flatDir = new Vector3(moveDir.x, 0f, moveDir.z).normalized;
+
+        // 위치 이동 (y축은 그대로)
+        transform.position += flatDir * speed * Time.deltaTime;
+
+        // 수평 방향으로만 회전
+        if (flatDir != Vector3.zero)
+            transform.forward = flatDir;
     }
 
     bool IsObstacleAhead()//앞에 장애물이 있는지 레이로 확인
