@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SlotUI : MonoBehaviour
 {
     [SerializeField] private Image _itemImage;
+    public Image ItemImage => _itemImage;
     [SerializeField] private TextMeshProUGUI _countText;
     [SerializeField] private Image _outLine;
 
