@@ -20,7 +20,7 @@ public class PlayerInteraction : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, rayLength, interactableLayer, QueryTriggerInteraction.Collide))
             {
-                IInteractable target = hit.collider.GetComponent<IInteractable>();
+                IInteractable target = hit.collider.GetComponentInParent<IInteractable>();
                 if (target != null)
                 {
                     target.Interact();
