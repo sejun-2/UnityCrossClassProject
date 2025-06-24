@@ -19,18 +19,6 @@ public class Inventory
         }
     }
 
-    // 테스트용 코드
-    public Inventory(Item item)
-    {
-        for (int i = 0; i < _slotList.GetLength(0); i++)
-        {
-            for (int j = 0; j < _slotList.GetLength(1); j++)
-            {
-                _slotList[i, j] = new Slot(item);
-            }
-        }
-    }
-
     public bool AddItem(Item item)
     {
         foreach(Slot slot in SlotList)

@@ -14,23 +14,14 @@ public class SlotUI : MonoBehaviour
     private Slot _slot = new();
     public Slot Slot => _slot;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            _slot.AddItem(_testItem);
-            UpdateSlotData();
-        }
-    }
-
-
     public void SetSlot(Slot slot)
     {
         _slot = slot;
+        slot.OnItemChanged += UpdateSlotData;
         UpdateSlotData();
     }
 
-    public void UpdateSlotData()
+    public void UpdateSlotData(Item item = null)
     {
         if(_slot.CurItem == null)
         {
@@ -50,7 +41,6 @@ public class SlotUI : MonoBehaviour
         {
             _countText.text = "";
         }
-        
     }
 
     public void UseItem()
@@ -58,7 +48,6 @@ public class SlotUI : MonoBehaviour
         if (_slot.IsEmpty) return;
 
         _slot.UseItem();
-        UpdateSlotData();
     }
 
     public Item GetItemData()
