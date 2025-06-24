@@ -8,7 +8,7 @@ public class Door : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        _door = GetComponent<GameObject>();
+        _door = gameObject;
     }
     public void Interact()
     {
