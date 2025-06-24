@@ -8,8 +8,6 @@ public class InventoryPresenter : BaseUI
     [SerializeField] private Item _testItemPrefab;
     [SerializeField] private GameObject _slotUIPrefab;
 
-    [SerializeField] private Transform _itemSlots;
-
     private Inventory _inven = new();
 
     private Vector2 _slotStartPos = new Vector2(30, -30);
@@ -21,12 +19,6 @@ public class InventoryPresenter : BaseUI
 
     private void Update()
     {
-        // 테스트용 코드
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            SetInventory(new Inventory(_testItemPrefab));
-        }
-
         MoveInventory();
 
         if (Input.GetKeyDown(KeyCode.Z))
@@ -43,12 +35,14 @@ public class InventoryPresenter : BaseUI
 
     public void InitInventory()
     {
+        Transform itemSlots = GetUI("ItemSlots").transform;
+
         _slotUIs = new SlotUI[_inven.SlotList.GetLength(0), _inven.SlotList.GetLength(1)];
         for(int i = 0; i < _inven.SlotList.GetLength(0); i++)
         {
             for(int j = 0; j < _inven.SlotList.GetLength(1); j++)
             {
-                RectTransform rt = Instantiate(_slotUIPrefab, _itemSlots).GetComponent<RectTransform>();
+                RectTransform rt = Instantiate(_slotUIPrefab, itemSlots).GetComponent<RectTransform>();
                 rt.anchoredPosition = _slotStartPos;
                 SlotUI slot = rt.GetComponent<SlotUI>();
                 slot.SetSlot(_inven.SlotList[i, j]);
