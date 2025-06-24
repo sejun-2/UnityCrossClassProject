@@ -19,20 +19,13 @@ public class Slot
         _maxItemCount = maxItemCount;
     }
 
-    // 테스트용 코드
-    public Slot(Item item)
-    {
-        _maxItemCount = 4;
-        Debug.Log(AddItem(item));
-    }
-
     public void UseItem()
     {
         _curItem.Use();
 
-
         // TODO : 아이템 Type에 따른 변동사항 적용
         _itemCount--;
+        OnItemChanged?.Invoke(_curItem);
         if(_itemCount <= 0)
         {
             RemoveItem();
