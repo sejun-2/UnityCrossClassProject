@@ -42,10 +42,10 @@ public class Slot
             if (IsEmpty)
             {
                 _curItem = item;
-                OnItemChanged?.Invoke(_curItem);
             }
 
             _itemCount++;
+            OnItemChanged?.Invoke(_curItem);
             return true;
         }
 
