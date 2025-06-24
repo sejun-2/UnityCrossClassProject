@@ -4,28 +4,38 @@ public class Door : MonoBehaviour, IInteractable
 {
     private bool _isOpen = false;
 
-    GameObject _door;
+    private Transform _meshTransform;
+    private Vector3 _closedPos;
+    [SerializeField] private float openDistance = 6f;
 
     private void Start()
     {
-        _door = gameObject;
+        // 자식 중 "Mesh" 이름의 오브젝트 찾기
+        _meshTransform = transform.Find("Mesh");
+
+        if (_meshTransform == null)
+        {
+            Debug.Log("Mesh 오브젝트를 찾을 수 없습니다.");
+            return;
+        }
+
+        _closedPos = _meshTransform.localPosition;
     }
     public void Interact()
     {
+        if (_meshTransform == null) return;
+
         _isOpen = !_isOpen;
 
         if (_isOpen)
         {
             Debug.Log("문 열림");
-            //문 열릴 때 실행할 코드
-            _door.SetActive(false);
-
+            _meshTransform.localPosition = _closedPos + new Vector3(0f, 0f, openDistance);
         }
         else
         {
             Debug.Log("문 닫힘");
-            //문 닫힐 때 실행할 코드
-            _door.SetActive(true);
+            _meshTransform.localPosition = _closedPos;
         }
     }
 }
