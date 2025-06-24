@@ -9,19 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e3ad3d10e6b0eb469b5f87f445128d9, type: 3}
-  m_Name: Pill
+  m_Script: {fileID: 11500000, guid: 0df4989c4f2e26441b192be2d359cc97, type: 3}
+  m_Name: Rice
   m_EditorClassIdentifier: 
-  itemName: Pill
-  itemType: 9
+  itemName: Rice
+  itemType: 0
   sprite: {fileID: 0}
   Description: 
-  hpRestore: 10
+  hpRestore: 0
   hungerRestore: 0
-  thirstRestore: 0
-  addAttackPower: 0
-  addDefensePower: 0
-  durability: 0
-  freshness: 0
-  cureStatusEffect: 0
+  thirstRestore: 20
   itemCount: 0
+  cureStatusEffect: 0
+  freshness: 0
