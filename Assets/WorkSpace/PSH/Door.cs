@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Door : MonoBehaviour, IInteractable
 {
+    [SerializeField] private GameObject linkedDarkness;
+
     private bool _isOpen = false;
 
     private Transform _meshTransform;
@@ -31,11 +33,17 @@ public class Door : MonoBehaviour, IInteractable
         {
             Debug.Log("¹® ¿­¸²");
             _meshTransform.localPosition = _closedPos + new Vector3(0f, 0f, openDistance);
+
+            if (linkedDarkness != null)
+                linkedDarkness.SetActive(false);
         }
         else
         {
             Debug.Log("¹® ´ÝÈû");
             _meshTransform.localPosition = _closedPos;
+
+            if (linkedDarkness != null)
+                linkedDarkness.SetActive(true);
         }
     }
 }
