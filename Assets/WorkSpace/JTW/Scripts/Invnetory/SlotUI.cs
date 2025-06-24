@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SlotUI : MonoBehaviour
 {
     [SerializeField] private Image _itemImage;
+    public Image ItemImage => _itemImage;
     [SerializeField] private TextMeshProUGUI _countText;
     [SerializeField] private Image _outLine;
 
@@ -25,14 +26,14 @@ public class SlotUI : MonoBehaviour
     {
         if(_slot.CurItem == null)
         {
-            _itemImage.sprite = null;
+            if(_itemImage != null)
+                _itemImage.sprite = null;
         }
         else
         {
             _itemImage.sprite = _slot.CurItem.Sprite;
         }
 
-            
         if(_slot.ItemCount > 1)
         {
             _countText.text = _slot.ItemCount.ToString();

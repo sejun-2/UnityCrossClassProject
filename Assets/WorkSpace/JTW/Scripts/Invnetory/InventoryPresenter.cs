@@ -5,17 +5,11 @@ using UnityEngine;
 
 public class InventoryPresenter : BaseUI
 {
-    [SerializeField] private Item _testItemPrefab;
+    [SerializeField] private GameObject _itemSlotsPrefab;
     [SerializeField] private GameObject _slotUIPrefab;
 
     private Inventory _inven = new();
-
-    private Vector2 _slotStartPos = new Vector2(30, -30);
-    private float _interval = 120f;
-
-    private SlotUI[,] _slotUIs;
-    private SlotUI _selectedSlot;
-    private Vector2 _selectedSlotPos;
+    private ItemSlotUIs _itemSlotUIs;
 
     private void Update()
     {
@@ -35,76 +29,84 @@ public class InventoryPresenter : BaseUI
 
     public void InitInventory()
     {
-        Transform itemSlots = GetUI("ItemSlots").transform;
+        Transform itemSlotsPanel = GetUI("ItemSlotsPanel").transform;
 
-        _slotUIs = new SlotUI[_inven.SlotList.GetLength(0), _inven.SlotList.GetLength(1)];
-        for(int i = 0; i < _inven.SlotList.GetLength(0); i++)
+        _itemSlotUIs = Instantiate(_itemSlotsPrefab, itemSlotsPanel).GetComponent<ItemSlotUIs>();
+
+        foreach(Slot slot in _inven.SlotList)
         {
-            for(int j = 0; j < _inven.SlotList.GetLength(1); j++)
-            {
-                RectTransform rt = Instantiate(_slotUIPrefab, itemSlots).GetComponent<RectTransform>();
-                rt.anchoredPosition = _slotStartPos;
-                SlotUI slot = rt.GetComponent<SlotUI>();
-                slot.SetSlot(_inven.SlotList[i, j]);
-                _slotUIs[i, j] = slot;
-
-                _slotStartPos.x += _interval;
-            }
-            _slotStartPos.y -= _interval;
-            _slotStartPos.x = 30;
+            _itemSlotUIs.AddSlotUI(slot);
         }
 
-        _selectedSlot = _slotUIs[0, 0];
-        _selectedSlotPos = Vector2.zero;
-        ChangeSelectSlot(_selectedSlotPos);
+        _itemSlotUIs.SelectSlotUI(0);
+        UpdateItemInfo();
+    }
+
+    public bool AddItem(Item item)
+    {
+        // °ãÄ¥¼ö ÀÖ´Â°Ô ÀÖ´ÂÁö ¸ÕÀú Å½»ö
+        foreach(Slot slot in _inven.SlotList)
+        {
+            if(!slot.IsEmpty && slot.CurItem.Name == item.Name)
+            {
+                if (slot.AddItem(item))
+                {
+                    UpdateItemInfo();
+                    return true;
+                }
+            }
+        }
+
+        foreach (Slot slot in _inven.SlotList)
+        {
+            if (slot.AddItem(item))
+            {
+                UpdateItemInfo();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void UseItem()
     {
-        _selectedSlot.UseItem();
+        _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].UseItem();
     }
 
     private void MoveInventory()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            ChangeSelectSlot(_selectedSlotPos + Vector2.right);
+            ChangeSelectSlot(Vector2.right);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            ChangeSelectSlot(_selectedSlotPos + Vector2.left);
+            ChangeSelectSlot(Vector2.left);
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            ChangeSelectSlot(_selectedSlotPos - Vector2.up);
+            ChangeSelectSlot(Vector2.up);
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            ChangeSelectSlot(_selectedSlotPos - Vector2.down);
+            ChangeSelectSlot(Vector2.down);
         }
     }
 
     private void ChangeSelectSlot(Vector2 movePos)
     {
-        if (CanMove(movePos))
-        {
-            _selectedSlot.Unselected();
-            _selectedSlotPos = movePos;
-            _selectedSlot = _slotUIs[(int)movePos.y, (int)movePos.x];
-            _selectedSlot.Selected();
-
-            Item item = _selectedSlot.GetItemData();
-
-            UpdateItemInfo(item);
-            _selectedSlot.Slot.OnItemChanged += UpdateItemInfo;
-        }
+        _itemSlotUIs.MoveSelectSlot(movePos);
+        UpdateItemInfo();
     }
 
-    private void UpdateItemInfo(Item item)
+    private void UpdateItemInfo()
     {
+        Item item = _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].GetItemData();
+
         if (item != null)
         {
             GetUI<TextMeshProUGUI>("ItemNameText").text = item.Name;
@@ -115,16 +117,5 @@ public class InventoryPresenter : BaseUI
             GetUI<TextMeshProUGUI>("ItemNameText").text = "";
             GetUI<TextMeshProUGUI>("ItemDescriptionText").text = "";
         }
-    }
-
-    private bool CanMove(Vector2 pos)
-    {
-        if (pos.x < 0 || pos.y < 0 ||
-            pos.x >= _slotUIs.GetLength(0) || pos.y >= _slotUIs.GetLength(1))
-        {
-            return false;
-        }
-
-        return true;
     }
 }
