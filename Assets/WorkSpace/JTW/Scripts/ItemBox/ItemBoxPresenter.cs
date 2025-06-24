@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 
 public class ItemBoxPresenter : BaseUI
@@ -13,6 +13,8 @@ public class ItemBoxPresenter : BaseUI
 
     private GameObject _categoryPanel;
     private GameObject _itemSlotsPanel;
+    private TextMeshProUGUI _itemNameText;
+    private TextMeshProUGUI _itemDescriptionText;
 
     private List<ItemSlotUIs> _itemSlotsList = new List<ItemSlotUIs>();
     private List<List<Item.ItemType>> _acceptTypeLists = new List<List<Item.ItemType>>();
@@ -32,6 +34,8 @@ public class ItemBoxPresenter : BaseUI
 
         _itemSlotsPanel = GetUI("ItemSlotsPanel");
         _categoryPanel = GetUI("CategoryPanel");
+        _itemNameText = GetUI<TextMeshProUGUI>("ItemNameText");
+        _itemDescriptionText = GetUI<TextMeshProUGUI>("ItemDescriptionText");
     }
 
     private void Update()
@@ -78,6 +82,9 @@ public class ItemBoxPresenter : BaseUI
                 if (slots.AddSlotUI(slot)) break;
             }
         }
+
+        _itemNameText.text = "";
+        _itemDescriptionText.text = "";
     }
 
     public void AddItem(Item item)
@@ -126,9 +133,17 @@ public class ItemBoxPresenter : BaseUI
         {
             GoCategory();
         }
-        Destroy(_selectedItemSlots.gameObject);
+        else
+        {
+            Item item = itemSlotUIs.SlotUIs[itemSlotUIs.SelectedSlotIndex].Slot.CurItem;
+            _itemNameText.text = item.Name;
+            _itemDescriptionText.text = item.Description;
+        }
+            Destroy(_selectedItemSlots.gameObject);
         _itemSlotsList[_categotySlots.SelectedSlotIndex] = itemSlotUIs;
         _selectedItemSlots = itemSlotUIs;
+
+        
     }
 
     private void MoveInventory()
@@ -161,6 +176,9 @@ public class ItemBoxPresenter : BaseUI
         if (_isInItemSlots)
         {
             _selectedItemSlots.MoveSelectSlot(direction);
+            Item item = _selectedItemSlots.SlotUIs[_selectedItemSlots.SelectedSlotIndex].Slot.CurItem;
+            _itemNameText.text = item.Name;
+            _itemDescriptionText.text = item.Description;
         }
         else
         {
@@ -207,6 +225,10 @@ public class ItemBoxPresenter : BaseUI
         _selectedItemSlots = _itemSlotsList[_categotySlots.SelectedSlotIndex];
         _selectedItemSlots.gameObject.SetActive(true);
         _selectedItemSlots.Activate();
+
+        Item item = _selectedItemSlots.SlotUIs[_selectedItemSlots.SelectedSlotIndex].Slot.CurItem;
+        _itemNameText.text = item.Name;
+        _itemDescriptionText.text = item.Description;
     }
 
     private void GoCategory()
@@ -215,5 +237,8 @@ public class ItemBoxPresenter : BaseUI
 
         _isInItemSlots = false;
         _categotySlots.Activate();
+
+        _itemNameText.text = "";
+        _itemDescriptionText.text = "";
     }
 }
