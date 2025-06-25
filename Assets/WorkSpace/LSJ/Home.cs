@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,8 +6,9 @@ public class Home : BaseUI
 {
     private void Start()
     {
-        // ½ºÅä¸® ¹öÆ°ÀÌ Å¬¸¯µÇ¾úÀ» ¶§ È£ÃâµÇ´Â ¸Ş¼­µå
-        GetEvent("Story").Click += data => Manager.UI.PopUp.ShowPopUp<TextPopUp>(); // ½ºÅä¸® ÆË¾÷À» Ç¥½ÃÇÕ´Ï´Ù.
+        Debug.Log(GetEvent("Story")); // Home UIê°€ ì‹œì‘ë  ë•Œ ë¡œê·¸ë¥¼ ì¶œë ¥í•©ë‹ˆë‹¤.
+        // ìŠ¤í† ë¦¬ ë²„íŠ¼ì´ í´ë¦­ë˜ì—ˆì„ ë•Œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
+        GetEvent("Story").Click += data => Manager.UI.PopUp.ShowPopUp<TextPopUp>(); // ìŠ¤í† ë¦¬ íŒì—…ì„ í‘œì‹œí•©ë‹ˆë‹¤.
     }
     
 }

@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 1014186915}
   - component: {fileID: 1014186914}
   m_Layer: 5
-  m_Name: Stroy
+  m_Name: Story
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -352,8 +352,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 914.2554, y: 263.21973}
-  m_SizeDelta: {x: 222.6429, y: 67.1217}
+  m_AnchoredPosition: {x: 855, y: 187}
+  m_SizeDelta: {x: 222.6429, y: 176.4129}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1014186914
 MonoBehaviour:
