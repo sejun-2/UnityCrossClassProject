@@ -18,7 +18,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private TextMeshProUGUI _itemDescriptionText;
 
     private List<ItemSlotUIs> _itemSlotsList = new List<ItemSlotUIs>();
-    private List<List<Item.ItemType>> _acceptTypeLists = new List<List<Item.ItemType>>();
+    private List<List<ItemType>> _acceptTypeLists = new List<List<ItemType>>();
     private ItemSlotUIs _selectedItemSlots;
 
     private ItemSlotUIs _categotySlots;
@@ -75,10 +75,10 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private void InitData()
     {
         // 각 카테고리에 들어갈 아이템 타입 선정
-        _acceptTypeLists.Add(new List<Item.ItemType>() { Item.ItemType.Food, Item.ItemType.Drink, Item.ItemType.Medicine });
-        _acceptTypeLists.Add(new List<Item.ItemType>() { Item.ItemType.Weapon, Item.ItemType.Armor });
-        _acceptTypeLists.Add(new List<Item.ItemType>() { Item.ItemType.Material });
-        _acceptTypeLists.Add(new List<Item.ItemType>() { Item.ItemType.Key });
+        _acceptTypeLists.Add(new List<ItemType>() { ItemType.Consumable});
+        _acceptTypeLists.Add(new List<ItemType>() { ItemType.Weapon, ItemType.Armor });
+        _acceptTypeLists.Add(new List<ItemType>() { ItemType.Material });
+        _acceptTypeLists.Add(new List<ItemType>() { ItemType.Tool });
 
         _itemSlotsPanel = GetUI("ItemSlotsPanel");
         _categoryPanel = GetUI("CategoryPanel");
@@ -185,8 +185,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
         else
         {
             Item item = itemSlotUIs.SlotUIs[itemSlotUIs.SelectedSlotIndex].Slot.CurItem;
-            _itemNameText.text = item.Name;
-            _itemDescriptionText.text = item.Description;
+            _itemNameText.text = item.itemName;
+            _itemDescriptionText.text = item.description;
         }
             Destroy(_selectedItemSlots.gameObject);
         _itemSlotsList[_categotySlots.SelectedSlotIndex] = itemSlotUIs;
@@ -228,8 +228,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
         {
             _selectedItemSlots.MoveSelectSlot(direction);
             Item item = _selectedItemSlots.SlotUIs[_selectedItemSlots.SelectedSlotIndex].Slot.CurItem;
-            _itemNameText.text = item.Name;
-            _itemDescriptionText.text = item.Description;
+            _itemNameText.text = item.itemName;
+            _itemDescriptionText.text = item.description;
         }
         else
         {
@@ -292,8 +292,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
         _selectedItemSlots.Activate();
 
         Item item = _selectedItemSlots.SlotUIs[_selectedItemSlots.SelectedSlotIndex].Slot.CurItem;
-        _itemNameText.text = item.Name;
-        _itemDescriptionText.text = item.Description;
+        _itemNameText.text = item.itemName;
+        _itemDescriptionText.text = item.description;
     }
 
     private void GoCategory()

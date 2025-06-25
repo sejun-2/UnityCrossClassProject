@@ -23,7 +23,7 @@ public class Inventory
     {
         foreach(Slot slot in _slotList)
         {
-            if(slot.CurItem != null && item.Name == slot.CurItem.Name)
+            if(slot.CurItem != null && item.itemName == slot.CurItem.itemName)
             {
                 if (slot.AddItem(item)) return;
             }

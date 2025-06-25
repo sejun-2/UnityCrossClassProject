@@ -18,11 +18,11 @@ public class ItemSlotUIs : MonoBehaviour
     private int _selectedSlotIndex;
     public int SelectedSlotIndex => _selectedSlotIndex;
 
-    public List<Item.ItemType> AcceptTypeList = new List<Item.ItemType>();
+    public List<ItemType> AcceptTypeList = new List<ItemType>();
 
     public bool AddSlotUI(Slot slot = null, int maxItemCount = 4)
     {
-        if(AcceptTypeList.Count != 0 && !AcceptTypeList.Contains(slot.CurItem.Type)) return false;
+        if(AcceptTypeList.Count != 0 && !AcceptTypeList.Contains(slot.CurItem.itemType)) return false;
 
         RectTransform rt = Instantiate(_slotUIPrefab, transform).GetComponent<RectTransform>();
         rt.anchoredPosition = _slotUIPosition;

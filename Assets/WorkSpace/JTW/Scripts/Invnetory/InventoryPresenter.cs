@@ -78,7 +78,7 @@ public class InventoryPresenter : BaseUI, IInventory
         // °ãÄ¥¼ö ÀÖ´Â°Ô ÀÖ´ÂÁö ¸ÕÀú Å½»ö
         foreach(Slot slot in _inven.SlotList)
         {
-            if(!slot.IsEmpty && slot.CurItem.Name == item.Name)
+            if(!slot.IsEmpty && slot.CurItem.itemName == item.itemName)
             {
                 if (slot.AddItem(item))
                 {
@@ -162,8 +162,8 @@ public class InventoryPresenter : BaseUI, IInventory
 
         if (item != null)
         {
-            GetUI<TextMeshProUGUI>("ItemNameText").text = item.Name;
-            GetUI<TextMeshProUGUI>("ItemDescriptionText").text = item.Description;
+            GetUI<TextMeshProUGUI>("ItemNameText").text = item.itemName;
+            GetUI<TextMeshProUGUI>("ItemDescriptionText").text = item.description;
         }
         else
         {

@@ -6,7 +6,7 @@ public class AddItemToInventory : MonoBehaviour
 {
     [SerializeField] private InventoryPresenter _pre;
     [SerializeField] private Item _testItem;
-    [SerializeField] private Item.ItemType _type;
+    [SerializeField] private ItemType _type;
     [SerializeField] private string _name;
 
     private void Update()
@@ -19,8 +19,8 @@ public class AddItemToInventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             Item item = Instantiate(_testItem);
-            item.Type = _type;
-            item.Name = _name;
+            item.itemType = _type;
+            item.itemName = _name;
             _pre.AddItem(item);
         }
     }
