@@ -48,14 +48,14 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         prefab = Resources.Load<GameObject>($"UI/Inventory/Inventory");
         InventoryPresenter farmingInven = Instantiate(prefab, transform).GetComponent<InventoryPresenter>();
 
-        playerInven.SetInventory(Manager.Game.Inven, farmingInven, Vector2.right);
-        farmingInven.SetInventory(farmingInvenData, playerInven, Vector2.left);
+        playerInven.SetInventory(Manager.Game.Inven, farmingInven, Vector2.left);
+        farmingInven.SetInventory(farmingInvenData, playerInven, Vector2.right);
 
         RectTransform invenRt = playerInven.GetComponent<RectTransform>();
         RectTransform itemBoxRt = farmingInven.GetComponent<RectTransform>();
 
-        invenRt.anchoredPosition = new Vector2(-400, 0);
-        itemBoxRt.anchoredPosition = new Vector2(400, 0);
+        invenRt.anchoredPosition = new Vector2(400, 0);
+        itemBoxRt.anchoredPosition = new Vector2(-400, 0);
 
         playerInven.Deactivate();
     }

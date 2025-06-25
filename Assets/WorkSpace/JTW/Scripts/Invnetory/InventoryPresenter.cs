@@ -16,14 +16,34 @@ public class InventoryPresenter : BaseUI, IInventory
     private bool IsTrade => _inventoryForTrade != null;
 
     private bool _isActivate = true;
+    private bool _isSwitchActivate = false;
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Destroy(this.gameObject);
+        }
+
+        if (!_isActivate) return;
+
         MoveInventory();
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
             UseItem();
+        }
+
+        
+    }
+
+    private void LateUpdate()
+    {
+        // Update 한 사이클이 끝나고 변환해야 MoveInventory가 정상 작동
+        if (_isSwitchActivate)
+        {
+            _isActivate = !_isActivate;
+            _isSwitchActivate = false;
         }
     }
 
@@ -154,13 +174,13 @@ public class InventoryPresenter : BaseUI, IInventory
 
     public void Activate()
     {
-        _isActivate = true;
+        _isSwitchActivate = true;
         _itemSlotUIs.Activate();
     }
 
     public void Deactivate()
     {
-        _isActivate = false;
+        _isSwitchActivate = true;
         _itemSlotUIs.Deactivate();
     }
 }
