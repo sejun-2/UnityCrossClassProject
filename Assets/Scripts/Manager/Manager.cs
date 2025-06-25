@@ -5,12 +5,14 @@ using UnityEngine;
 public static class Manager
 {
     public static PlayerManager Player => PlayerManager.GetInstance();
-    public static UIManager UI => UIManager.GetInstance();  // 싱글톤 UI 매니저 인스턴스를 반환합니다.
+    public static UIManager UI => UIManager.GetInstance();
+    public static GameManager Game => GameManager.GetInstance();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initailize()
     {
         PlayerManager.CreateInstance();
         UIManager.CreateInstance();
+        GameManager.CreateInstance();
     }
 }
