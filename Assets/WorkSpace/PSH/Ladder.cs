@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ladder : MonoBehaviour, IInteractable
+public class Ladder : MonoBehaviour
 {
-    public Transform climbStartPoint;  // 사다리 타기 시작 위치
-    public Transform climbEndPoint;    // 사다리 끝
-    public Test player;
-    public void Interact()
-    {
-        player.Climb();
-    }
+    public Transform topPoint;
+    public Transform bottomPoint;
+
+    public Transform GetTop() => topPoint;
+    public Transform GetBottom() => bottomPoint;
+    public float ExitRange => .6f;
+
 }
