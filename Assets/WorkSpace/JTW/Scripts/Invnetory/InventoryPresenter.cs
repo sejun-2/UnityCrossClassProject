@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class InventoryPresenter : BaseUI
+public class InventoryPresenter : BaseUI, IInventory
 {
     [SerializeField] private GameObject _itemSlotsPrefab;
     [SerializeField] private GameObject _slotUIPrefab;
 
     private Inventory _inven = new();
     private ItemSlotUIs _itemSlotUIs;
+
+    private IInventory _inventoryForTrade;
+    private Vector2 _tradeInvenDirection;
+    private bool IsTrade => _inventoryForTrade != null;
+
+    private bool _isActivate = true;
 
     private void Update()
     {
@@ -21,9 +27,14 @@ public class InventoryPresenter : BaseUI
         }
     }
 
-    public void SetInventory(Inventory inven)
+    public void SetInventory(Inventory inven, IInventory tradeInven = null, Vector2 tradeInvenDirection = default)
     {
         _inven = inven;
+        if(tradeInven != null)
+        {
+            _inventoryForTrade = tradeInven;
+            _tradeInvenDirection = tradeInvenDirection;
+        }
         InitInventory();
     }
 
@@ -71,11 +82,26 @@ public class InventoryPresenter : BaseUI
 
     private void UseItem()
     {
-        _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].UseItem();
+        if (IsTrade)
+        {
+            Item item = _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].Slot.CurItem;
+
+            if(item != null)
+            {
+                _inventoryForTrade.AddItem(item);
+                _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].Slot.RemoveItem();
+            }
+        }
+        else
+        {
+            _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].UseItem();
+        }
     }
 
     private void MoveInventory()
     {
+        if (!_isActivate) return;
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             ChangeSelectSlot(Vector2.right);
@@ -99,6 +125,13 @@ public class InventoryPresenter : BaseUI
 
     private void ChangeSelectSlot(Vector2 movePos)
     {
+        if(IsTrade && movePos == _tradeInvenDirection && _itemSlotUIs.CanChangeTrade(movePos))
+        {
+            Deactivate();
+            _inventoryForTrade.Activate();
+            return;
+        }
+
         _itemSlotUIs.MoveSelectSlot(movePos);
         UpdateItemInfo();
     }
@@ -117,5 +150,17 @@ public class InventoryPresenter : BaseUI
             GetUI<TextMeshProUGUI>("ItemNameText").text = "";
             GetUI<TextMeshProUGUI>("ItemDescriptionText").text = "";
         }
+    }
+
+    public void Activate()
+    {
+        _isActivate = true;
+        _itemSlotUIs.Activate();
+    }
+
+    public void Deactivate()
+    {
+        _isActivate = false;
+        _itemSlotUIs.Deactivate();
     }
 }

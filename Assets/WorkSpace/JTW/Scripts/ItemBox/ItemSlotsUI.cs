@@ -20,8 +20,6 @@ public class ItemSlotUIs : MonoBehaviour
 
     public List<Item.ItemType> AcceptTypeList = new List<Item.ItemType>();
 
-    public ItemSlotUIs ItemSlotUIsForTrade;
-
     public bool AddSlotUI(Slot slot = null, int maxItemCount = 4)
     {
         if(AcceptTypeList.Count != 0 && !AcceptTypeList.Contains(slot.CurItem.Type)) return false;
@@ -92,5 +90,29 @@ public class ItemSlotUIs : MonoBehaviour
         {
             _selectedSlot.Unselected();
         }
+    }
+
+    public bool CanChangeTrade(Vector2 direction)
+    {
+        if (direction.x == 1)
+        {
+            if((_selectedSlotIndex + 1) % _lineCount == 0) return true;
+        }
+        else if(direction.x == -1)
+        {
+            if (_selectedSlotIndex % _lineCount == 0) return true;
+        }
+        else if(direction.y == 1)
+        {
+            if (_selectedSlotIndex < _lineCount) return true;
+        }
+        else if(direction.y == -1)
+        {
+            int minIndex = ((_slotUIs.Count - 1) / _lineCount) * _lineCount;
+
+            if (_selectedSlotIndex >= minIndex && _selectedSlotIndex < _slotUIs.Count) return true;
+        }
+
+        return false;
     }
 }
