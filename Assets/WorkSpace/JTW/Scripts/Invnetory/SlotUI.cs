@@ -31,7 +31,8 @@ public class SlotUI : MonoBehaviour
         }
         else
         {
-            _itemImage.sprite = _slot.CurItem.icon;
+            if (_itemImage != null)
+                _itemImage.sprite = _slot.CurItem.icon;
         }
 
         if(_slot.ItemCount > 1)
