@@ -13,7 +13,7 @@ public class TextPopUp : BaseUI
     public string[] messages = {
         "낮에는 포격과 저격수들의 위험으로 때문에 돌아 다닐수 없고",
         "밤에는 강도들이 피난처를 노리는 절망적인 상황입니다.",
-        "우리는 살아남기 위해 최선을 다해야 합니다.",
+        "우리는 살아남기 위해 최선을 다해야 합니다."
     };
 
     public float typingSpeed = 0.05f; // 글자 출력 간격(초)
@@ -46,25 +46,25 @@ public class TextPopUp : BaseUI
         }
     }
 
-    IEnumerator ShowLinesSequentially()
+    IEnumerator ShowLinesSequentially()     // 코루틴을 사용하여 여러 줄의 메시지를 순차적으로 출력하는 메서드
     {
-        uiText.text = string.Empty;
+        string accumulatedText = "";
 
         foreach (string line in messages)
         {
-            yield return StartCoroutine(TypeLine(line));
+            yield return StartCoroutine(TypeLine(line, accumulatedText));
+            accumulatedText += line + "\n";
             yield return new WaitForSeconds(lineDelay);
-            uiText.text += "\n";
         }
     }
 
-    IEnumerator TypeLine(string text)
+    IEnumerator TypeLine(string line, string prefix)       // 코루틴을 사용하여 한 줄의 메시지를 타이핑 효과로 출력하는 메서드
     {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < text.Length; i++)
+        for (int i = 0; i < line.Length; i++)
         {
-            sb.Append(text[i]);
-            uiText.text = sb.ToString();
+            sb.Append(line[i]);
+            uiText.text = prefix + sb.ToString();
             yield return new WaitForSeconds(typingSpeed);
         }
     }
