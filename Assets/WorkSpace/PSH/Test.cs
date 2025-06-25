@@ -1,25 +1,24 @@
 using UnityEngine;
-using System.Collections;
 
-public class PlayerInteraction : MonoBehaviour
+public class Test : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float climbSpeed = 3f;
 
     private Rigidbody rb;
-    private Collider playerCollider;
     public float interactDistance = 2f;
     public LayerMask interactableLayer;
 
-    private bool isAutoClimbing = false;
-    private Vector3 climbTargetPos;
+    private bool isClimbing = false;
     private Ladder currentLadder;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        playerCollider = GetComponent<Collider>();
     }
+
+    private bool isAutoClimbing = false;
+    private Vector3 climbTargetPos;
 
     void Update()
     {
@@ -31,7 +30,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
         {
-            TryAutoClimb(Input.GetKeyDown(KeyCode.W)); // true = 위로
+            TryAutoClimb(Input.GetKeyDown(KeyCode.W)); // true면 위로, false면 아래로
         }
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -48,6 +47,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (h != 0f)
         {
+            // 바라보는 방향을 입력값에 따라 좌우로 반전
             Vector3 scale = transform.localScale;
             scale.x = Mathf.Sign(h) * Mathf.Abs(scale.x);
             transform.localScale = scale;
@@ -56,6 +56,8 @@ public class PlayerInteraction : MonoBehaviour
         Vector3 move = Vector3.right * h;
         transform.position += move * moveSpeed * Time.deltaTime;
     }
+
+
 
     void TryInteract()
     {
@@ -77,7 +79,6 @@ public class PlayerInteraction : MonoBehaviour
             Debug.Log("Ray가 아무것도 못 맞춤");
         }
     }
-
     void TryAutoClimb(bool goUp)
     {
         Vector3 rayOrigin = transform.position + Vector3.up * 1f;
@@ -95,14 +96,15 @@ public class PlayerInteraction : MonoBehaviour
                 Transform startPoint = goUp ? ladder.GetBottom() : ladder.GetTop();
                 Transform endPoint = goUp ? ladder.GetTop() : ladder.GetBottom();
 
+                // 먼저 시작 지점으로 순간이동
                 transform.position = startPoint.position;
+
+                // 이후 도착 지점으로 자동 이동
                 climbTargetPos = endPoint.position;
 
                 isAutoClimbing = true;
                 rb.useGravity = false;
                 rb.velocity = Vector3.zero;
-
-                playerCollider.enabled = false; // 콜라이더 비활성화
 
                 Debug.Log($"자동 이동 시작: {startPoint.name} → {endPoint.name}");
             }
@@ -118,16 +120,7 @@ public class PlayerInteraction : MonoBehaviour
             isAutoClimbing = false;
             rb.useGravity = true;
             currentLadder = null;
-
             Debug.Log("사다리 자동 이동 완료");
-
-            StartCoroutine(ReenableColliderAfterDelay());
         }
-    }
-
-    IEnumerator ReenableColliderAfterDelay()
-    {
-        yield return new WaitForSeconds(0.1f); // 짧은 지연 후
-        playerCollider.enabled = true;
     }
 }
