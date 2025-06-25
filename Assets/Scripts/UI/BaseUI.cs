@@ -53,6 +53,10 @@ public class BaseUI : MonoBehaviour
     public PointerHandler GetEvent(in string name)  // PointerHandler 컴포넌트를 이름으로 가져오는 메서드
     {
         GameObject gameObject = GetUI(name);    // 게임오브젝트를 이름으로 가져옵니다.
-        return gameObject.GetOrAddComponent<PointerHandler>();  // 게임오브젝트에서 PointerHandler 컴포넌트를 가져오거나 추가합니다.
+        if (gameObject == null) return null;
+        var handler = gameObject.GetComponent<PointerHandler>();
+        if (handler == null)
+            handler = gameObject.AddComponent<PointerHandler>();
+        return handler;
     }
 }
