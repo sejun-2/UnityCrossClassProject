@@ -19,28 +19,19 @@ public class Inventory
         }
     }
 
-    // 테스트용 코드
-    public Inventory(Item item)
+    public void AddItem(Item item)
     {
-        for (int i = 0; i < _slotList.GetLength(0); i++)
+        foreach(Slot slot in _slotList)
         {
-            for (int j = 0; j < _slotList.GetLength(1); j++)
+            if(slot.CurItem != null && item.Name == slot.CurItem.Name)
             {
-                _slotList[i, j] = new Slot(item);
-            }
-        }
-    }
-
-    public bool AddItem(Item item)
-    {
-        foreach(Slot slot in SlotList)
-        {
-            if (slot.AddItem(item))
-            {
-                return true;
+                if (slot.AddItem(item)) return;
             }
         }
 
-        return false;
+        foreach (Slot slot in _slotList)
+        {
+            if (slot.AddItem(item)) return;
+        }
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SlotUI : MonoBehaviour
 {
     [SerializeField] private Image _itemImage;
+    public Image ItemImage => _itemImage;
     [SerializeField] private TextMeshProUGUI _countText;
     [SerializeField] private Image _outLine;
 
@@ -14,34 +15,25 @@ public class SlotUI : MonoBehaviour
     private Slot _slot = new();
     public Slot Slot => _slot;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            _slot.AddItem(_testItem);
-            UpdateSlotData();
-        }
-    }
-
-
     public void SetSlot(Slot slot)
     {
         _slot = slot;
+        slot.OnItemChanged += UpdateSlotData;
         UpdateSlotData();
     }
 
-    public void UpdateSlotData()
+    public void UpdateSlotData(Item item = null)
     {
         if(_slot.CurItem == null)
         {
-            _itemImage.sprite = null;
+            if(_itemImage != null)
+                _itemImage.sprite = null;
         }
         else
         {
             _itemImage.sprite = _slot.CurItem.Sprite;
         }
 
-            
         if(_slot.ItemCount > 1)
         {
             _countText.text = _slot.ItemCount.ToString();
@@ -50,7 +42,6 @@ public class SlotUI : MonoBehaviour
         {
             _countText.text = "";
         }
-        
     }
 
     public void UseItem()
@@ -58,7 +49,6 @@ public class SlotUI : MonoBehaviour
         if (_slot.IsEmpty) return;
 
         _slot.UseItem();
-        UpdateSlotData();
     }
 
     public Item GetItemData()
