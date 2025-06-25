@@ -40,8 +40,23 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         inven.Deactivate();
     }
 
-    public void ShowTradeFarming()
+    public void ShowTradeFarming(Inventory farmingInvenData = null)
     {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/Inventory");
+        InventoryPresenter playerInven = Instantiate(prefab, transform).GetComponent<InventoryPresenter>();
 
+        prefab = Resources.Load<GameObject>($"UI/Inventory/Inventory");
+        InventoryPresenter farmingInven = Instantiate(prefab, transform).GetComponent<InventoryPresenter>();
+
+        playerInven.SetInventory(Manager.Game.Inven, farmingInven, Vector2.right);
+        farmingInven.SetInventory(farmingInvenData, playerInven, Vector2.left);
+
+        RectTransform invenRt = playerInven.GetComponent<RectTransform>();
+        RectTransform itemBoxRt = farmingInven.GetComponent<RectTransform>();
+
+        invenRt.anchoredPosition = new Vector2(-400, 0);
+        itemBoxRt.anchoredPosition = new Vector2(400, 0);
+
+        playerInven.Deactivate();
     }
 }
