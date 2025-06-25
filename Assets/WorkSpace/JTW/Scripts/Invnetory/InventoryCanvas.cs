@@ -4,5 +4,44 @@ using UnityEngine;
 
 public class InventoryCanvas : UICanvas<InventoryCanvas>
 {
-    
+    public void ShowInven()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/Inventory");
+        InventoryPresenter inven = Instantiate(prefab, transform).GetComponent<InventoryPresenter>();
+
+        inven.SetInventory(Manager.Game.Inven);
+    }
+
+    public void ShowItemBox()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/ItemBox");
+        ItemBoxPresenter itemBox = Instantiate(prefab, transform).GetComponent<ItemBoxPresenter>();
+
+        itemBox.SetItemBoxData(Manager.Game.ItemBox);
+    }
+
+    public void ShowTradeItemBox()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/Inventory");
+        InventoryPresenter inven = Instantiate(prefab, transform).GetComponent<InventoryPresenter>();
+
+        prefab = Resources.Load<GameObject>($"UI/Inventory/ItemBox");
+        ItemBoxPresenter itemBox = Instantiate(prefab, transform).GetComponent<ItemBoxPresenter>();
+
+        inven.SetInventory(Manager.Game.Inven, itemBox, Vector2.right);
+        itemBox.SetItemBoxData(Manager.Game.ItemBox, inven, Vector2.left);
+
+        RectTransform invenRt = inven.GetComponent<RectTransform>();
+        RectTransform itemBoxRt = itemBox.GetComponent<RectTransform>();
+
+        invenRt.anchoredPosition = new Vector2(-400, 0);
+        itemBoxRt.anchoredPosition = new Vector2(400, 0);
+
+        inven.Deactivate();
+    }
+
+    public void ShowTradeFarming()
+    {
+
+    }
 }
