@@ -16,6 +16,7 @@ public class InventoryPresenter : BaseUI, IInventory
     private bool IsTrade => _inventoryForTrade != null;
 
     private bool _isActivate = true;
+    private bool _isSwitchActivate = false;
 
     private void Update()
     {
@@ -24,6 +25,18 @@ public class InventoryPresenter : BaseUI, IInventory
         if (Input.GetKeyDown(KeyCode.Z))
         {
             UseItem();
+        }
+
+        
+    }
+
+    private void LateUpdate()
+    {
+        // Update �� ����Ŭ�� ������ ��ȯ�ؾ� MoveInventory�� ���� �۵�
+        if (_isSwitchActivate)
+        {
+            _isActivate = !_isActivate;
+            _isSwitchActivate = false;
         }
     }
 
@@ -154,13 +167,13 @@ public class InventoryPresenter : BaseUI, IInventory
 
     public void Activate()
     {
-        _isActivate = true;
+        _isSwitchActivate = true;
         _itemSlotUIs.Activate();
     }
 
     public void Deactivate()
     {
-        _isActivate = false;
+        _isSwitchActivate = true;
         _itemSlotUIs.Deactivate();
     }
 }
