@@ -20,6 +20,13 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Destroy(this.gameObject);
+        }
+
+        if (!_isActivate) return;
+
         MoveInventory();
 
         if (Input.GetKeyDown(KeyCode.Z))
@@ -32,7 +39,7 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private void LateUpdate()
     {
-        // Update ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ø¾ï¿½ MoveInventoryï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ûµï¿½
+        // Update ÇÑ »çÀÌÅ¬ÀÌ ³¡³ª°í º¯È¯ÇØ¾ß MoveInventory°¡ Á¤»ó ÀÛµ¿
         if (_isSwitchActivate)
         {
             _isActivate = !_isActivate;

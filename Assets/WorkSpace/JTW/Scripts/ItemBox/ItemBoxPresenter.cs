@@ -34,6 +34,13 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Destroy(this.gameObject);
+        }
+
+        if (!_isActivate) return;
+
         MoveInventory();
 
         if (Input.GetKeyDown(KeyCode.Z))
