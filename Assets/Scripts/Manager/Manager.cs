@@ -7,6 +7,7 @@ public static class Manager
     public static PlayerManager Player => PlayerManager.GetInstance();
     public static UIManager UI => UIManager.GetInstance();
     public static GameManager Game => GameManager.GetInstance();
+    public static DataManager Data => DataManager.GetInstance();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initailize()
@@ -14,5 +15,6 @@ public static class Manager
         PlayerManager.CreateInstance();
         UIManager.CreateInstance();
         GameManager.CreateInstance();
+        DataManager.CreateInstance();
     }
 }
