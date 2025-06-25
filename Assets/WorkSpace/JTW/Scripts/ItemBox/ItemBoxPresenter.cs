@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class ItemBoxPresenter : BaseUI
+public class ItemBoxPresenter : BaseUI, IInventory
 {
     [SerializeField] private GameObject _itemSlotsPrefab;
     [SerializeField] private GameObject _slotPrefab;
@@ -24,7 +25,47 @@ public class ItemBoxPresenter : BaseUI
 
     private bool _isInItemSlots;
 
-    private void Start()
+    private IInventory _inventoryForTrade;
+    private Vector2 _tradeInvenDirection;
+    private bool IsTrade => _inventoryForTrade != null;
+
+    private bool _isActivate = true;
+    private bool _isSwitchActivate = false;
+
+    private void Update()
+    {
+        MoveInventory();
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            UseItem();
+        }
+    }
+
+    private void LateUpdate()
+    {
+        // Update 한 사이클이 끝나고 변환해야 MoveInventory가 정상 작동
+        if (_isSwitchActivate)
+        {
+            _isActivate = !_isActivate;
+            _isSwitchActivate = false;
+        }
+    }
+
+    public void SetItemBoxData(ItemBoxData itemBox, IInventory tradeInven = null, Vector2 tradeDirection = default)
+    {
+        _itemBox = itemBox;
+        if(tradeInven != null)
+        {
+            _inventoryForTrade = tradeInven;
+            _tradeInvenDirection = tradeDirection;
+        }
+
+        InitData();
+        InitItemBox();
+    }
+
+    private void InitData()
     {
         // 각 카테고리에 들어갈 아이템 타입 선정
         _acceptTypeLists.Add(new List<Item.ItemType>() { Item.ItemType.Food, Item.ItemType.Drink, Item.ItemType.Medicine });
@@ -38,24 +79,9 @@ public class ItemBoxPresenter : BaseUI
         _itemDescriptionText = GetUI<TextMeshProUGUI>("ItemDescriptionText");
     }
 
-    private void Update()
-    {
-        MoveInventory();
-
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            UseItem();
-        }
-    }
-
-    public void SetItemBoxData(ItemBoxData itemBox)
-    {
-        _itemBox = itemBox;
-        InitItemBox();
-    }
-
     private void InitItemBox()
     {
+        Debug.Log(_categoryPanel);
         _categotySlots = Instantiate(_itemSlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
         _categotySlots.GetComponent<RectTransform>().sizeDelta = new Vector2(520, 160);
         for(int i = 0; i < _categorySprites.Count; i++)
@@ -87,11 +113,11 @@ public class ItemBoxPresenter : BaseUI
         _itemDescriptionText.text = "";
     }
 
-    public void AddItem(Item item)
+    public bool AddItem(Item item)
     {
         foreach (Slot slot in _itemBox.SlotList)
         {
-            if (slot.AddItem(item)) return;
+            if (slot.AddItem(item)) return true;
         }
 
         Slot newSlot = new Slot(int.MaxValue);
@@ -100,8 +126,10 @@ public class ItemBoxPresenter : BaseUI
 
         foreach (ItemSlotUIs slots in _itemSlotsList)
         {
-            if (slots.AddSlotUI(newSlot)) return;
+            if (slots.AddSlotUI(newSlot)) return true;
         }
+
+        return false;
     }
 
     private void UseItem()
@@ -110,7 +138,21 @@ public class ItemBoxPresenter : BaseUI
 
         SlotUI selectedSlotUI = _selectedItemSlots.SlotUIs[_selectedItemSlots.SelectedSlotIndex];
 
-        selectedSlotUI.UseItem();
+        if (IsTrade)
+        {
+            Item item = selectedSlotUI.Slot.CurItem;
+
+            if (item != null)
+            {
+                _inventoryForTrade.AddItem(item);
+                selectedSlotUI.Slot.RemoveItem();
+            }
+        }
+        else
+        {
+            selectedSlotUI.UseItem();
+        }
+
         if (selectedSlotUI.Slot.IsEmpty)
         {
             _itemBox.SlotList.Remove(selectedSlotUI.Slot);
@@ -148,6 +190,8 @@ public class ItemBoxPresenter : BaseUI
 
     private void MoveInventory()
     {
+        if (!_isActivate) return;
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             ChangeSelectSlot(Vector2.right);
@@ -194,6 +238,13 @@ public class ItemBoxPresenter : BaseUI
     {
         if (_isInItemSlots)
         {
+            if (IsTrade && direction == _tradeInvenDirection && _selectedItemSlots.CanChangeTrade(direction))
+            {
+                Deactivate();
+                _inventoryForTrade.Activate();
+                return false;
+            }
+
             if(direction.y == 1 && _selectedItemSlots.SelectedSlotIndex < _selectedItemSlots.LineCount)
             {
                 GoCategory();
@@ -202,7 +253,14 @@ public class ItemBoxPresenter : BaseUI
         }
         else
         {
-            if(direction.y == -1)
+            if (IsTrade && direction == _tradeInvenDirection && _categotySlots.CanChangeTrade(direction))
+            {
+                Deactivate();
+                _inventoryForTrade.Activate();
+                return false;
+            }
+
+            if (direction.y == -1)
             {
                 if (_itemSlotsList[_categotySlots.SelectedSlotIndex].SlotUIs.Count <= 0)
                 {
@@ -240,5 +298,33 @@ public class ItemBoxPresenter : BaseUI
 
         _itemNameText.text = "";
         _itemDescriptionText.text = "";
+    }
+
+    public void Activate()
+    {
+        if (_isInItemSlots)
+        {
+            _selectedItemSlots.Activate();
+        }
+        else
+        {
+            _categotySlots.Activate();
+        }
+
+        _isSwitchActivate = true;
+    }
+
+    private void Deactivate()
+    {
+        if (_isInItemSlots)
+        {
+            _selectedItemSlots.Deactivate();
+        }
+        else
+        {
+            _categotySlots.Deactivate();
+        }
+
+        _isSwitchActivate = true;
     }
 }
