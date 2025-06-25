@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3ad3d10e6b0eb469b5f87f445128d9, type: 3}
+  m_Name: 10022
+  m_EditorClassIdentifier: 
+  index: 10022
+  itemName: "\uD1B5\uC870\uB9BC \uC2A4\uD29C"
+  description: "\uACE0\uAE09\uC2A4\uB7FD\uAC8C \uD45C\uD604\uD588\uC9C0\uB9CC \uACB0\uAD6D
+    \uD1B5\uC870\uB9BC\uC744 \uAC00\uC5F4\uD55C \uB4A4 \uB0B4\uC6A9\uBB3C\uC744 \uAEBC\uB0B8
+    \uC2A4\uD29C. \uBA39\uB294\uB370\uB294 \uC9C0\uC7A5\uC774 \uC5C6\uC73C\uB098
+    \uB9DB\uC740 \uC88B\uC9C0 \uC54A\uB2E4."
+  icon: {fileID: 21300000, guid: 611b1a3e7cc23824db903f24ac815027, type: 3}
+  itemTier: 1
+  itemType: 1
+  attackValue: 0
+  defValue: 0
+  durabilityValue: 0
+  attackSpeed: 0
+  hpRecover: 0
+  hungerRecover: 2
+  thirstRecover: 0
+  mentalRecover: 0
+  canStack: 1
+  maxStackCount: 2

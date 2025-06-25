@@ -1,4 +1,3 @@
-using ItemDataManager;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,91 +5,57 @@ using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.Progress;
+
+
 
 public class ItemCSVConnecter
 {
-    //유니티내에 Tools메뉴추가 > .asset 파일을 쉽게 만들기위함
     [MenuItem("Tools/Import Items From CSV")]
     public static void ImportItems()
     {
-        string path = "Assets/WorkSpace/KBK/CSV/ItemData - Data.csv";
-        string[] lines = File.ReadAllLines(path);
+        string csvPath = "Assets/WorkSpace/KBK/CSV/ItemData - Data.csv";
+        string[] lines = File.ReadAllLines(csvPath);
 
         for (int i = 1; i < lines.Length; i++)
         {
             string[] values = lines[i].Split(',');
 
-            string name = values[0].Trim();
+            Item item = ScriptableObject.CreateInstance<Item>();
 
-            //ItemBase.ItemType itemType = (ItemBase.ItemType)System.Enum.Parse(typeof(ItemBase.ItemType), values[1].Trim());
-
-            string rawItemType = values[1].Trim().Replace("\r", "").Replace("\n", "");
-            ItemBase.ItemType itemType;
-            if (!Enum.TryParse(rawItemType, true, out itemType))
-            {
-                Debug.LogError($"ItemType 파싱 실패: '{rawItemType}' > Food로 처리됨");
-                itemType = ItemBase.ItemType.Food; // fallback
-            }
-            else
-            {
-                Debug.Log($"ItemType 파싱 성공: {rawItemType} > {itemType}");
-            }
-
-            string classType = values[2].Trim();
-
+            int.TryParse(values[0], out item.index);
+            item.itemName = values[1].Trim();
+            item.description = values[2].Trim();
             string iconName = values[3].Trim();
-            Sprite icon = Resources.Load<Sprite>("Icons/" + iconName);
+            string iconPath = $"Assets/Imports/UnityCrossClassProject_Assets/Icons/{iconName}.png";
+            Sprite icon = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+            item.icon = icon;
 
-            Debug.Log($"[클래스 타입 확인] '{classType}'");
+            int.TryParse(values[4], out item.itemTier);
+            item.itemType = (ItemType)int.Parse(values[5]);
 
-            if (classType == "Consumable")
-            {
-                Debug.Log("Consumable 분기 진입");
+            int.TryParse(values[6], out item.attackValue);
+            int.TryParse(values[7], out item.defValue);
+            int.TryParse(values[8], out item.durabilityValue);
+            float.TryParse(values[9], out item.attackSpeed);
 
-                ConsumableItem item = ScriptableObject.CreateInstance<ConsumableItem>();
-                item.itemName = name;
-                item.sprite = icon;
-                item.Description = "";
+            int.TryParse(values[10], out item.hpRecover);
+            int.TryParse(values[11], out item.hungerRecover);
+            int.TryParse(values[12], out item.thirstRecover);
+            int.TryParse(values[13], out item.mentalRecover);
 
-                int.TryParse(values[4], out item.hpRestore);
-                int.TryParse(values[5], out item.hungerRestore);
-                int.TryParse(values[6], out item.thirstRestore);
+            bool.TryParse(values[14], out item.canStack);
+            int.TryParse(values[15], out item.maxStackCount);
 
-                string assetPath = $"Assets/WorkSpace/KBK/Items/Consumable/{name}.asset";
-                SaveAsset(item, assetPath);
-            }
-            else if (classType == "Equipment")
-            {
-                EquipmentItem item = ScriptableObject.CreateInstance<EquipmentItem>();
-                item.itemName = name;
-                item.sprite = icon;
-
-                int.TryParse(values[7], out item.addAttackPower);
-                int.TryParse(values[8], out item.addDefensePower);
-                int.TryParse(values[9], out item.durability);
-
-                string assetPath = $"Assets/WorkSpace/KBK/Items/Equipment/{name}.asset";
-                SaveAsset(item, assetPath);
-            }
+            string assetPath = $"Assets/WorkSpace/KBK/Items/{item.index}.asset";
+            Directory.CreateDirectory(Path.GetDirectoryName(assetPath));
+            AssetDatabase.CreateAsset(item, assetPath);
         }
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log(".asset 생성 완료!");
-    }
-
-    static void SaveAsset(UnityEngine.Object obj, string path)
-    {
-        string folder = Path.GetDirectoryName(path);
-        Debug.Log($"[SAVE] 폴더: {folder}");
-        if (!Directory.Exists(folder))
-        {
-            Directory.CreateDirectory(folder);
-            Debug.Log($"[SAVE] 폴더 생성 시도: {folder}");
-        }
-
-        Debug.Log($"[SAVE] Asset 생성: {path}");
-        AssetDatabase.CreateAsset(obj, path);
     }
 }
+
+
+
+

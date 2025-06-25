@@ -1,44 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace ItemDataManager
+
+public enum ItemType
 {
-    public class Item : ScriptableObject
+    Material = 0,
+    Consumable = 1,
+    Tool = 2,
+    Weapon = 3,
+    Armor = 4
+}
+
+[CreateAssetMenu(fileName = "NewItem", menuName = "Item/General Item")]
+public class Item : ScriptableObject
+{
+    public int index;
+    public string itemName;
+    public string description;
+    public Sprite icon;
+    public int itemTier;
+    public ItemType itemType;
+
+    public int attackValue;
+    public int defValue;
+    public int durabilityValue;
+    public float attackSpeed;
+
+    public int hpRecover;
+    public int hungerRecover;
+    public int thirstRecover;
+    public int mentalRecover;
+
+    public bool canStack;
+    public int maxStackCount;
+
+
+    // 실제 아이템의 사용 효과를 구현할 함수.
+    public virtual void Use()
     {
-        //아이템 타입 종류
-        public enum ItemType
-        {
-            Food, Drink, Weapon, Armor, Key, Material, Medicine, Furniture, Tool, Potion
-        }
 
-        public string itemName;
-        public ItemType itemType;
-        public Sprite sprite;
-        public string Description;
-
-
-
-        //체력회복
-        public int hpRestore;
-        //배고픔회복
-        public int hungerRestore;
-        //목마름회복
-        public int thirstRestore;
-        //추가공격력
-        public int addAttackPower;
-        //추가방어력
-        public int addDefensePower;
-        //내구도
-        public int durability;
-        //신선도
-        public int freshness;
-        //상태이상회복
-        public bool cureStatusEffect;
-        //갯수
-        public int itemCount;
-
-        // 실제 아이템의 사용 효과를 구현할 함수.
-        //public abstract void Use();
     }
 }

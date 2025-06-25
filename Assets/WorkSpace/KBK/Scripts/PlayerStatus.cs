@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
@@ -12,6 +10,8 @@ public class PlayerStatus : MonoBehaviour
 
     public int thirst = 50;
     public int maxThirst = 100;
+
+    
 
     public void AddHp(int amount)
     {
@@ -30,4 +30,5 @@ public class PlayerStatus : MonoBehaviour
         thirst = Mathf.Clamp(thirst + amount, 0, maxThirst);
         Debug.Log($"[Thirst] {thirst}/{maxThirst}");
     }
+    
 }

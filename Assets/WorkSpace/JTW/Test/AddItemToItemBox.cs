@@ -6,7 +6,7 @@ public class AddItemToItemBox : MonoBehaviour
 {
     [SerializeField] private ItemBoxPresenter _pre;
     [SerializeField] private Item _testItemPrefab;
-    [SerializeField] private Item.ItemType _type;
+    [SerializeField] private ItemType _type;
     [SerializeField] private string _name;
 
     private void Update()
@@ -14,8 +14,8 @@ public class AddItemToItemBox : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             Item item = Instantiate(_testItemPrefab);
-            item.Type = _type;
-            item.Name = _name;
+            item.itemType = _type;
+            item.itemName = _name;
 
             _pre.AddItem(item);
         }

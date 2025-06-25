@@ -1130,6 +1130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1646322914}
   - component: {fileID: 1646322913}
+  - component: {fileID: 1646322915}
   m_Layer: 0
   m_Name: ItemManager
   m_TagString: Untagged
@@ -1150,9 +1151,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1057594241}
-  hpItem: {fileID: 0}
-  hungerItem: {fileID: 0}
-  thirstItem: {fileID: 0}
+  hpItem: {fileID: 11400000, guid: 038e6e1d90b725d4d8ccddb22c1fa525, type: 2}
+  hungerItem: {fileID: 11400000, guid: 270de0bade71ec343899057cc9a62b80, type: 2}
+  thirstItem: {fileID: 11400000, guid: 8a82161857524764ca5e0566c6131a22, type: 2}
 --- !u!4 &1646322914
 Transform:
   m_ObjectHideFlags: 0
@@ -1168,6 +1169,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1646322915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646322912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 354a97f943724404787bc037a6ad2075, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1736061286
 GameObject:
   m_ObjectHideFlags: 0

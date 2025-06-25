@@ -29,7 +29,7 @@ public class Slot
 
     public bool AddItem(Item item)
     {
-        if(IsEmpty || _curItem.Name == item.Name)
+        if(IsEmpty || _curItem.itemName == item.itemName)
         {
             // TODO : Type에 따른 최대 개수 제한 설정
             if (_itemCount >= _maxItemCount) return false;
