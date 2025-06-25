@@ -18,4 +18,20 @@ public class Inventory
             }
         }
     }
+
+    public void AddItem(Item item)
+    {
+        foreach(Slot slot in _slotList)
+        {
+            if(slot.CurItem != null && item.Name == slot.CurItem.Name)
+            {
+                if (slot.AddItem(item)) return;
+            }
+        }
+
+        foreach (Slot slot in _slotList)
+        {
+            if (slot.AddItem(item)) return;
+        }
+    }
 }
