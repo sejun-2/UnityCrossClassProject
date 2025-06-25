@@ -24,12 +24,7 @@ public class Slot
         _curItem.Use();
 
         // TODO : 아이템 Type에 따른 변동사항 적용
-        _itemCount--;
-        OnItemChanged?.Invoke(_curItem);
-        if(_itemCount <= 0)
-        {
-            RemoveItem();
-        }
+        RemoveItem();
     }
 
     public bool AddItem(Item item)
@@ -52,10 +47,20 @@ public class Slot
         return false;
     }
 
-    public void RemoveItem()
+    public void DeleteItem()
     {
         _curItem = null;
         _itemCount = 0;
         OnItemChanged?.Invoke(_curItem);
+    }
+
+    public void RemoveItem()
+    {
+        _itemCount--;
+        OnItemChanged?.Invoke(_curItem);
+        if (_itemCount <= 0)
+        {
+            DeleteItem();
+        }
     }
 }
