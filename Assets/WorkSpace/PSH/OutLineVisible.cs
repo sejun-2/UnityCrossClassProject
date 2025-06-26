@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class OutLineVisible : MonoBehaviour
 {
+    //오브젝트의 상태에 따라 윤곽선을 표시하는 스크립트
+
     private Renderer _renderer;
     private Material _mat;
 
