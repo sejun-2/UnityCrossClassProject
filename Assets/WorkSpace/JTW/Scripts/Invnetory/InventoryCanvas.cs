@@ -66,4 +66,11 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
         Instantiate(prefab, transform);
     }
+
+    public void ShowCookingUI()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/CookingUI");
+
+        Instantiate(prefab, transform);
+    }
 }
