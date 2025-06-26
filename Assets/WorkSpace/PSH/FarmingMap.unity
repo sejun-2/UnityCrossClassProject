@@ -844,6 +844,7 @@ MeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: b4ae5db51ddb2bf4db425a2b9b5ae5bb, type: 2}
   - {fileID: 2100000, guid: bd476412f74d83d498b48296ef48f073, type: 2}
+  - {fileID: 2100000, guid: 51ce13f64a6542047be4a282f9e1ea0e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -882,7 +883,7 @@ Transform:
   m_GameObject: {fileID: 610215627}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.17, y: 1.09, z: 2.31}
+  m_LocalPosition: {x: 10.86, y: 1.09, z: 2.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1209,7 +1210,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1.94, z: 6}
   m_Center: {x: 0.22000003, y: 0.42, z: -2.2565174}
@@ -1373,7 +1374,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3.12
+  orthographic size: 5.98
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2210,7 +2211,7 @@ MonoBehaviour:
   m_Follow: {fileID: 147501639}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 3.12
+    OrthographicSize: 5.98
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
