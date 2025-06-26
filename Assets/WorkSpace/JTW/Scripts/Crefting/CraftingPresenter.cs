@@ -46,6 +46,11 @@ public class CraftingPresenter : BaseUI
 
             UpdateNeedItemList(_resultItemSlots.SelectedSlotIndex);
         }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void InitCrafting()
