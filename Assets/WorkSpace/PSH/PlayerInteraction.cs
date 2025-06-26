@@ -15,6 +15,8 @@ public class PlayerInteraction : MonoBehaviour
     private Vector3 climbTargetPos;
     private Ladder currentLadder;
 
+    public bool isFarming = false;//파밍중인지 나타내는 불값
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -23,6 +25,15 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
+        if(isFarming)
+        {
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                isFarming = false;
+            }
+            return;
+        }
+
         if (isAutoClimbing)
         {
             AutoClimb();
