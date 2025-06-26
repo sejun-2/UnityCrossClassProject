@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -7,23 +8,22 @@ using static UnityEditor.Progress;
 
 public class DataManager : Singleton<DataManager>
 {
-    // TODO : URL 적용
-    private const string _itemDataTableURL = "/export?format=csv&gid=1551223081";
-    private const string _itemNameTableURL = "/export?format=csv&gid=1551223081";
+    private const string _itemDataTableURL = "https://docs.google.com/spreadsheets/d/1BUzeyQqdgSJwcADZ37UqJvqF_LNbXtGZjFV4FOsgHLk/export?format=csv&gid=0";
+    private const string _itemNameTableURL = "https://docs.google.com/spreadsheets/d/1IkbcBZ9SV8rxuTtpKtRiC8WMsE8wPh6IyHyhu-JKyvg/export?format=csv&gid=0";
     private const string _craftingTableURL = "https://docs.google.com/spreadsheets/d/1YykeOdfCjzHxt6ixDxeOxsHo-kAuLKVyG1KXayTs-fQ/export?format=csv&gid=0";
 
-    // Item에 IUsableID 추가
-    public DataTableParser<ItemTest> ItemData;
+    public DataTableParser<Item> ItemData;
     public DataTableParser<CraftingData> CraftingData;
 
     private void Awake()
     {
-        // TODO : URL 확정 되고 나서 진행
-        // StartCoroutine(DownloaditemRoutine());
+        StartCoroutine(DownloadItemRoutine());
+        StartCoroutine(DownloadCraftingRoutine());
     }
 
     IEnumerator DownloadItemRoutine()
     {
+
         UnityWebRequest request = UnityWebRequest.Get(_itemDataTableURL);
         yield return request.SendWebRequest();
         string dataCsv = request.downloadHandler.text;
@@ -35,6 +35,7 @@ public class DataManager : Singleton<DataManager>
         string[] dataLines = dataCsv.Split("\n");
         string[] nameLines = itemCsv.Split("\n");
 
+        dataLines = dataLines.Skip(1).ToArray();
 
         string[] resultLines = new string[dataLines.Length];
 
@@ -45,18 +46,19 @@ public class DataManager : Singleton<DataManager>
 
         string result = string.Join("\n", resultLines);
 
-        ItemData.Parse = words =>
+        ItemData = new DataTableParser<Item>(words => 
         {
             Item item = ScriptableObject.CreateInstance<Item>();
             int.TryParse(words[0], out item.index);
             item.itemName = words[1].Trim();
             item.description = words[2].Trim();
             string iconName = words[6].Trim();
-            string iconPath = $"Assets/Imports/UnityCrossClassProject_Assets/Icons/{iconName}.png";
+            string iconPath = $"Assets/Imports/UnityCrossClassProject_Assets/Icons/{words[0]}.png";
             Sprite icon = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
             item.icon = icon;
 
             int.TryParse(words[7], out item.itemTier);
+            Debug.Log(words[0] + words[1] + words[7] + words[8]);
             item.itemType = (ItemType)int.Parse(words[8]);
 
             int.TryParse(words[9], out item.attackValue);
@@ -71,9 +73,10 @@ public class DataManager : Singleton<DataManager>
 
             bool.TryParse(words[17], out item.canStack);
             int.TryParse(words[18], out item.maxStackCount);
-            //return item;
-            return new ItemTest();
-        };
+            float.TryParse(words[19], out item.attackRange);
+            item.animationName = words[20];
+            return item;
+        });
 
         ItemData.Load(result);
     }
@@ -84,7 +87,7 @@ public class DataManager : Singleton<DataManager>
         yield return request.SendWebRequest();
         string dataCsv = request.downloadHandler.text;
 
-        CraftingData.Parse = words =>
+        CraftingData = new DataTableParser<CraftingData>(words =>
         {
             CraftingData craft = new CraftingData();
 
@@ -103,7 +106,7 @@ public class DataManager : Singleton<DataManager>
             }
 
             return craft;
-        };
+        });
 
         CraftingData.Load(dataCsv);
     }

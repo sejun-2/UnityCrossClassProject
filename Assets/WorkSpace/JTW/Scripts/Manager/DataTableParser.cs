@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class DataTableParser<T> where T : IUsableID
@@ -20,7 +21,17 @@ public class DataTableParser<T> where T : IUsableID
         string[] lines = csv.Split('\n');
         for (int i = 1; i < lines.Length; i++)
         {
-            T value = Parse(lines[i].Split(','));
+            Regex csvSplitRegex = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+            string[] fields = csvSplitRegex.Split(lines[i]);
+
+            // 따옴표 제거 (선택)
+            for (int j = 0; j < fields.Length; j++)
+            {
+                fields[j] = fields[j].Trim().Trim('"');
+            }
+
+            T value = Parse(fields);
             values.Add(value.GetID(), value);
         }
 
