@@ -58,7 +58,6 @@ public class DataManager : Singleton<DataManager>
             item.icon = icon;
 
             int.TryParse(words[7], out item.itemTier);
-            Debug.Log(words[0] + words[1] + words[7] + words[8]);
             item.itemType = (ItemType)int.Parse(words[8]);
 
             int.TryParse(words[9], out item.attackValue);
