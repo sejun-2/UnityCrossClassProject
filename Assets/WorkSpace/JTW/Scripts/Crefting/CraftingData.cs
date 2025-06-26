@@ -12,7 +12,7 @@ public class CraftingData : IUsableID
 {
     public string ID;
     public string ResultItemID;
-    public List<NeedItem> NeedItems;
+    public List<NeedItem> NeedItems = new List<NeedItem>();
 
     public string GetID()
     {

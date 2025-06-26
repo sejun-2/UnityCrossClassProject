@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class CraftingPresenter : BaseUI
 {
-    // 테스트 용
-    [SerializeField] private Item _resultItem;
-    [SerializeField] private Item _needItem;
-
     [SerializeField] private ItemSlotUIs _itemSlotUIsPrefab;
     private ItemSlotUIs _resultItemSlots;
     private ItemSlotUIs _needItemSlots;
@@ -19,14 +15,12 @@ public class CraftingPresenter : BaseUI
 
     private bool _canCraft;
 
-    private Dictionary<string, CraftingData> CraftDict;
+    private Dictionary<string, CraftingData> CraftDict => Manager.Data.CraftingData.Values;
 
     private void Start()
     {
         _resultItemPanel = GetUI("ResultItemPanel");
         _needItemPanel = GetUI("NeedItemPanel");
-
-        InitCrafting();
     }
 
     private void Update()
@@ -50,31 +44,16 @@ public class CraftingPresenter : BaseUI
 
             UpdateNeedItemList(_resultItemSlots.SelectedSlotIndex);
         }
+
+        //테스트 코드
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            InitCrafting();
+        }
     }
 
     public void InitCrafting()
     {
-        CraftDict = new Dictionary<string, CraftingData>();
-
-        CraftingData data = new();
-        data.ResultItemID = "111";
-        data.NeedItems = new List<NeedItem>();
-        NeedItem need;
-        need.ItemId = "1";
-        need.count = 3;
-        data.NeedItems.Add(need);
-
-        CraftingData data2 = new();
-        data2.ResultItemID = "222";
-        data2.NeedItems = new List<NeedItem>();
-        NeedItem need2;
-        need2.ItemId = "2";
-        need2.count = 4;
-        data2.NeedItems.Add(need2);
-
-        CraftDict.Add("1", data);
-        CraftDict.Add("2", data2);
-
         _resultItemSlots = Instantiate(_itemSlotUIsPrefab, _resultItemPanel.transform)
             .GetComponent<ItemSlotUIs>();
 
@@ -83,10 +62,7 @@ public class CraftingPresenter : BaseUI
             _needItemList.Add(craft.NeedItems);
 
             Slot slot = new Slot(1);
-            //slot.AddItem(Manager.Data.ItemData.Values[craft.ResultItemID]);
-
-
-            slot.AddItem(_resultItem);
+            slot.AddItem(Manager.Data.ItemData.Values[craft.ResultItemID]);
 
             _resultItemSlots.AddSlotUI(slot);
         }
@@ -140,9 +116,7 @@ public class CraftingPresenter : BaseUI
             Slot slot = new Slot(int.MaxValue);
             for (int j = 0; j < _needItemList[index][i].count; j++)
             {
-                //slot.AddItem(Manager.Data.ItemData.Values[_needItemList[index][i].ItemId]);
-                // 테스트 용
-                slot.AddItem(_needItem);
+                slot.AddItem(Manager.Data.ItemData.Values[_needItemList[index][i].ItemId]);
             }
 
             _needItemSlots.AddSlotUI(slot);
