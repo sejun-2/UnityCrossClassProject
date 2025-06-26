@@ -11,14 +11,17 @@ public class DataManager : Singleton<DataManager>
     private const string _itemDataTableURL = "https://docs.google.com/spreadsheets/d/1BUzeyQqdgSJwcADZ37UqJvqF_LNbXtGZjFV4FOsgHLk/export?format=csv&gid=0";
     private const string _itemNameTableURL = "https://docs.google.com/spreadsheets/d/1IkbcBZ9SV8rxuTtpKtRiC8WMsE8wPh6IyHyhu-JKyvg/export?format=csv&gid=0";
     private const string _craftingTableURL = "https://docs.google.com/spreadsheets/d/1YykeOdfCjzHxt6ixDxeOxsHo-kAuLKVyG1KXayTs-fQ/export?format=csv&gid=0";
+    private const string _cookingTableURL = "https://docs.google.com/spreadsheets/d/1nihidDn1fQzNgrbfrwzy0TWjW3SyqWswoYCY5Jo93us/export?format=csv&gid=0";
 
     public DataTableParser<Item> ItemData;
     public DataTableParser<CraftingData> CraftingData;
+    public DataTableParser<CraftingData> CookingData;
 
     private void Awake()
     {
         StartCoroutine(DownloadItemRoutine());
         StartCoroutine(DownloadCraftingRoutine());
+        StartCoroutine(DownloadCookingRoutine());
     }
 
     IEnumerator DownloadItemRoutine()
@@ -108,5 +111,35 @@ public class DataManager : Singleton<DataManager>
         });
 
         CraftingData.Load(dataCsv);
+    }
+
+    IEnumerator DownloadCookingRoutine()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(_cookingTableURL);
+        yield return request.SendWebRequest();
+        string dataCsv = request.downloadHandler.text;
+
+        CookingData = new DataTableParser<CraftingData>(words =>
+        {
+            CraftingData craft = new CraftingData();
+
+            craft.ID = words[0];
+            craft.ResultItemID = words[1];
+
+            for (int i = 2; i < 12; i += 2)
+            {
+                if (string.IsNullOrEmpty(words[i])) break;
+
+                NeedItem needItem;
+                needItem.ItemId = words[i];
+                needItem.count = int.Parse(words[i + 1]);
+
+                craft.NeedItems.Add(needItem);
+            }
+
+            return craft;
+        });
+
+        CookingData.Load(dataCsv);
     }
 }
