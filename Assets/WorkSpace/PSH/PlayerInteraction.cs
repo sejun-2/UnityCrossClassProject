@@ -1,6 +1,10 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
+public partial class PlayerStats
+{
+    public bool isFarming = false;//파밍중인지 나타내는 불값
+}
 public class PlayerInteraction : MonoBehaviour
 {
     public float moveSpeed = 5f;
@@ -13,23 +17,21 @@ public class PlayerInteraction : MonoBehaviour
 
     private bool isAutoClimbing = false;
     private Vector3 climbTargetPos;
-    private Ladder currentLadder;
-
-    public bool isFarming = false;//파밍중인지 나타내는 불값
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         playerCollider = GetComponent<Collider>();
+        Manager.Player.Stats.isFarming = false;
     }
 
     void Update()
     {
-        if(isFarming)
+        if (Manager.Player.Stats.isFarming)
         {
             if (Input.GetKeyDown(KeyCode.X))
             {
-                isFarming = false;
+                Manager.Player.Stats.isFarming = false;
             }
             return;
         }
@@ -101,7 +103,7 @@ public class PlayerInteraction : MonoBehaviour
             Ladder ladder = hit.collider.GetComponentInParent<Ladder>();
             if (ladder != null)
             {
-                currentLadder = ladder;
+
 
                 Transform startPoint = goUp ? ladder.GetBottom() : ladder.GetTop();
                 Transform endPoint = goUp ? ladder.GetTop() : ladder.GetBottom();
@@ -128,7 +130,6 @@ public class PlayerInteraction : MonoBehaviour
         {
             isAutoClimbing = false;
             rb.useGravity = true;
-            currentLadder = null;
 
             Debug.Log("사다리 자동 이동 완료");
 

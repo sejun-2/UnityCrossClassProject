@@ -6,9 +6,7 @@ public class ItemBox : MonoBehaviour, IInteractable
     [SerializeField] private Item _testItem;
 
     private Inventory _farmingInven;
-
-    [SerializeField] private PlayerInteraction _interaction;
-
+    
     private void Awake()
     {
         _farmingInven = new Inventory();
@@ -20,6 +18,6 @@ public class ItemBox : MonoBehaviour, IInteractable
     public void Interact()
     {
         Manager.UI.Inven.ShowTradeFarming(_farmingInven);
-        _interaction.isFarming = true;
+        Manager.Player.Stats.isFarming = true;
     }
 }
