@@ -4,6 +4,7 @@ using UnityEngine;
 public partial class PlayerStats
 {
     public bool isFarming = false;//파밍중인지 나타내는 불값
+    public IInteractable CurrentNearby;//가까운 상호작용 대상
 }
 public class PlayerInteraction : MonoBehaviour
 {
@@ -47,9 +48,10 @@ public class PlayerInteraction : MonoBehaviour
             TryAutoClimb(Input.GetKeyDown(KeyCode.UpArrow)); // true = 위로
         }
 
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
-            TryInteract();
+            Manager.Player.Stats.CurrentNearby.Interact();
+            Debug.Log("상호작용 실행");
         }
 
         MoveSideways();
@@ -103,7 +105,6 @@ public class PlayerInteraction : MonoBehaviour
             Ladder ladder = hit.collider.GetComponentInParent<Ladder>();
             if (ladder != null)
             {
-
 
                 Transform startPoint = goUp ? ladder.GetBottom() : ladder.GetTop();
                 Transform endPoint = goUp ? ladder.GetTop() : ladder.GetBottom();
