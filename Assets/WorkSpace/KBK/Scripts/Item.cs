@@ -11,7 +11,7 @@ public enum ItemType
 }
 
 [CreateAssetMenu(fileName = "NewItem", menuName = "Item/General Item")]
-public class Item : ScriptableObject
+public class Item : ScriptableObject, IUsableID
 {
     public int index;
     public string itemName;
@@ -33,10 +33,23 @@ public class Item : ScriptableObject
     public bool canStack;
     public int maxStackCount;
 
+    public float attackRange;
+
+    public string animationName;
+
 
     // 실제 아이템의 사용 효과를 구현할 함수.
     public virtual void Use()
     {
+        switch (itemType)
+        {
+            case ItemType.Weapon:
+                break;
+        }
+    }
 
+    public string GetID()
+    {
+        return index.ToString();
     }
 }
