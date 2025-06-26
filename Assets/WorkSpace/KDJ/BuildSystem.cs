@@ -5,7 +5,7 @@ using UnityEngine;
 // 플레이어가 바리케이드를 설치할 수 있도록 해주는 건설 시스템
 public class BuildSystem : MonoBehaviour
 {
-    public GameObject barricadePrefab;// 설치할 바리케이드 프리팹 (유니티 에디터에서 지정)
+    public GameObject barricadePrefab;// 설치할 바리케이드 프리팹 
     public LayerMask groundLayer;// 바닥으로 인식될 레이어 (Ray가 맞아야 설치됨)
     public KeyCode buildKey = KeyCode.B;// 설치키 기본: B 키
     void Update()

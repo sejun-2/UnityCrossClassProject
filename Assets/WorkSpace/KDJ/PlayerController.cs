@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;//걷기 속도
@@ -45,7 +44,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // 사다리에서 위/아래 이동 처리 함수
-     void Climb()
+    void Climb()
     {
         // W/S 키 또는 위아래 입력값 (-1 ~ 1)
         float v = Input.GetAxis("Vertical");

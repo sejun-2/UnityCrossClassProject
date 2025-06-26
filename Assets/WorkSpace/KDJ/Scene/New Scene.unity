@@ -208,13 +208,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 552772157}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 1.94, z: -10}
+  m_LocalRotation: {x: 0.6036244, y: -0, z: -0, w: 0.79726887}
+  m_LocalPosition: {x: 0.6, y: 43.1, z: -10.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 74.26, y: 0, z: 0}
 --- !u!114 &552772161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,6 +392,8 @@ GameObject:
   - component: {fileID: 662545996}
   - component: {fileID: 662545995}
   - component: {fileID: 662545994}
+  - component: {fileID: 662546002}
+  - component: {fileID: 662546001}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -413,7 +415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   hunger: 100
-  fatigue: 0
+  fatigue: 10
   mental: 100
   hungerDecayRate: 5
   fatigueIncreaseRate: 5
@@ -547,6 +549,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &662546001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662545993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff6e555170ddf24faab7e11f3c91d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackPoint: {fileID: 0}
+  attackRange: 2
+  attackKey: 122
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &662546002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662545993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a62388e7b73261146a907caaf697b358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRange: 1.5
+  damage: 20
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &950662425
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,8 +684,8 @@ Transform:
   m_GameObject: {fileID: 950662425}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3172775, y: 0.6, z: -0.94207907}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -1.0745, y: 0.6, z: 1.91}
+  m_LocalScale: {x: 3.8054376, y: 1, z: 4.777965}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
