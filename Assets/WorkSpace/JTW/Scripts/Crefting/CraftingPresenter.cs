@@ -21,6 +21,8 @@ public class CraftingPresenter : BaseUI
     {
         _resultItemPanel = GetUI("ResultItemPanel");
         _needItemPanel = GetUI("NeedItemPanel");
+
+        InitCrafting();
     }
 
     private void Update()
@@ -43,12 +45,6 @@ public class CraftingPresenter : BaseUI
             }
 
             UpdateNeedItemList(_resultItemSlots.SelectedSlotIndex);
-        }
-
-        //테스트 코드
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            InitCrafting();
         }
     }
 
