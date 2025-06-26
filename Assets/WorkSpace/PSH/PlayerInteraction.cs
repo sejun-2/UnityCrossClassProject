@@ -29,12 +29,12 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            TryAutoClimb(Input.GetKeyDown(KeyCode.W)); // true = 위로
+            TryAutoClimb(Input.GetKeyDown(KeyCode.UpArrow)); // true = 위로
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             TryInteract();
         }
