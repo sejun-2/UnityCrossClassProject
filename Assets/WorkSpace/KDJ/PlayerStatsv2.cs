@@ -22,7 +22,7 @@ public class PlayerStatsv2 : MonoBehaviour
         // 배고픔이 0이거나 피로가 100 이상이면 체력 감소 시작
         if (hunger <= 0 || fatigue >= 100f)
         {
-            health -= Time.deltaTime * 5f;// 체력은 초당 5씩 감소
+            health -=  Time.deltaTime * 5f;// 체력은 초당 5씩 감소
         }
 
         if (health <= 0f)// 체력이 0 이하로 떨어지면 사망 처리
