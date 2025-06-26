@@ -10,17 +10,19 @@ public class DataManager : Singleton<DataManager>
     // TODO : URL 적용
     private const string _itemDataTableURL = "/export?format=csv&gid=1551223081";
     private const string _itemNameTableURL = "/export?format=csv&gid=1551223081";
+    private const string _craftingTableURL = "https://docs.google.com/spreadsheets/d/1YykeOdfCjzHxt6ixDxeOxsHo-kAuLKVyG1KXayTs-fQ/export?format=csv&gid=0";
 
     // Item에 IUsableID 추가
     public DataTableParser<ItemTest> ItemData;
+    public DataTableParser<CraftingData> CraftingData;
 
     private void Awake()
     {
         // TODO : URL 확정 되고 나서 진행
-        // StartCoroutine(DownloadRoutine());
+        // StartCoroutine(DownloaditemRoutine());
     }
 
-    IEnumerator DownloadRoutine()
+    IEnumerator DownloadItemRoutine()
     {
         UnityWebRequest request = UnityWebRequest.Get(_itemDataTableURL);
         yield return request.SendWebRequest();
@@ -74,5 +76,35 @@ public class DataManager : Singleton<DataManager>
         };
 
         ItemData.Load(result);
+    }
+
+    IEnumerator DownloadCraftingRoutine()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(_craftingTableURL);
+        yield return request.SendWebRequest();
+        string dataCsv = request.downloadHandler.text;
+
+        CraftingData.Parse = words =>
+        {
+            CraftingData craft = new CraftingData();
+
+            craft.ID = words[0];
+            craft.ResultItemID = words[1];
+
+            for(int i = 2; i < 12; i += 2)
+            {
+                if (string.IsNullOrEmpty(words[i])) break;
+
+                NeedItem needItem;
+                needItem.ItemId = words[i];
+                needItem.count = int.Parse(words[i + 1]);
+
+                craft.NeedItems.Add(needItem);
+            }
+
+            return craft;
+        };
+
+        CraftingData.Load(dataCsv);
     }
 }

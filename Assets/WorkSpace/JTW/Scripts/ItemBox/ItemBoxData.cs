@@ -22,4 +22,32 @@ public class ItemBoxData
 
         _slotList.Add(newSlot);
     }
+
+    public bool IsItemExist(string itemId, int count = 1)
+    {
+        foreach(Slot slot in _slotList)
+        {
+            if (slot.CurItem == null) continue;
+
+            if(slot.CurItem.index.ToString() == itemId && slot.ItemCount >= count)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void RemoveItem(string itemId)
+    {
+        foreach(Slot slot in _slotList)
+        {
+            if (slot.CurItem == null) continue;
+
+            if(slot.CurItem.index.ToString() == itemId)
+            {
+                slot.RemoveItem();
+            }
+        }
+    }
 }

@@ -66,4 +66,9 @@ public class SlotUI : MonoBehaviour
     {
         _outLine.gameObject.SetActive(false);
     }
+
+    public void SetColor(Color color)
+    {
+        _countText.color = color;
+    }
 }
