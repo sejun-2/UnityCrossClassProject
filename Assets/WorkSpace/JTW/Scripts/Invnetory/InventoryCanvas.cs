@@ -59,4 +59,11 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
         playerInven.Deactivate();
     }
+
+    public void ShowCraftingUI()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/CraftingUI");
+
+        Instantiate(prefab, transform);
+    }
 }
