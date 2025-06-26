@@ -125,7 +125,6 @@ public class CraftingPresenter : BaseUI
             if(!Manager.Game.ItemBox
                 .IsItemExist(_needItemList[index][i].ItemId, _needItemList[index][i].count))
             {
-                Debug.Log(_needItemList[index][i].ItemId);
                 _needItemSlots.SlotUIs[i].SetColor(Color.red);
                 _canCraft = false;
             }
