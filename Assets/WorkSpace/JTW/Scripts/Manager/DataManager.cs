@@ -158,6 +158,8 @@ public class DataManager : Singleton<DataManager>
 
             craft.ID = words[0];
             craft.ResultItemID = words[0];
+            Manager.Game.IsRepairObject[words[0]] = false;
+            Manager.Game.IsUsedObject[words[0]] = false;
 
             for (int i = 1; i < 11; i += 2)
             {

@@ -10,6 +10,7 @@ public class GameManager : Singleton<GameManager>
     public ItemBoxData ItemBox;
 
     public Dictionary<string, bool> IsRepairObject = new Dictionary<string, bool>();
+    public Dictionary<string, bool> IsUsedObject = new Dictionary<string, bool>();
 
 
     // 하루가 마무리 될 때, 즉 베이스캠프로 돌아올 때 발생
@@ -29,5 +30,14 @@ public class GameManager : Singleton<GameManager>
         }
 
         SceneManager.LoadScene(sceneName);
+    }
+
+    public void DayComplete()
+    {
+        foreach(string key in IsUsedObject.Keys)
+        {
+            IsUsedObject[key] = false;
+        }
+        OnDayCompleted?.Invoke();
     }
 }
