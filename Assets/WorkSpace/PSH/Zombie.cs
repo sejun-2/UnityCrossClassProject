@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour
+public class Zombie : MonoBehaviour, IDamageable
 {
     public enum State { Patrol, Wait, Chase, Attack, Dead }
     State _currentState = State.Patrol;
@@ -168,7 +168,7 @@ public class Zombie : MonoBehaviour
     }
 
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(float amount)
     {
         if (_currentState == State.Dead) return;
 
@@ -176,11 +176,15 @@ public class Zombie : MonoBehaviour
         if (_health <= 0)
         {
             StateChange(State.Dead);
-            new WaitForSeconds(3f);
-            this.enabled = false;
+            StartCoroutine(DieAfterDelay());
         }
     }
-
+    private IEnumerator DieAfterDelay()
+    {
+        yield return new WaitForSeconds(3f);
+        gameObject.SetActive(false);
+        // ¶Ç´Â Destroy(gameObject);
+    }
     public void StateChange(State state)
     {
         switch (state)
