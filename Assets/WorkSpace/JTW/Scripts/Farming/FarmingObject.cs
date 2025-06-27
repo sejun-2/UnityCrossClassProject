@@ -20,5 +20,6 @@ public class FarmingObject : MonoBehaviour, IInteractable
     public void Interact()
     {
         Manager.UI.Inven.ShowTradeFarming(_farmingInven);
+        Manager.Player.Stats.isFarming = true;
     }
 }
