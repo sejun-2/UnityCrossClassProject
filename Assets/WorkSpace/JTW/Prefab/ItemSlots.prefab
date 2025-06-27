@@ -33,11 +33,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 520, y: 520}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7271042169146772908
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -90,4 +90,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slotUIPrefab: {fileID: 4287079269926146491, guid: 3648248cf47a7574a817462c41a54bbc,
     type: 3}
+  _itemSlotUIsPanel: {fileID: 5629065961620485264}
   AcceptTypeList: 

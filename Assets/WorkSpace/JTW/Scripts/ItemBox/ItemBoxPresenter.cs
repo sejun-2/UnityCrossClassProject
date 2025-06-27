@@ -90,7 +90,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
     {
         Debug.Log(_categoryPanel);
         _categotySlots = Instantiate(_itemSlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
-        _categotySlots.GetComponent<RectTransform>().sizeDelta = new Vector2(520, 160);
+        _categotySlots.SetPanelSize(new Vector2(5, 1));
         for(int i = 0; i < _categorySprites.Count; i++)
         {
             _categotySlots.AddSlotUI(maxItemCount:0);
@@ -101,6 +101,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
         for(int i = 0; i < _categorySprites.Count; i++)
         {
             _itemSlotsList.Add(Instantiate(_itemSlotsPrefab, _itemSlotsPanel.transform).GetComponent<ItemSlotUIs>());
+            _itemSlotsList[i].SetPanelSize(new Vector2(5, 4));
             _itemSlotsList[i].AcceptTypeList = _acceptTypeLists[i];
             _itemSlotsList[i].gameObject.SetActive(false);
         }

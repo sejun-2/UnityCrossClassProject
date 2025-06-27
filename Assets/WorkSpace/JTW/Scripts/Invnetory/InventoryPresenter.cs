@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private bool _isActivate = true;
     private bool _isSwitchActivate = false;
+
+    private Vector2 _panelSize;
 
     private void Update()
     {
@@ -55,7 +58,16 @@ public class InventoryPresenter : BaseUI, IInventory
             _inventoryForTrade = tradeInven;
             _tradeInvenDirection = tradeInvenDirection;
         }
+        _panelSize = new Vector2(5, 2);
         InitInventory();
+    }
+
+    public void SetPanelSize(Vector2 size)
+    {
+        Destroy(_itemSlotUIs.gameObject);
+        _panelSize = size;
+        InitInventory();
+
     }
 
     public void InitInventory()
@@ -63,6 +75,7 @@ public class InventoryPresenter : BaseUI, IInventory
         Transform itemSlotsPanel = GetUI("ItemSlotsPanel").transform;
 
         _itemSlotUIs = Instantiate(_itemSlotsPrefab, itemSlotsPanel).GetComponent<ItemSlotUIs>();
+        _itemSlotUIs.SetPanelSize(_panelSize);
 
         foreach(Slot slot in _inven.SlotList)
         {

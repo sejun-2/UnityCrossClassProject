@@ -11,7 +11,7 @@ public class FarmingObject : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        _farmingInven = new Inventory();
+        _farmingInven = new Inventory(new Vector2(5,1));
 
         // 테스트용 아이템 추가.
         _farmingInven.AddItem(_testItem);
