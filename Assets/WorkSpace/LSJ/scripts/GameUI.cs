@@ -8,9 +8,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] private Slider HpSlider; // Inspector에서 HP 슬라이더 연결
     [SerializeField] private Slider HungerSlider; 
     [SerializeField] private Slider ThirstSlider; 
-    [SerializeField] private Slider MentalitySlider;
-    [SerializeField] public int setMaxHp = 100; // 최대 체력
-    [SerializeField] public int setCurHp = 80; // 최대 체력
+    [SerializeField] private Slider MentalitySlider; 
 
     private void Start()
     {
@@ -20,15 +18,15 @@ public class GameUI : MonoBehaviour
         if (Manager.Player.Stats == null)
         {
             Debug.LogError("playerStats가 할당되지 않았습니다!");
+            Manager.Player.Stats.MaxHp.Value = 100; // 기본값 설정
+            Manager.Player.Stats.CurHp.Value = 40; // 기본값 설정 
         }
-
+        Manager.Player.Stats.MaxHp.Value = 100; // 기본값 설정
+        Manager.Player.Stats.CurHp.Value = 60; // 기본값 설정 
     }
 
     private void Update()
     {
-        Manager.Player.Stats.MaxHp.Value = setMaxHp; // 기본값 설정
-        Manager.Player.Stats.CurHp.Value = setCurHp; // 기본값 설정 
-
         // 체력 변화 이벤트 구독
         Manager.Player.Stats.CurHp.OnChanged += OnCurHpChanged;
         Manager.Player.Stats.MaxHp.OnChanged += OnMaxHpChanged;
