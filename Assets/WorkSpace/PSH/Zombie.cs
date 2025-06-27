@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour
+public class Zombie : MonoBehaviour, IDamageable
 {
     enum State { Patrol, Wait, Chase, Attack, Dead }
     State _currentState = State.Patrol;
@@ -118,7 +118,8 @@ public class Zombie : MonoBehaviour
         {
             Debug.Log("좀비가 공격");
             //animator.SetTrigger("Attack");
-            //player.GetComponent<PlayerHealth>().TakeDamage((int)_damage);
+            Manager.Player.Stats.CurHp.Value -= (int)_damage;
+            //Manager.Player.TakeDamage(_damage);
             _attackTimer = _attackCooldown;
         }
     }
@@ -165,7 +166,7 @@ public class Zombie : MonoBehaviour
         return Physics.Raycast(transform.position, _direction, 1f, obstacleMask);
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(float amount)
     {
         if (_currentState == State.Dead) return;
 
