@@ -13,7 +13,7 @@ public class RoomVisible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Destroy(dark);
+            dark.SetActive(false);
         }
     }
     //한 번 방문한 방은 다시 어두워지지 않음 으로 일단 구현함

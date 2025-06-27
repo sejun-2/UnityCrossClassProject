@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour
+public class Zombie : MonoBehaviour, IDamageable
 {
-    enum State { Patrol, Wait, Chase, Attack, Dead }
+    public enum State { Patrol, Wait, Chase, Attack, Dead }
     State _currentState = State.Patrol;
 
-    [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _patrolRange;
+    [SerializeField] private float _moveSpeed = 2;
+    [SerializeField] private float _patrolRange = 4;
     [SerializeField, Tooltip("추격시 이속 증가배율")] private float _chaseSpeedMultiplier = 1.1f;
-    [SerializeField, Tooltip("대기 시간")] private float _waitTime;
-    [SerializeField, Tooltip("플레이어 감지 범위")] private float _detectionDistance;
-    [SerializeField] private float _attackRange;
-    [SerializeField] private float _health;
-    [SerializeField] private float _damage;
-    [SerializeField] private float _attackCooldown;
+    [SerializeField, Tooltip("대기 시간")] private float _waitTime = 3;
+    [SerializeField, Tooltip("플레이어 감지 범위")] private float _detectionDistance = 5;
+    [SerializeField] private float _attackRange = 2;
+    [SerializeField] private float _health = 100;
+    [SerializeField] private float _damage = 10;
+    [SerializeField] private float _attackCooldown = 2;
 
     public Transform player;
     public LayerMask obstacleMask;
@@ -31,6 +31,8 @@ public class Zombie : MonoBehaviour
     {
         _spawnPos = transform.position;
         _targetPos = _spawnPos + _direction * _patrolRange;
+        //플레이어 어차피 한명이니까 찾아서 미리 세팅해두기
+        animator.SetInteger("MovingPattren", 0);//0순찰 1대기 2추격
     }
 
     void Update()
@@ -61,14 +63,14 @@ public class Zombie : MonoBehaviour
 
         if (IsObstacleAhead())//장애물이 있다면 멈추기
         {
-            _currentState = State.Wait;
+            StateChange(State.Wait);
             _waitTimer = _waitTime;
             return;
         }
 
         if (Vector3.Distance(transform.position, _targetPos) < 0.5f)//목표 지점에 가까워지면 멈추기
         {
-            _currentState = State.Wait;
+            StateChange(State.Wait);
             _waitTimer = _waitTime;
         }
     }
@@ -80,7 +82,7 @@ public class Zombie : MonoBehaviour
         {
             _direction *= -1;
             _targetPos = _spawnPos + _direction * _patrolRange;
-            _currentState = State.Patrol;
+            StateChange(State.Patrol);
         }
     }
 
@@ -88,7 +90,7 @@ public class Zombie : MonoBehaviour
     {
         if (Mathf.Abs(player.position.y - transform.position.y) > 2f)
         {
-            _currentState = State.Patrol;
+            StateChange(State.Patrol);
             _targetPos = _spawnPos + _direction * _patrolRange;
             Debug.Log("플레이어가 Y축 벗어남. 추격 중단");
             return;
@@ -96,7 +98,7 @@ public class Zombie : MonoBehaviour
 
         if (Vector3.Distance(transform.position, player.position) <= _attackRange)//공격 사정거리 안에 들어오면 공격
         {
-            _currentState = State.Attack;
+            StateChange(State.Attack);
             _attackTimer = 0f;
             return;
         }
@@ -110,14 +112,14 @@ public class Zombie : MonoBehaviour
 
         if (Vector3.Distance(transform.position, player.position) > _attackRange)
         {
-            _currentState = State.Chase;
+            StateChange(State.Chase);
             return;
         }
 
         if (_attackTimer <= 0f)
         {
-            Debug.Log("좀비가 공격");
-            //animator.SetTrigger("Attack");
+            Debug.Log($"좀비가 공격 플레이어 {_damage} 대미지");
+            StateChange(State.Attack);
             //player.GetComponent<PlayerHealth>().TakeDamage((int)_damage);
             _attackTimer = _attackCooldown;
         }
@@ -125,7 +127,7 @@ public class Zombie : MonoBehaviour
 
     void DetectPlayer()
     {
-        Vector3 rayOrigin = transform.position;//지금은 캡슐이라 그대론데 프리팹 바뀌면 위치 높이 조정해야할 수 있음
+        Vector3 rayOrigin = transform.position + Vector3.up;//프리팹 바뀌면 위치 높이 조정해야할 수 있음
         Vector3 rayDir = transform.forward * Mathf.Sign(_direction.z); // 이동 방향 기준 레이 쏨
 
         RaycastHit hit;
@@ -135,7 +137,7 @@ public class Zombie : MonoBehaviour
             {
                 if (_currentState == State.Patrol || _currentState == State.Wait)
                 {
-                    _currentState = State.Chase;
+                    StateChange(State.Chase);
                     Debug.Log("좀비: 앞에 플레이어 있음! 추격 시작");
                 }
             }
@@ -165,16 +167,51 @@ public class Zombie : MonoBehaviour
         return Physics.Raycast(transform.position, _direction, 1f, obstacleMask);
     }
 
-    public void TakeDamage(int amount)
+
+    public void TakeDamage(float amount)
     {
         if (_currentState == State.Dead) return;
 
         _health -= amount;
         if (_health <= 0)
         {
-            _currentState = State.Dead;
-            animator.SetTrigger("Die");
-            this.enabled = false;
+            StateChange(State.Dead);
+            StartCoroutine(DieAfterDelay());
         }
     }
+    private IEnumerator DieAfterDelay()
+    {
+        yield return new WaitForSeconds(3f);
+        gameObject.SetActive(false);
+        // 또는 Destroy(gameObject);
+    }
+    public void StateChange(State state)
+    {
+        switch (state)
+        {
+            case State.Patrol:
+                _currentState = State.Patrol;
+                animator.SetInteger("MovingPattren", 0);
+                break;
+            case State.Wait:
+                _currentState = State.Wait;
+                animator.SetInteger("MovingPattren", 1);
+                break;
+            case State.Chase:
+                _currentState = State.Chase;
+                animator.SetInteger("MovingPattren", 2);
+                break;
+            case State.Attack:
+                _currentState = State.Attack;
+                animator.SetTrigger("Attack");
+                break;
+            case State.Dead:
+                _currentState = State.Dead;
+                animator.SetBool("IsDead", true);
+                break;
+            default:
+                break;
+        }
+    }
+
 }
