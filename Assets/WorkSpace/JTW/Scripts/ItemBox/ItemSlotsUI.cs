@@ -5,13 +5,14 @@ using UnityEngine;
 public class ItemSlotUIs : MonoBehaviour
 {
     [SerializeField] private GameObject _slotUIPrefab;
+    [SerializeField] private RectTransform _itemSlotUIsPanel;
 
     private List<SlotUI> _slotUIs = new List<SlotUI>();
     public List<SlotUI> SlotUIs => _slotUIs;
     private Vector2 _slotUIPosition = new Vector2(30, -30);
     private float _interval = 120;
 
-    private int _lineCount = 4;
+    private int _lineCount = 5;
     public int LineCount => _lineCount;
 
     private SlotUI _selectedSlot;
@@ -20,6 +21,13 @@ public class ItemSlotUIs : MonoBehaviour
 
     public List<ItemType> AcceptTypeList = new List<ItemType>();
 
+    public void SetPanelSize(Vector2 sizeRate)
+    {
+        float width = sizeRate.x * 100 + (sizeRate.x - 1) * 20 + 60;
+        float height = sizeRate.y * 100 + (sizeRate.y - 1) * 20 + 60;
+
+        _itemSlotUIsPanel.sizeDelta = new Vector2(width, height);
+    }
     public bool AddSlotUI(Slot slot = null, int maxItemCount = 4)
     {
         if(AcceptTypeList.Count != 0 && !AcceptTypeList.Contains(slot.CurItem.itemType)) return false;

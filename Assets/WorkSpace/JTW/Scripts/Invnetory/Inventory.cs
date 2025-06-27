@@ -5,11 +5,16 @@ using UnityEngine;
 [System.Serializable]
 public class Inventory
 {
-    private Slot[,] _slotList = new Slot[4,4];
+    private Slot[,] _slotList = new Slot[2,5];
     public Slot[,] SlotList => _slotList;
 
-    public Inventory()
+    public Inventory(Vector2 size = default)
     {
+        if(size != default)
+        {
+            _slotList = new Slot[(int)size.x, (int)size.y];
+        }
+
         for(int i = 0; i < _slotList.GetLength(0); i++)
         {
             for(int j = 0; j < _slotList.GetLength(1); j++)
