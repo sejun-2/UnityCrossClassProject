@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 간단한 근접 무기 (검) 구현
-public class SimpleSword : MonoBehaviour, IWeapon
+public class SimpleSword : MonoBehaviour
 {
     public float damage = 20f;           // 데미지 수치
     public float range = 2f;             // 공격 범위
@@ -13,7 +13,7 @@ public class SimpleSword : MonoBehaviour, IWeapon
     public void Attack(Transform attackPoint)
     {
         // 공격 방향으로 Ray 발사
-        if (Physics.Raycast(attackPoint.position, attackPoint.forward, out RaycastHit hit, range, targetLayer))
+        if (Physics.Raycast(attackPoint.position, attackPoint.right, out RaycastHit hit, range, targetLayer))
         {
             // 충돌한 오브젝트가 적(Zombie)이면 데미지 입히기
             EnemyStats enemy = hit.collider.GetComponent<EnemyStats>();

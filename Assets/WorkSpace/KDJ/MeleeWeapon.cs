@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 근접 무기 기능을 담당하는 클래스 (IWeapon 인터페이스 구현)
-public class MeleeWeapon : MonoBehaviour, IWeapon
+public class MeleeWeapon : MonoBehaviour
 {
     public float attackRange = 1.5f;// 공격 범위 반지름 (무기 공격 범위)
     public int damage = 20;// 무기의 데미지 수치
