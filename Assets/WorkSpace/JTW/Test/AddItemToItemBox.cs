@@ -4,25 +4,13 @@ using UnityEngine;
 
 public class AddItemToItemBox : MonoBehaviour
 {
-    [SerializeField] private ItemBoxPresenter _pre;
-    [SerializeField] private Item _testItemPrefab;
-    [SerializeField] private ItemType _type;
-    [SerializeField] private string _name;
-
+    [SerializeField] private string _itemId;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            Item item = Instantiate(_testItemPrefab);
-            item.itemType = _type;
-            item.itemName = _name;
-
-            _pre.AddItem(item);
-        }
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            _pre.SetItemBoxData(new ItemBoxData());
+            Manager.Game.ItemBox.AddItem(Manager.Data.ItemData.Values[_itemId]);
+            Debug.Log($"Add {_itemId} item To ItemBox");
         }
     }
 }
