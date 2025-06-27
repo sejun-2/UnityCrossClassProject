@@ -74,4 +74,12 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
         Instantiate(prefab, transform);
     }
+
+    public void ShowRepairUI(RepairObject repair)
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/RepairUI");
+
+        RepairPresenter pre = Instantiate(prefab, transform).GetComponent<RepairPresenter>();
+        pre.InitRepair(repair);
+    }
 }

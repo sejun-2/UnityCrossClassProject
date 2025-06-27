@@ -12,16 +12,19 @@ public class DataManager : Singleton<DataManager>
     private const string _itemNameTableURL = "https://docs.google.com/spreadsheets/d/1IkbcBZ9SV8rxuTtpKtRiC8WMsE8wPh6IyHyhu-JKyvg/export?format=csv&gid=0";
     private const string _craftingTableURL = "https://docs.google.com/spreadsheets/d/1YykeOdfCjzHxt6ixDxeOxsHo-kAuLKVyG1KXayTs-fQ/export?format=csv&gid=0";
     private const string _cookingTableURL = "https://docs.google.com/spreadsheets/d/1nihidDn1fQzNgrbfrwzy0TWjW3SyqWswoYCY5Jo93us/export?format=csv&gid=0";
+    private const string _repairTableURL = "";
 
     public DataTableParser<Item> ItemData;
     public DataTableParser<CraftingData> CraftingData;
     public DataTableParser<CraftingData> CookingData;
+    public DataTableParser<CraftingData> RefairData;
 
     private void Awake()
     {
         StartCoroutine(DownloadItemRoutine());
         StartCoroutine(DownloadCraftingRoutine());
         StartCoroutine(DownloadCookingRoutine());
+        // StartCoroutine(DownloadRepairRoutine());
     }
 
     IEnumerator DownloadItemRoutine()
@@ -141,5 +144,35 @@ public class DataManager : Singleton<DataManager>
         });
 
         CookingData.Load(dataCsv);
+    }
+
+    IEnumerator DownloadRepairRoutine()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(_repairTableURL);
+        yield return request.SendWebRequest();
+        string dataCsv = request.downloadHandler.text;
+
+        RefairData = new DataTableParser<CraftingData>(words =>
+        {
+            CraftingData craft = new CraftingData();
+
+            craft.ID = words[0];
+            craft.ResultItemID = words[0];
+
+            for (int i = 1; i < 11; i += 2)
+            {
+                if (string.IsNullOrEmpty(words[i])) break;
+
+                NeedItem needItem;
+                needItem.ItemId = words[i];
+                needItem.count = int.Parse(words[i + 1]);
+
+                craft.NeedItems.Add(needItem);
+            }
+
+            return craft;
+        });
+
+        RefairData.Load(dataCsv);
     }
 }
