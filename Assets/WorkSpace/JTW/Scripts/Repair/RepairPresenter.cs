@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class RepairPresenter : BaseUI
 {
     [SerializeField] private ItemSlotUIs _itemSlotUIsPrefab;
+
     private ItemSlotUIs _needItemSlots;
     private GameObject _needItemPanel;
+    private TextMeshProUGUI _nameText;
+    private TextMeshProUGUI _descriptionText;
+
 
     private List<NeedItem> _needItemList = new List<NeedItem>();
 
@@ -14,12 +19,7 @@ public class RepairPresenter : BaseUI
 
     private bool _canRepair;
 
-    private Dictionary<string, CraftingData> RepairDict => Manager.Data.RefairData.Values;
-
-    private void Start()
-    {
-        _needItemPanel = GetUI("NeedItemPanel");
-    }
+    private Dictionary<string, RepairData> RepairDict => Manager.Data.RefairData.Values;
 
     private void Update()
     {
@@ -39,18 +39,26 @@ public class RepairPresenter : BaseUI
 
     public void InitRepair(RepairObject repair)
     {
+        InitObjects();
+
         _repairObject = repair;
 
         _needItemList = RepairDict[_repairObject.ObjectId].NeedItems;
 
         UpdateNeedItemList();
     }
+    private void InitObjects()
+    {
+        _needItemPanel = GetUI("NeedItemPanel");
+        _nameText = GetUI<TextMeshProUGUI>("NameText");
+        _descriptionText = GetUI<TextMeshProUGUI>("DescriptionText");
+    }
 
     private void UpdateNeedItemList()
     {
         _needItemSlots = Instantiate(_itemSlotUIsPrefab, _needItemPanel.transform)
             .GetComponent<ItemSlotUIs>();
-        _needItemSlots.SetPanelSize(new Vector2(5, 4));
+        _needItemSlots.SetPanelSize(new Vector2(5, 1));
         _needItemSlots.Deactivate();
 
         _canRepair = true;
@@ -71,5 +79,8 @@ public class RepairPresenter : BaseUI
                 _canRepair = false;
             }
         }
+
+        _nameText.text = RepairDict[_repairObject.ObjectId].Name;
+        _descriptionText.text = RepairDict[_repairObject.ObjectId].Description;
     }
 }
