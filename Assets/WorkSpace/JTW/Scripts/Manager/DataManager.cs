@@ -334,7 +334,7 @@ public class DataManager : Singleton<DataManager>
     #region DownloadPlayerDialogue
     IEnumerator DownloadPlayerDialogueRoutine()
     {
-        UnityWebRequest request = UnityWebRequest.Get(_storyDescriptionTableURL);
+        UnityWebRequest request = UnityWebRequest.Get(_playerDialogueTableURL);
         yield return request.SendWebRequest();
         string dataCsv = request.downloadHandler.text;
 
