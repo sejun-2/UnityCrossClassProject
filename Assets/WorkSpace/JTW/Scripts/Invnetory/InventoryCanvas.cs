@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InventoryCanvas : UICanvas<InventoryCanvas>
 {
+    #region Inven,ItemBox,Farming
     public void ShowInven()
     {
         GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/Inventory");
@@ -60,7 +61,9 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
         playerInven.Deactivate();
     }
+    #endregion
 
+    #region Crafting,Cooking,Repair
     public void ShowCraftingUI()
     {
         GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/CraftingUI");
@@ -82,4 +85,71 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         RepairPresenter pre = Instantiate(prefab, transform).GetComponent<RepairPresenter>();
         pre.InitRepair(repair);
     }
+    #endregion
+
+    public void ShowSubStoryUI()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/SubStoryUI");
+
+        Instantiate(prefab, transform);
+    }
+
+    public void ShowStoryPopUp(string storyId)
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/StoryPopUp");
+
+        StoryPopUpPresenter pre = Instantiate(prefab, transform).GetComponent<StoryPopUpPresenter>();
+        pre.InitStoryPopUp(storyId);
+    }
+
+    #region BubbleText
+    private GameObject _bubble;
+    private Coroutine _bubbleCoroutine;
+
+    public void ShowBubbleText(string text)
+    {
+        if (_bubbleCoroutine != null)
+        {
+            StopCoroutine(_bubbleCoroutine);
+            Destroy(_bubble);
+        }
+
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/Bubble");
+
+        _bubble = Instantiate(prefab, transform);
+
+        BubbleText bubbleText = _bubble.GetComponent<BubbleText>();
+        bubbleText.SetText(text);
+
+        _bubbleCoroutine = StartCoroutine(BubbleTextCoroutine(_bubble));
+    }
+
+    private IEnumerator BubbleTextCoroutine(GameObject bubble)
+    {
+        float timer = 5f;
+
+        RectTransform bubbleRt = bubble.GetComponent<RectTransform>();
+
+        Vector3 offset = new Vector3(0, 2, 0);
+
+        while (timer > 0)
+        {
+            if (bubble == null) break;
+
+            timer -= Time.deltaTime;
+            Vector3 pos = Manager.Player.Transform.position + offset;
+
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
+
+            bubbleRt.position = screenPos;
+
+            yield return null;
+        }
+
+        if(bubble != null)
+        {
+            Destroy(bubble);
+        }
+    }
+    #endregion
 }
