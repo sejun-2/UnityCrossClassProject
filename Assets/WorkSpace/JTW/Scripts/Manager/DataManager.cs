@@ -18,6 +18,8 @@ public class DataManager : Singleton<DataManager>
     private const string _repairDescriptionTableURL = "https://docs.google.com/spreadsheets/d/1rCK2XdGhGUgGEfJWPJVchXTQTnqh3adUDixuAyX0P1c/export?format=csv&gid=0";
     private const string _ItemDropTableURL = "https://docs.google.com/spreadsheets/d/12WitX8EnRC_vlkSdJI_P3oBDLzqgPZE_0CRtUczMlOM/export?format=csv&gid=0";
     private const string _ItemSearchTableURL = "https://docs.google.com/spreadsheets/d/1acWhQmMpqq8mlE_XdDYcHdSh0Os9_zTbLrw_5cfV_P0/export?format=csv&gid=0";
+    private const string _storyDescriptionTableURL = "https://docs.google.com/spreadsheets/d/1jRBAj27nZM4DmqJFzzZAhh8zO3jYZ3TV3wdA2bwf7Fk/export?format=csv&gid=0";
+    private const string _playerDialogueTableURL = "https://docs.google.com/spreadsheets/d/1aMfYaGA6_9bvLPwBczY-up_UYgHt4Lg4W-OtRcmY-fU/export?format=csv&gid=0";
 
     public DataTableParser<Item> ItemData;
     public DataTableParser<CraftingData> CraftingData;
@@ -25,6 +27,8 @@ public class DataManager : Singleton<DataManager>
     public DataTableParser<RepairData> RefairData;
     public DataTableParser<ItemSearchData> ItemSearchData;
     public DataTableParser<ItemDropData> ItemDropData;
+    public DataTableParser<StoryDescriptionData> StoryDescriptionData;
+    public DataTableParser<PlayerDialogueData> PlayerDialogueData;
 
     private void Awake()
     {
@@ -34,8 +38,11 @@ public class DataManager : Singleton<DataManager>
         StartCoroutine(DownloadRepairRoutine());
         StartCoroutine(DownloadSearchRoutine());
         StartCoroutine(DownloadDropRoutine());
+        StartCoroutine(DownloadStoryRoutine());
+        StartCoroutine(DownloadPlayerDialogueRoutine());
     }
 
+    #region DownloadItem
     IEnumerator DownloadItemRoutine()
     {
 
@@ -101,7 +108,9 @@ public class DataManager : Singleton<DataManager>
 
         ItemData.Load(result);
     }
+    #endregion
 
+    #region DownloadCrafting
     IEnumerator DownloadCraftingRoutine()
     {
         UnityWebRequest request = UnityWebRequest.Get(_craftingTableURL);
@@ -131,7 +140,9 @@ public class DataManager : Singleton<DataManager>
 
         CraftingData.Load(dataCsv);
     }
+    #endregion
 
+    #region DownloadCooking
     IEnumerator DownloadCookingRoutine()
     {
         UnityWebRequest request = UnityWebRequest.Get(_cookingTableURL);
@@ -161,7 +172,9 @@ public class DataManager : Singleton<DataManager>
 
         CookingData.Load(dataCsv);
     }
+    #endregion
 
+    #region DownloadRepair
     IEnumerator DownloadRepairRoutine()
     {
         UnityWebRequest request = UnityWebRequest.Get(_repairTableURL);
@@ -219,7 +232,9 @@ public class DataManager : Singleton<DataManager>
 
         Debug.Log(result);
     }
+    #endregion
 
+    #region DownloadDrop
     IEnumerator DownloadDropRoutine()
     {
         UnityWebRequest request = UnityWebRequest.Get(_ItemDropTableURL);
@@ -253,7 +268,9 @@ public class DataManager : Singleton<DataManager>
 
         ItemDropData.Load(dataCsv);
     }
+    #endregion
 
+    #region DownloadSearch
     IEnumerator DownloadSearchRoutine()
     {
         UnityWebRequest request = UnityWebRequest.Get(_ItemSearchTableURL);
@@ -283,4 +300,56 @@ public class DataManager : Singleton<DataManager>
 
         ItemSearchData.Load(dataCsv);
     }
+    #endregion
+
+    #region DownloadStory
+    IEnumerator DownloadStoryRoutine()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(_storyDescriptionTableURL);
+        yield return request.SendWebRequest();
+        string dataCsv = request.downloadHandler.text;
+
+        StoryDescriptionData = new DataTableParser<StoryDescriptionData>(words =>
+        {
+            StoryDescriptionData story = new StoryDescriptionData();
+
+            story.ID = words[0];
+            Manager.Game.IsGetSubStory[words[0]] = false;
+
+            string iconName = words[1].Trim();
+            string iconPath = $"Assets/Imports/UnityCrossClassProject_Assets/Icons/{iconName}.png";
+            Sprite icon = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+            story.Icon = icon;
+            story.Name = words[2];
+            story.Description = words[3];
+            story.PlayerDialogueID = words[4];
+
+            return story;
+        });
+
+        StoryDescriptionData.Load(dataCsv);
+    }
+    #endregion
+
+    #region DownloadPlayerDialogue
+    IEnumerator DownloadPlayerDialogueRoutine()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(_storyDescriptionTableURL);
+        yield return request.SendWebRequest();
+        string dataCsv = request.downloadHandler.text;
+
+        PlayerDialogueData = new DataTableParser<PlayerDialogueData>(words =>
+        {
+            PlayerDialogueData dialogue = new();
+
+            dialogue.ID = words[0];
+            dialogue.Dialogue_kr = words[1];
+            dialogue.Dialogue_en = words[2];
+
+            return dialogue;
+        });
+
+        PlayerDialogueData.Load(dataCsv);
+    }
+    #endregion
 }
