@@ -71,4 +71,16 @@ public class SlotUI : MonoBehaviour
     {
         _countText.color = color;
     }
+
+    public Vector2 GetSlotSize()
+    {
+        RectTransform rt = transform.GetComponent<RectTransform>();
+
+        return rt.sizeDelta;
+    }
+
+    public void SetText(string text)
+    {
+        _countText.text = text;
+    }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8930528071088649519}
   - component: {fileID: 1778441505217503213}
   m_Layer: 5
-  m_Name: ItemSlots
+  m_Name: SubstorySlots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00497594adf3cbc4bbb83555ddcc0202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotUIPrefab: {fileID: 4287079269926146491, guid: 3648248cf47a7574a817462c41a54bbc,
+  _slotUIPrefab: {fileID: 4287079269926146491, guid: 824524ba8458dd84999e78b106783edb,
     type: 3}
   _itemSlotUIsPanel: {fileID: 5629065961620485264}
   AcceptTypeList: 
