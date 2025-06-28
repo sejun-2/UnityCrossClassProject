@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Burst.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,11 +14,15 @@ public class DataManager : Singleton<DataManager>
     private const string _craftingTableURL = "https://docs.google.com/spreadsheets/d/1YykeOdfCjzHxt6ixDxeOxsHo-kAuLKVyG1KXayTs-fQ/export?format=csv&gid=0";
     private const string _cookingTableURL = "https://docs.google.com/spreadsheets/d/1nihidDn1fQzNgrbfrwzy0TWjW3SyqWswoYCY5Jo93us/export?format=csv&gid=0";
     private const string _repairTableURL = "";
+    private const string _ItemDropTableURL = "https://docs.google.com/spreadsheets/d/12WitX8EnRC_vlkSdJI_P3oBDLzqgPZE_0CRtUczMlOM/export?format=csv&gid=0";
+    private const string _ItemSearchTableURL = "https://docs.google.com/spreadsheets/d/1acWhQmMpqq8mlE_XdDYcHdSh0Os9_zTbLrw_5cfV_P0/export?format=csv&gid=0";
 
     public DataTableParser<Item> ItemData;
     public DataTableParser<CraftingData> CraftingData;
     public DataTableParser<CraftingData> CookingData;
     public DataTableParser<CraftingData> RefairData;
+    public DataTableParser<ItemSearchData> ItemSearchData;
+    public DataTableParser<ItemDropData> ItemDropData;
 
     private void Awake()
     {
@@ -25,6 +30,8 @@ public class DataManager : Singleton<DataManager>
         StartCoroutine(DownloadCraftingRoutine());
         StartCoroutine(DownloadCookingRoutine());
         // StartCoroutine(DownloadRepairRoutine());
+        StartCoroutine(DownloadSearchRoutine());
+        StartCoroutine(DownloadDropRoutine());
     }
 
     IEnumerator DownloadItemRoutine()
@@ -176,5 +183,69 @@ public class DataManager : Singleton<DataManager>
         });
 
         RefairData.Load(dataCsv);
+    }
+
+    IEnumerator DownloadDropRoutine()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(_ItemDropTableURL);
+        yield return request.SendWebRequest();
+        string dataCsv = request.downloadHandler.text;
+
+        string[] temp = dataCsv.Split("\n");
+        temp = temp.Skip(1).ToArray();
+
+        dataCsv = string.Join("\n", temp);
+
+        ItemDropData = new DataTableParser<ItemDropData>(words =>
+        {
+            ItemDropData drop = new();
+
+            drop.ID = words[0];
+            for(int i = 1; i < 6; i++)
+            {
+                if (float.TryParse(words[i], out float value))
+                {
+                    drop.ProbabilityList.Add(value);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return drop;
+        });
+
+        ItemDropData.Load(dataCsv);
+    }
+
+    IEnumerator DownloadSearchRoutine()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(_ItemSearchTableURL);
+        yield return request.SendWebRequest();
+        string dataCsv = request.downloadHandler.text;
+
+        ItemSearchData = new DataTableParser<ItemSearchData>(words =>
+        {
+            ItemSearchData search = new();
+
+            search.ID = words[0];
+
+            for(int i = 1; i < 16; i += 3)
+            {
+                if (string.IsNullOrEmpty(words[i])) break;
+
+                RandomItemData data;
+                data.ItemId = words[i];
+                data.Probability = float.Parse(words[i + 1]);
+                data.Count = int.Parse(words[i + 2]);
+
+                search.RandomItemList.Add(data);
+            }
+
+            return search;
+        });
+
+        ItemSearchData.Load(dataCsv);
     }
 }
