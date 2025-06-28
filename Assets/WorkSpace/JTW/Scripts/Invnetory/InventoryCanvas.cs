@@ -94,6 +94,18 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         Instantiate(prefab, transform);
     }
 
+    public void ShowStoryPopUp(string storyId)
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/StoryPopUp");
+
+        StoryPopUpPresenter pre = Instantiate(prefab, transform).GetComponent<StoryPopUpPresenter>();
+        pre.InitStoryPopUp(storyId);
+    }
+
+    #region BubbleText
+    private GameObject _bubble;
+    private Coroutine _bubbleCoroutine;
+
     public void ShowBubbleText(string text)
     {
         if (_bubbleCoroutine != null)
