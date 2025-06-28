@@ -14,7 +14,13 @@ public class StoryPopUpPresenter : BaseUI
             Destroy(this.gameObject);
 
             string dialogueId = Manager.Data.StoryDescriptionData.Values[_storyId].PlayerDialogueID;
-            Manager.UI.Inven.ShowBubbleText(Manager.Data.PlayerDialogueData.Values[dialogueId].Dialogue_kr);
+
+            if (!string.IsNullOrEmpty(dialogueId))
+            {
+                string dialogue = Manager.Data.PlayerDialogueData.Values[dialogueId].Dialogue_kr;
+                Manager.UI.Inven.ShowBubbleText(dialogue);
+            }
+            
         }
     }
 
