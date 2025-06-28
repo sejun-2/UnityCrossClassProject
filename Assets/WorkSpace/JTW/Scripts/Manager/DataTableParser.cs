@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class DataTableParser<T> where T : IUsableID
 {
@@ -18,10 +19,10 @@ public class DataTableParser<T> where T : IUsableID
 
     public bool Load(in string csv)
     {
-        string[] lines = csv.Split('\n');
+        string[] lines = Regex.Split(csv, @"\n(?=(?:[^$]*\$[^$]*\$)*[^$]*$)");
         for (int i = 1; i < lines.Length; i++)
         {
-            Regex csvSplitRegex = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+            Regex csvSplitRegex = new Regex(@",(?=(?:[^$]*\$[^$]*\$)*[^$]*$)");
 
             string[] fields = csvSplitRegex.Split(lines[i]);
 
