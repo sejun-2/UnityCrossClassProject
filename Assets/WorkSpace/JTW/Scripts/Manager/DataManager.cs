@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Unity.Burst.CompilerServices;
 using UnityEditor;
 using UnityEngine;
@@ -13,14 +14,15 @@ public class DataManager : Singleton<DataManager>
     private const string _itemNameTableURL = "https://docs.google.com/spreadsheets/d/1IkbcBZ9SV8rxuTtpKtRiC8WMsE8wPh6IyHyhu-JKyvg/export?format=csv&gid=0";
     private const string _craftingTableURL = "https://docs.google.com/spreadsheets/d/1YykeOdfCjzHxt6ixDxeOxsHo-kAuLKVyG1KXayTs-fQ/export?format=csv&gid=0";
     private const string _cookingTableURL = "https://docs.google.com/spreadsheets/d/1nihidDn1fQzNgrbfrwzy0TWjW3SyqWswoYCY5Jo93us/export?format=csv&gid=0";
-    private const string _repairTableURL = "";
+    private const string _repairTableURL = "https://docs.google.com/spreadsheets/d/1Ll4kkB0pElIZV6ohYWB54NQbv4JPD9yijzrobMuslDM/export?format=csv&gid=0";
+    private const string _repairDescriptionTableURL = "https://docs.google.com/spreadsheets/d/1rCK2XdGhGUgGEfJWPJVchXTQTnqh3adUDixuAyX0P1c/export?format=csv&gid=0";
     private const string _ItemDropTableURL = "https://docs.google.com/spreadsheets/d/12WitX8EnRC_vlkSdJI_P3oBDLzqgPZE_0CRtUczMlOM/export?format=csv&gid=0";
     private const string _ItemSearchTableURL = "https://docs.google.com/spreadsheets/d/1acWhQmMpqq8mlE_XdDYcHdSh0Os9_zTbLrw_5cfV_P0/export?format=csv&gid=0";
 
     public DataTableParser<Item> ItemData;
     public DataTableParser<CraftingData> CraftingData;
     public DataTableParser<CraftingData> CookingData;
-    public DataTableParser<CraftingData> RefairData;
+    public DataTableParser<RepairData> RefairData;
     public DataTableParser<ItemSearchData> ItemSearchData;
     public DataTableParser<ItemDropData> ItemDropData;
 
@@ -29,7 +31,7 @@ public class DataManager : Singleton<DataManager>
         StartCoroutine(DownloadItemRoutine());
         StartCoroutine(DownloadCraftingRoutine());
         StartCoroutine(DownloadCookingRoutine());
-        // StartCoroutine(DownloadRepairRoutine());
+        StartCoroutine(DownloadRepairRoutine());
         StartCoroutine(DownloadSearchRoutine());
         StartCoroutine(DownloadDropRoutine());
     }
@@ -49,6 +51,13 @@ public class DataManager : Singleton<DataManager>
         string[] nameLines = itemCsv.Split("\n");
 
         dataLines = dataLines.Skip(1).ToArray();
+
+        Regex csvSplitRegex = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+        for (int i = 0; i < nameLines.Length; i++)
+        {
+            nameLines[i] = string.Join(",", csvSplitRegex.Split(nameLines[i]).Take(5).ToArray());
+        }
 
         string[] resultLines = new string[dataLines.Length];
 
@@ -159,16 +168,40 @@ public class DataManager : Singleton<DataManager>
         yield return request.SendWebRequest();
         string dataCsv = request.downloadHandler.text;
 
-        RefairData = new DataTableParser<CraftingData>(words =>
-        {
-            CraftingData craft = new CraftingData();
+        request = UnityWebRequest.Get(_repairDescriptionTableURL);
+        yield return request.SendWebRequest();
+        string DescriptiondataCsv = request.downloadHandler.text;
 
-            craft.ID = words[0];
-            craft.ResultItemID = words[0];
+        string[] dataLines = dataCsv.Split("\n");
+        string[] descriptionLine = DescriptiondataCsv.Split("\n");
+
+        Regex csvSplitRegex = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+        for (int i = 0; i < descriptionLine.Length; i++)
+        {
+            descriptionLine[i] = string.Join(",", csvSplitRegex.Split(descriptionLine[i]).Take(3).ToArray());
+        }
+
+        string[] resultLines = new string[dataLines.Length];
+
+        for (int i = 0; i < dataLines.Length; i++)
+        {
+            resultLines[i] = $"{descriptionLine[i]},{dataLines[i]}";
+        }
+
+        string result = string.Join("\n", resultLines);
+
+        RefairData = new DataTableParser<RepairData>(words =>
+        {
+            RepairData repair = new RepairData();
+
+            repair.ID = words[0];
+            repair.Name = words[1];
+            repair.Description = words[2];
             Manager.Game.IsRepairObject[words[0]] = false;
             Manager.Game.IsUsedObject[words[0]] = false;
 
-            for (int i = 1; i < 11; i += 2)
+            for (int i = 4; i < 14; i += 2)
             {
                 if (string.IsNullOrEmpty(words[i])) break;
 
@@ -176,13 +209,15 @@ public class DataManager : Singleton<DataManager>
                 needItem.ItemId = words[i];
                 needItem.count = int.Parse(words[i + 1]);
 
-                craft.NeedItems.Add(needItem);
+                repair.NeedItems.Add(needItem);
             }
 
-            return craft;
+            return repair;
         });
 
-        RefairData.Load(dataCsv);
+        RefairData.Load(result);
+
+        Debug.Log(result);
     }
 
     IEnumerator DownloadDropRoutine()
