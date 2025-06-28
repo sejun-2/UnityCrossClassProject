@@ -10,4 +10,12 @@ public class LangguagePopUp : BaseUI
         GetEvent("Cancellation").Click += data => Manager.UI.PopUp.ClosePopUp();
         GetEvent("XButton").Click += data => Manager.UI.PopUp.ClosePopUp();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Manager.UI.PopUp.ClosePopUp();
+        }
+    }
 }
