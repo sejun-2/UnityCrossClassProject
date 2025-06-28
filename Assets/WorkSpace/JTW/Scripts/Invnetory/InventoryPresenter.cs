@@ -47,6 +47,10 @@ public class InventoryPresenter : BaseUI, IInventory
         {
             _isActivate = !_isActivate;
             _isSwitchActivate = false;
+            if (_isActivate)
+            {
+                UpdateItemInfo();
+            }
         }
     }
 
@@ -123,6 +127,7 @@ public class InventoryPresenter : BaseUI, IInventory
             {
                 _inventoryForTrade.AddItem(item);
                 _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].Slot.RemoveItem();
+                UpdateItemInfo();
             }
         }
         else
@@ -171,6 +176,8 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private void UpdateItemInfo()
     {
+        if (!_isActivate) return;
+
         Item item = _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].GetItemData();
 
         if (item != null)
@@ -188,7 +195,6 @@ public class InventoryPresenter : BaseUI, IInventory
     public void Activate()
     {
         _isSwitchActivate = true;
-        UpdateItemInfo();
         _itemSlotUIs.Activate();
     }
 
