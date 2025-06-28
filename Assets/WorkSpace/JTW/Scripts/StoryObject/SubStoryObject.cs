@@ -10,5 +10,6 @@ public class SubStoryObject : MonoBehaviour, IInteractable
     {
         Manager.Player.Stats.isFarming = true;
         Manager.Game.IsGetSubStory[_storyId] = true;
+        Manager.UI.Inven.ShowStoryPopUp(_storyId);
     }
 }
