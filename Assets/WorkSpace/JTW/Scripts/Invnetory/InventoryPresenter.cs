@@ -188,12 +188,15 @@ public class InventoryPresenter : BaseUI, IInventory
     public void Activate()
     {
         _isSwitchActivate = true;
+        UpdateItemInfo();
         _itemSlotUIs.Activate();
     }
 
     public void Deactivate()
     {
         _isSwitchActivate = true;
+        GetUI<TextMeshProUGUI>("ItemNameText").text = "";
+        GetUI<TextMeshProUGUI>("ItemDescriptionText").text = "";
         _itemSlotUIs.Deactivate();
     }
 }
