@@ -9,10 +9,10 @@ public class RepairObject : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        if (Manager.Game.IsRepairObject[_objectId])
-        {
-            Repair();
-        }
+        //if (Manager.Game.IsRepairObject[_objectId])
+        //{
+        //    Repair();
+        //}
     }
 
     public void Interact()
