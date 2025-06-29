@@ -152,4 +152,11 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         }
     }
     #endregion
+
+    public void ShowMapUI()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/MapUI");
+
+        Instantiate(prefab, transform);
+    }
 }
