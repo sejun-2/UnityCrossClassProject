@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, bool> IsGetSubStory = new Dictionary<string, bool>();
 
     public bool IsInBaseCamp = true;
+    public string SelectedMapName = "";
 
 
     // 하루가 마무리 될 때, 즉 베이스캠프로 돌아올 때 발생
@@ -29,7 +30,7 @@ public class GameManager : Singleton<GameManager>
     {
         if(sceneName == "BaseCamp")
         {
-            OnDayCompleted?.Invoke();
+            DayComplete();
         }
 
         SceneManager.LoadScene(sceneName);
