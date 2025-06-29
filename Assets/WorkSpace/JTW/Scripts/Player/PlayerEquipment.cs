@@ -1,9 +1,12 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
 public partial class PlayerStats
 {
-    public Stat<Item> Weapon;
-    public Stat<Item> Armor;
+    [JsonIgnore]
+    public Stat<Item> Weapon = new();
+    [JsonIgnore]
+    public Stat<Item> Armor = new();
 }
 
 public class PlayerEquipment : MonoBehaviour
