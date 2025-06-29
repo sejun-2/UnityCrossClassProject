@@ -27,10 +27,10 @@ public class Slot
 
     public void UseItem()
     {
-        _curItem.Use();
-
-        // TODO : 아이템 Type에 따른 변동사항 적용
-        RemoveItem();
+        if (_curItem.Use())
+        {
+            RemoveItem();
+        }
     }
 
     public bool AddItem(Item item)
