@@ -166,7 +166,7 @@ public class InventoryPresenter : BaseUI, IInventory
         if(IsTrade && movePos == _tradeInvenDirection && _itemSlotUIs.CanChangeTrade(movePos))
         {
             Deactivate();
-            _inventoryForTrade.Activate();
+            _inventoryForTrade.Activate(_itemSlotUIs.SelectedSlotIndex);
             return;
         }
 
@@ -192,10 +192,13 @@ public class InventoryPresenter : BaseUI, IInventory
         }
     }
 
-    public void Activate()
+    public void Activate(int index)
     {
         _isSwitchActivate = true;
-        _itemSlotUIs.Activate();
+
+        index = SetSelectIndex(index);
+
+        _itemSlotUIs.Activate(index);
     }
 
     public void Deactivate()
@@ -204,5 +207,46 @@ public class InventoryPresenter : BaseUI, IInventory
         GetUI<TextMeshProUGUI>("ItemNameText").text = "";
         GetUI<TextMeshProUGUI>("ItemDescriptionText").text = "";
         _itemSlotUIs.Deactivate();
+    }
+
+    private int SetSelectIndex(int index)
+    {
+        if(_tradeInvenDirection == Vector2.up)
+        {
+            return index % _itemSlotUIs.LineCount;
+        }
+        else if (_tradeInvenDirection == Vector2.down)
+        {
+            return (_itemSlotUIs.SlotUIs.Count + index) - _itemSlotUIs.LineCount;
+        }
+        else if (_tradeInvenDirection == Vector2.left)
+        {
+            int selectIndex = index - (_itemSlotUIs.LineCount - 1);
+
+            while(selectIndex > _itemSlotUIs.SlotUIs.Count - 1)
+            {
+                selectIndex -= _itemSlotUIs.LineCount;
+            }
+
+            return selectIndex;
+        }
+        else if (_tradeInvenDirection == Vector2.right)
+        {
+            int selectIndex = index + (_itemSlotUIs.LineCount - 1);
+
+            while (selectIndex > _itemSlotUIs.SlotUIs.Count - 1)
+            {
+                selectIndex -= _itemSlotUIs.LineCount;
+            }
+
+            if(selectIndex < 0)
+            {
+                selectIndex = _itemSlotUIs.SlotUIs.Count - 1;
+            }
+
+            return selectIndex;
+        }
+
+        return 0;
     }
 }

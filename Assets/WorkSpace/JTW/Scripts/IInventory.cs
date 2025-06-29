@@ -6,5 +6,5 @@ public interface IInventory
 {
     public bool AddItem(Item item);
 
-    public void Activate();
+    public void Activate(int index);
 }
