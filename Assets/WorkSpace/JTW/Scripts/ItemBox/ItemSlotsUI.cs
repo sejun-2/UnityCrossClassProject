@@ -95,9 +95,17 @@ public class ItemSlotUIs : MonoBehaviour
         return true;
     }
 
-    public void Activate()
+    public void Activate(int index = -1)
     {
-        SelectSlotUI(_selectedSlotIndex);
+        if(index == -1)
+        {
+            SelectSlotUI(_selectedSlotIndex);
+        }
+        else
+        {
+            SelectSlotUI(index);
+        }
+        
     }
 
     public void Deactivate()
