@@ -8,6 +8,7 @@ public static class Manager
     public static UIManager UI => UIManager.GetInstance();
     public static GameManager Game => GameManager.GetInstance();
     public static DataManager Data => DataManager.GetInstance();
+    public static SoundManager Sound => SoundManager.GetInstance();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initailize()
@@ -16,5 +17,6 @@ public static class Manager
         UIManager.CreateInstance();
         GameManager.CreateInstance();
         DataManager.CreateInstance();
+        SoundManager.CreateInstance();
     }
 }
