@@ -69,6 +69,10 @@ public class SlotUI : MonoBehaviour
 
     public void SetColor(Color color)
     {
+        if(_itemImage != null)
+        {
+            _itemImage.color = color;
+        }
         _countText.color = color;
     }
 
