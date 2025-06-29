@@ -125,7 +125,7 @@ public class InventoryPresenter : BaseUI, IInventory
 
             if(item != null)
             {
-                _inventoryForTrade.AddItem(item);
+                if (!_inventoryForTrade.AddItem(item)) return;
                 _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].Slot.RemoveItem();
                 UpdateItemInfo();
             }

@@ -152,7 +152,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
             if (item != null)
             {
-                _inventoryForTrade.AddItem(item);
+                if (!_inventoryForTrade.AddItem(item)) return;
                 selectedSlotUI.Slot.RemoveItem();
             }
         }
