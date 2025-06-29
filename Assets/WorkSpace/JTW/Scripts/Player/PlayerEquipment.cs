@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public partial class PlayerStats
@@ -22,7 +20,15 @@ public class PlayerEquipment : MonoBehaviour
 
     public void UnEquipmentWeapon()
     {
-        Manager.Game.Inven.AddItem(Manager.Player.Stats.Weapon.Value);
+        if (Manager.Game.IsInBaseCamp)
+        {
+            Manager.Game.ItemBox.AddItem(Manager.Player.Stats.Weapon.Value);
+        }
+        else
+        {
+            Manager.Game.Inven.AddItem(Manager.Player.Stats.Weapon.Value);
+        }
+
         Manager.Player.Stats.Weapon.Value = null;
     }
 
@@ -38,7 +44,15 @@ public class PlayerEquipment : MonoBehaviour
 
     public void UnEquipmentArmor()
     {
-        Manager.Game.Inven.AddItem(Manager.Player.Stats.Armor.Value);
+        if (Manager.Game.IsInBaseCamp)
+        {
+            Manager.Game.ItemBox.AddItem(Manager.Player.Stats.Armor.Value);
+        }
+        else
+        {
+            Manager.Game.Inven.AddItem(Manager.Player.Stats.Armor.Value);
+        }
+
         Manager.Player.Stats.Armor.Value = null;
     }
 }
