@@ -36,7 +36,16 @@ public class ItemBoxPresenter : BaseUI, IInventory
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
+            if (IsTrade)
+            {
+                Manager.UI.Inven.ShowMapUI();
+            }
             Destroy(this.gameObject);
+        }
+
+        if (IsTrade && Input.GetKeyDown(KeyCode.C))
+        {
+            Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
         }
 
         if (!_isActivate) return;
