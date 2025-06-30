@@ -57,6 +57,7 @@ public class CraftingPresenter : BaseUI
     {
         _resultItemSlots = Instantiate(_itemSlotUIsPrefab, _resultItemPanel.transform)
             .GetComponent<ItemSlotUIs>();
+        _resultItemSlots.SetPanelSize(new Vector2(5, 4));
 
         foreach(CraftingData craft in CraftDict.Values)
         {
@@ -109,6 +110,7 @@ public class CraftingPresenter : BaseUI
 
         _needItemSlots = Instantiate(_itemSlotUIsPrefab, _needItemPanel.transform)
             .GetComponent<ItemSlotUIs>();
+        _needItemSlots.SetPanelSize(new Vector2(5, 4));
         _needItemSlots.Deactivate();
 
         _canCraft = true;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private bool _isActivate = true;
     private bool _isSwitchActivate = false;
+
+    private Vector2 _panelSize;
 
     private void Update()
     {
@@ -44,6 +47,10 @@ public class InventoryPresenter : BaseUI, IInventory
         {
             _isActivate = !_isActivate;
             _isSwitchActivate = false;
+            if (_isActivate)
+            {
+                UpdateItemInfo();
+            }
         }
     }
 
@@ -55,7 +62,16 @@ public class InventoryPresenter : BaseUI, IInventory
             _inventoryForTrade = tradeInven;
             _tradeInvenDirection = tradeInvenDirection;
         }
+        _panelSize = new Vector2(5, 2);
         InitInventory();
+    }
+
+    public void SetPanelSize(Vector2 size)
+    {
+        Destroy(_itemSlotUIs.gameObject);
+        _panelSize = size;
+        InitInventory();
+
     }
 
     public void InitInventory()
@@ -63,6 +79,7 @@ public class InventoryPresenter : BaseUI, IInventory
         Transform itemSlotsPanel = GetUI("ItemSlotsPanel").transform;
 
         _itemSlotUIs = Instantiate(_itemSlotsPrefab, itemSlotsPanel).GetComponent<ItemSlotUIs>();
+        _itemSlotUIs.SetPanelSize(_panelSize);
 
         foreach(Slot slot in _inven.SlotList)
         {
@@ -108,8 +125,9 @@ public class InventoryPresenter : BaseUI, IInventory
 
             if(item != null)
             {
-                _inventoryForTrade.AddItem(item);
+                if (!_inventoryForTrade.AddItem(item)) return;
                 _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].Slot.RemoveItem();
+                UpdateItemInfo();
             }
         }
         else
@@ -148,7 +166,7 @@ public class InventoryPresenter : BaseUI, IInventory
         if(IsTrade && movePos == _tradeInvenDirection && _itemSlotUIs.CanChangeTrade(movePos))
         {
             Deactivate();
-            _inventoryForTrade.Activate();
+            _inventoryForTrade.Activate(_itemSlotUIs.SelectedSlotIndex);
             return;
         }
 
@@ -158,6 +176,8 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private void UpdateItemInfo()
     {
+        if (!_isActivate) return;
+
         Item item = _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].GetItemData();
 
         if (item != null)
@@ -172,15 +192,61 @@ public class InventoryPresenter : BaseUI, IInventory
         }
     }
 
-    public void Activate()
+    public void Activate(int index)
     {
         _isSwitchActivate = true;
-        _itemSlotUIs.Activate();
+
+        index = SetSelectIndex(index);
+
+        _itemSlotUIs.Activate(index);
     }
 
     public void Deactivate()
     {
         _isSwitchActivate = true;
+        GetUI<TextMeshProUGUI>("ItemNameText").text = "";
+        GetUI<TextMeshProUGUI>("ItemDescriptionText").text = "";
         _itemSlotUIs.Deactivate();
+    }
+
+    private int SetSelectIndex(int index)
+    {
+        if(_tradeInvenDirection == Vector2.up)
+        {
+            return index % _itemSlotUIs.LineCount;
+        }
+        else if (_tradeInvenDirection == Vector2.down)
+        {
+            return (_itemSlotUIs.SlotUIs.Count + index) - _itemSlotUIs.LineCount;
+        }
+        else if (_tradeInvenDirection == Vector2.left)
+        {
+            int selectIndex = index - (_itemSlotUIs.LineCount - 1);
+
+            while(selectIndex > _itemSlotUIs.SlotUIs.Count - 1)
+            {
+                selectIndex -= _itemSlotUIs.LineCount;
+            }
+
+            return selectIndex;
+        }
+        else if (_tradeInvenDirection == Vector2.right)
+        {
+            int selectIndex = index + (_itemSlotUIs.LineCount - 1);
+
+            while (selectIndex > _itemSlotUIs.SlotUIs.Count - 1)
+            {
+                selectIndex -= _itemSlotUIs.LineCount;
+            }
+
+            if(selectIndex < 0)
+            {
+                selectIndex = _itemSlotUIs.SlotUIs.Count - 1;
+            }
+
+            return selectIndex;
+        }
+
+        return 0;
     }
 }

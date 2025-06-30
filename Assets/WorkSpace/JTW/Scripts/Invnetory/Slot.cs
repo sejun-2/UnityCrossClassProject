@@ -9,30 +9,39 @@ public class Slot
     public Item CurItem => _curItem;
     private int _itemCount;
     public int ItemCount => _itemCount;
-    private int _maxItemCount = 4;
+    private int _CustomMaxItemCount;
     public bool IsEmpty => _curItem == null;
 
     public event Action<Item> OnItemChanged;
 
-    public Slot(int maxItemCount = 4)
+    public bool _isCustomStack;
+
+    public Slot(int CustomItemCount = 0)
     {
-        _maxItemCount = maxItemCount;
+        if(CustomItemCount != 0)
+        {
+            _CustomMaxItemCount = CustomItemCount;
+            _isCustomStack = true;
+        }
     }
 
     public void UseItem()
     {
-        _curItem.Use();
-
-        // TODO : 아이템 Type에 따른 변동사항 적용
-        RemoveItem();
+        if (_curItem.Use())
+        {
+            RemoveItem();
+        }
     }
 
     public bool AddItem(Item item)
     {
         if(IsEmpty || _curItem.itemName == item.itemName)
         {
-            // TODO : Type에 따른 최대 개수 제한 설정
-            if (_itemCount >= _maxItemCount) return false;
+            if (!_isCustomStack && _itemCount >= item.maxStackCount) return false;
+
+            if (_isCustomStack && _itemCount >= _CustomMaxItemCount) return false;
+
+            if (!IsEmpty && (_curItem.itemType == ItemType.Weapon || _curItem.itemType == ItemType.Armor)) return false;
 
             if (IsEmpty)
             {
@@ -49,6 +58,7 @@ public class Slot
 
     public void DeleteItem()
     {
+        _curItem.ClearEvent();
         _curItem = null;
         _itemCount = 0;
         OnItemChanged?.Invoke(_curItem);

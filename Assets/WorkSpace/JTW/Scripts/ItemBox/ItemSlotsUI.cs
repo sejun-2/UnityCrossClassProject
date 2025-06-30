@@ -5,13 +5,14 @@ using UnityEngine;
 public class ItemSlotUIs : MonoBehaviour
 {
     [SerializeField] private GameObject _slotUIPrefab;
+    [SerializeField] private RectTransform _itemSlotUIsPanel;
 
     private List<SlotUI> _slotUIs = new List<SlotUI>();
     public List<SlotUI> SlotUIs => _slotUIs;
     private Vector2 _slotUIPosition = new Vector2(30, -30);
-    private float _interval = 120;
+    private float _interval = 20;
 
-    private int _lineCount = 4;
+    private int _lineCount = 5;
     public int LineCount => _lineCount;
 
     private SlotUI _selectedSlot;
@@ -19,6 +20,21 @@ public class ItemSlotUIs : MonoBehaviour
     public int SelectedSlotIndex => _selectedSlotIndex;
 
     public List<ItemType> AcceptTypeList = new List<ItemType>();
+
+    public void SetPanelSize(Vector2 sizeRate)
+    {
+        Vector2 size = _slotUIPrefab.GetComponent <SlotUI>().GetSlotSize();
+
+        float width = sizeRate.x * size.x + (sizeRate.x - 1) * _interval + 60;
+        float height = sizeRate.y * size.y + (sizeRate.y - 1) * _interval + 60;
+
+        _itemSlotUIsPanel.sizeDelta = new Vector2(width, height);
+    }
+
+    public void SetLineCount(int count)
+    {
+        _lineCount = count;
+    }
 
     public bool AddSlotUI(Slot slot = null, int maxItemCount = 4)
     {
@@ -39,12 +55,12 @@ public class ItemSlotUIs : MonoBehaviour
 
         if(_slotUIs.Count % _lineCount == 0)
         {
-            _slotUIPosition.y -= _interval;
+            _slotUIPosition.y -= slotUI.GetSlotSize().y + _interval;
             _slotUIPosition.x = 30;
         }
         else
         {
-            _slotUIPosition.x += _interval;
+            _slotUIPosition.x += slotUI.GetSlotSize().x + _interval;
         }
 
         return true;
@@ -79,9 +95,17 @@ public class ItemSlotUIs : MonoBehaviour
         return true;
     }
 
-    public void Activate()
+    public void Activate(int index = -1)
     {
-        SelectSlotUI(_selectedSlotIndex);
+        if(index == -1)
+        {
+            SelectSlotUI(_selectedSlotIndex);
+        }
+        else
+        {
+            SelectSlotUI(index);
+        }
+        
     }
 
     public void Deactivate()

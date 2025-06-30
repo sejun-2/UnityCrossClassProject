@@ -36,7 +36,16 @@ public class ItemBoxPresenter : BaseUI, IInventory
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
+            if (IsTrade)
+            {
+                Manager.UI.Inven.ShowMapUI();
+            }
             Destroy(this.gameObject);
+        }
+
+        if (IsTrade && Input.GetKeyDown(KeyCode.C))
+        {
+            Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
         }
 
         if (!_isActivate) return;
@@ -88,9 +97,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     private void InitItemBox()
     {
-        Debug.Log(_categoryPanel);
         _categotySlots = Instantiate(_itemSlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
-        _categotySlots.GetComponent<RectTransform>().sizeDelta = new Vector2(520, 160);
+        _categotySlots.SetPanelSize(new Vector2(5, 1));
         for(int i = 0; i < _categorySprites.Count; i++)
         {
             _categotySlots.AddSlotUI(maxItemCount:0);
@@ -101,6 +109,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
         for(int i = 0; i < _categorySprites.Count; i++)
         {
             _itemSlotsList.Add(Instantiate(_itemSlotsPrefab, _itemSlotsPanel.transform).GetComponent<ItemSlotUIs>());
+            _itemSlotsList[i].SetPanelSize(new Vector2(5, 4));
             _itemSlotsList[i].AcceptTypeList = _acceptTypeLists[i];
             _itemSlotsList[i].gameObject.SetActive(false);
         }
@@ -151,7 +160,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
             if (item != null)
             {
-                _inventoryForTrade.AddItem(item);
+                if (!_inventoryForTrade.AddItem(item)) return;
                 selectedSlotUI.Slot.RemoveItem();
             }
         }
@@ -173,6 +182,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
     {
         ItemSlotUIs itemSlotUIs = Instantiate(_itemSlotsPrefab, _itemSlotsPanel.transform)
                 .GetComponent<ItemSlotUIs>();
+        itemSlotUIs.SetPanelSize(new Vector2(5, 4));
         itemSlotUIs.AcceptTypeList = _selectedItemSlots.AcceptTypeList;
         foreach (SlotUI slotUI in _selectedItemSlots.SlotUIs)
         {
@@ -248,7 +258,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
             if (IsTrade && direction == _tradeInvenDirection && _selectedItemSlots.CanChangeTrade(direction))
             {
                 Deactivate();
-                _inventoryForTrade.Activate();
+                _inventoryForTrade.Activate(_selectedItemSlots.SelectedSlotIndex);
                 return false;
             }
 
@@ -263,7 +273,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
             if (IsTrade && direction == _tradeInvenDirection && _categotySlots.CanChangeTrade(direction))
             {
                 Deactivate();
-                _inventoryForTrade.Activate();
+                _inventoryForTrade.Activate(_categotySlots.SelectedSlotIndex);
                 return false;
             }
 
@@ -307,14 +317,16 @@ public class ItemBoxPresenter : BaseUI, IInventory
         _itemDescriptionText.text = "";
     }
 
-    public void Activate()
+    public void Activate(int index)
     {
         if (_isInItemSlots)
         {
+            index = SetSelectIndex(_selectedItemSlots, index);
             _selectedItemSlots.Activate();
         }
         else
         {
+            index = SetSelectIndex(_categotySlots, index);
             _categotySlots.Activate();
         }
 
@@ -333,5 +345,46 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
 
         _isSwitchActivate = true;
+    }
+
+    private int SetSelectIndex(ItemSlotUIs slotUIs, int index)
+    {
+        if (_tradeInvenDirection == Vector2.up)
+        {
+            return index % slotUIs.LineCount;
+        }
+        else if (_tradeInvenDirection == Vector2.down)
+        {
+            return (slotUIs.SlotUIs.Count + index) - slotUIs.LineCount;
+        }
+        else if (_tradeInvenDirection == Vector2.left)
+        {
+            int selectIndex = index - (slotUIs.LineCount - 1);
+
+            while (selectIndex > slotUIs.SlotUIs.Count - 1)
+            {
+                selectIndex -= slotUIs.LineCount;
+            }
+
+            return selectIndex;
+        }
+        else if (_tradeInvenDirection == Vector2.right)
+        {
+            int selectIndex = index + (slotUIs.LineCount - 1);
+
+            while (selectIndex > slotUIs.SlotUIs.Count - 1)
+            {
+                selectIndex -= slotUIs.LineCount;
+            }
+
+            if (selectIndex < 0)
+            {
+                selectIndex = slotUIs.SlotUIs.Count - 1;
+            }
+
+            return selectIndex;
+        }
+
+        return 0;
     }
 }
