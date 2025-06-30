@@ -14,10 +14,6 @@ public class PlayerInteraction : MonoBehaviour
     private Rigidbody rb;//필요없을 거 같은데 굳이 없앨 이유도 없을거같음
     private Collider playerCollider;
 
-    //나중에 문제없다면 밑에 2줄 지울것
-    public float interactDistance = 2f;
-    public LayerMask interactableLayer;
-
     private bool isAutoClimbing = false;
     private Vector3 climbTargetPos;
 
@@ -50,12 +46,13 @@ public class PlayerInteraction : MonoBehaviour
         //위아래 키를 누르면 사다리 이동 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            //TryAutoClimb(Input.GetKeyDown(KeyCode.UpArrow)); // true = 위로
             bool goUp = Input.GetKeyDown(KeyCode.UpArrow);
 
+            
             if (Manager.Player.Stats.CurrentNearby is Ladder ladder)
             {
-                ladder.RequestClimb(transform, goUp, climbSpeed, this);
+                Debug.Log("사다리 이동 시도");
+                ladder.Interact(transform, goUp, climbSpeed, this);
             }
         }
 
@@ -84,61 +81,7 @@ public class PlayerInteraction : MonoBehaviour
         Vector3 move = Vector3.right * h;
         transform.position += move * moveSpeed * Time.deltaTime;
     }
-    //안씀
-    /*
-    void TryInteract()
-    {
-        Vector3 rayOrigin = transform.position + Vector3.up * 1f;
-        float dirX = Mathf.Sign(transform.localScale.x);
-        Vector3 rayDir = new Vector3(dirX, 0f, 0f);
-        Ray ray = new Ray(rayOrigin, rayDir);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, interactableLayer, QueryTriggerInteraction.Collide))
-        {
-            IInteractable target = hit.collider.GetComponentInParent<IInteractable>();
-            if (target != null)
-                target.Interact();
-
-            Debug.Log("Hit: " + hit.collider.name);
-        }
-        else
-        {
-            Debug.Log("Ray가 아무것도 못 맞춤");
-        }
-    }
-    */
-    //안씀
-    /*
-    void TryAutoClimb(bool goUp)
-    {
-        Vector3 rayOrigin = transform.position + Vector3.up * 1f;
-        float dirX = Mathf.Sign(transform.localScale.x);
-        Vector3 rayDir = new Vector3(dirX, 0f, 0f);
-        Ray ray = new Ray(rayOrigin, rayDir);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, interactableLayer, QueryTriggerInteraction.Collide))
-        {
-            Ladder ladder = hit.collider.GetComponentInParent<Ladder>();
-            if (ladder != null)
-            {
-
-                Transform startPoint = goUp ? ladder.GetBottom() : ladder.GetTop();
-                Transform endPoint = goUp ? ladder.GetTop() : ladder.GetBottom();
-
-                transform.position = startPoint.position;
-                climbTargetPos = endPoint.position;
-
-                isAutoClimbing = true;
-                rb.useGravity = false;
-                rb.velocity = Vector3.zero;
-
-                playerCollider.enabled = false; // 콜라이더 비활성화
-
-                Debug.Log($"자동 이동 시작: {startPoint.name} → {endPoint.name}");
-            }
-        }
-    }
-    */
     public void StartClimb(Vector3 from, Vector3 to)
     {
         transform.position = from;
