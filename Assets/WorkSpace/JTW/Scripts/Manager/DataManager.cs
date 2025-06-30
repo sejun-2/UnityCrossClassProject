@@ -91,7 +91,12 @@ public class DataManager : Singleton<DataManager>
 
             int.TryParse(words[9], out item.attackValue);
             int.TryParse(words[10], out item.defValue);
-            int.TryParse(words[11], out item.durabilityValue);
+            if (!string.IsNullOrEmpty(words[11]))
+            {
+                item.durabilityValue = int.Parse(words[11]);
+            }
+            
+            int.TryParse(words[11], out item.maxDrabilityValue);
             float.TryParse(words[12], out item.attackSpeed);
 
             int.TryParse(words[13], out item.hpRecover);
