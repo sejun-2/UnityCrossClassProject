@@ -133,11 +133,11 @@ public class Item : ScriptableObject, IUsableID
     {
         if(itemType == ItemType.Weapon)
         {
-            Manager.Player.Stats.Weapon = null;
+            Manager.Player.Stats.Weapon.Value = null;
         }
         else if(itemType == ItemType.Armor)
         {
-            Manager.Player.Stats.Armor = null;
+            Manager.Player.Stats.Armor.Value = null;
         }
     }
 }
