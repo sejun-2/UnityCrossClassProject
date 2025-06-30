@@ -1,3 +1,4 @@
+using EPOOutline;
 using UnityEngine;
 
 public class OutLineVisible : MonoBehaviour
@@ -5,53 +6,52 @@ public class OutLineVisible : MonoBehaviour
     //오브젝트의 상태에 따라 윤곽선을 표시하는 스크립트
     //방 탐색 여부에 따라 실루엣 표시
 
-    private Renderer _renderer;
-    private Material _outlineMat;
-    private Material _silhouetteMat;
+    private Outlinable _outlinable;
+    private Color _color;
+    private bool _silhouetteShown = true;
+
     [SerializeField] private GameObject linkedDarkness;
 
-    [SerializeField] private float onScale = 1.2f;
-    [SerializeField] private float offScale = 0f;
+
 
     private void Awake()
     {
-        _renderer = GetComponent<Renderer>();
-        if (_renderer != null && _renderer.materials.Length > 1)
-        {
-            _outlineMat = _renderer.materials[1]; // 두 번째 머테리얼이 아웃라인
-            _silhouetteMat = _renderer.materials[2]; // 세 번째 머테리얼이 실루엣
-        }
+        _outlinable = GetComponentInChildren<Outlinable>();
+        if (linkedDarkness == null)
+            _outlinable.enabled = false;
+        _color = _outlinable.FrontParameters.Color;
 
         if (linkedDarkness == null)
-            Destroy(_silhouetteMat);
+            SetSilhouetteVisible();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && _outlineMat != null)
+        if (other.CompareTag("Player"))
         {
-            _outlineMat.SetFloat("_Scale", onScale);
+            _outlinable.enabled = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && _outlineMat != null)
+        if (other.CompareTag("Player"))
         {
-            _outlineMat.SetFloat("_Scale", offScale);
+            _outlinable.enabled = false;
         }
     }
     private void Update()
     {
-        if (linkedDarkness != null)
+        if (linkedDarkness != null && _silhouetteShown)
             if (!linkedDarkness.activeSelf)
+            {
                 SetSilhouetteVisible();
+                _silhouetteShown = false;
+            }
     }
     public void SetSilhouetteVisible()
     {
-        if (_silhouetteMat != null)
-        {
-            _silhouetteMat.SetFloat("_Alpha", 0f);
-        }
+        _outlinable.BackParameters.Color = _color;
+        _outlinable.enabled = false;
     }
 }
