@@ -63,6 +63,20 @@ public class PlayerInteraction : MonoBehaviour
             Debug.Log("상호작용 실행");
         }
 
+        //uparrow키를 누르면 은신 시도
+        if (Input.GetKeyDown(KeyCode.UpArrow) && Manager.Player.Stats.CurrentNearby != null)
+        {
+            Manager.Player.Stats.CurrentNearby.Interact();
+            Debug.Log("은신 실행");
+        }
+
+        //space키를 누르면 공격 시도
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            
+            Debug.Log("공격 실행");
+        }
+
         //이외에는 좌우 이동
         MoveSideways();
     }

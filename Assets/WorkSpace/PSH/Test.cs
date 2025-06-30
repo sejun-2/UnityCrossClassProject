@@ -5,7 +5,7 @@ public class Test : MonoBehaviour
    [SerializeField] Zombie zombie;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.K))
         {
             zombie.TakeDamage(1000f);
             Debug.Log("");
