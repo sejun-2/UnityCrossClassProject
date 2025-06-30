@@ -4,6 +4,7 @@ using UnityEngine;
 public partial class PlayerStats
 {
     public bool isFarming = false;//파밍중인지 나타내는 불값
+    public bool isHiding = false;//숨었는지
     public IInteractable CurrentNearby;//가까운 상호작용 대상
 }
 public class PlayerInteraction : MonoBehaviour
@@ -32,6 +33,16 @@ public class PlayerInteraction : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.X))
             {
                 Manager.Player.Stats.isFarming = false;
+            }
+            return;
+        }
+
+        //은신중에는 uparrow키로 은신 풀기 전까지는 다른 키 입력 불가
+        if (Manager.Player.Stats.isHiding)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z))//z키 일단 추가는 해봄
+            {
+                Manager.Player.Stats.isHiding = false;
             }
             return;
         }
