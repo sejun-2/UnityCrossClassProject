@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linkedDarkness: {fileID: 0}
-  openDistance: 6
+  _door: {fileID: 90780460451917403}
 --- !u!1001 &91776694374845677
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,7 +119,17 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6062430086475922997}
+    - targetCorrespondingSourceObject: {fileID: 1317928216877434, guid: b7c3b2dd2f122ef43a908e19b40a7875,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2322100512869166611}
   m_SourcePrefab: {fileID: 100100000, guid: b7c3b2dd2f122ef43a908e19b40a7875, type: 3}
+--- !u!1 &90780460451917403 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1277855230534326, guid: b7c3b2dd2f122ef43a908e19b40a7875,
+    type: 3}
+  m_PrefabInstance: {fileID: 91776694374845677}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &90811743788045719 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1317928216877434, guid: b7c3b2dd2f122ef43a908e19b40a7875,
@@ -146,7 +156,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 2.509991, y: 3.0119958, z: 0.25000006}
-  m_Center: {x: -1.2500002, y: 1.5, z: 0.63}
+  m_Center: {x: -1.2500002, y: 1.5, z: 0.6}
 --- !u!65 &6062430086475922997
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -167,7 +177,19 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 2.509991, y: 3.0119958, z: 0.25000006}
-  m_Center: {x: -1.2500002, y: 1.5, z: -0.63}
+  m_Center: {x: -1.2500002, y: 1.5, z: -0.6}
+--- !u!114 &2322100512869166611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90811743788045719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c6937873511d6479688c75cc2e4165, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &96284012974941585 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4538399133591932, guid: b7c3b2dd2f122ef43a908e19b40a7875,
