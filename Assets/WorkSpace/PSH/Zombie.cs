@@ -117,6 +117,11 @@ public class Zombie : MonoBehaviour, IDamageable
             return;
         }
 
+        if (Manager.Player.Stats.isHiding)
+        {
+            StateChange(State.Patrol);
+        }
+
         MoveTowards(_playerTransform.position, _moveSpeed * _chaseSpeedMultiplier);
     }
 
