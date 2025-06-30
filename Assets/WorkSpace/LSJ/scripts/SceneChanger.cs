@@ -8,7 +8,7 @@ public class SceneChanger : MonoBehaviour
 {
     // <씬 전환>
     // 프로젝트에 포함된 다른 씬을 로딩하고 기존의 씬의 내용을 삭제함
-    public void ChageScene(string sceneName)
+    public static void ChageScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }
@@ -16,7 +16,7 @@ public class SceneChanger : MonoBehaviour
 
     // <씬 추가>
     // 프로젝트에 포함된 다른 씬을 로딩하고 기존의 씬의 내용을 유지함
-    public void AddScene(string sceneName)
+    public static void AddScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
     }
