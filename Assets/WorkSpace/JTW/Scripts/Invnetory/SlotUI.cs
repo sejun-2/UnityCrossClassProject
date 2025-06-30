@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
+using static UnityEngine.Rendering.DebugUI;
 
 public class SlotUI : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class SlotUI : MonoBehaviour
     public Image ItemImage => _itemImage;
     [SerializeField] private TextMeshProUGUI _countText;
     [SerializeField] private Image _outLine;
+    [SerializeField] private Slider _durabilitySlider;
 
     [SerializeField] private Item _testItem;
     private Slot _slot = new();
@@ -19,7 +22,10 @@ public class SlotUI : MonoBehaviour
     {
         _slot = slot;
         slot.OnItemChanged += UpdateSlotData;
+        slot.OnItemChanged += UpdateDurabilityData;
         UpdateSlotData();
+        UpdateDurabilityData(slot.CurItem);
+
     }
 
     public void UpdateSlotData(Item item = null)
@@ -33,6 +39,7 @@ public class SlotUI : MonoBehaviour
         {
             if (_itemImage != null)
                 _itemImage.sprite = _slot.CurItem.icon;
+
         }
 
         if(_slot.ItemCount > 1)
@@ -43,6 +50,27 @@ public class SlotUI : MonoBehaviour
         {
             _countText.text = "";
         }
+    }
+
+    public void UpdateDurabilityData(Item item)
+    {
+        if (_durabilitySlider == null) return;
+
+        if (item != null && (item.itemType == ItemType.Weapon || item.itemType == ItemType.Armor))
+        {
+            _durabilitySlider.gameObject.SetActive(true);
+            UpdateDurabilitySlider(item.durabilityValue);
+            item.OnDurabilityChanged += UpdateDurabilitySlider;
+        }
+        else
+        {
+            _durabilitySlider.gameObject.SetActive(false);
+        }
+    }
+
+    private void UpdateDurabilitySlider(int value)
+    {
+        _durabilitySlider.value = _slot.CurItem.durabilityValue / _slot.CurItem.maxDrabilityValue;
     }
 
     public void UseItem()

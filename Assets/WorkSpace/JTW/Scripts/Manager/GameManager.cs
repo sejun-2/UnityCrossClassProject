@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
 
     private SaveController _saveContoroller = new SaveController();
 
-    // ÇÏ·ç°¡ ¸¶¹«¸® µÉ ¶§, Áï º£ÀÌ½ºÄ·ÇÁ·Î µ¹¾Æ¿Ã ¶§ ¹ß»ı
+    // í•˜ë£¨ê°€ ë§ˆë¬´ë¦¬ ë  ë•Œ, ì¦‰ ë² ì´ìŠ¤ìº í”„ë¡œ ëŒì•„ì˜¬ ë•Œ ë°œìƒ
     public event Action OnDayCompleted;
 
     private void Awake()

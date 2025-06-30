@@ -61,7 +61,7 @@ public class FarmingObject : MonoBehaviour, IInteractable
             sum += data.Probability;
             if (randomValue > sum) continue;
 
-            Item item = Manager.Data.ItemData.Values[data.ItemId];
+            Item item = Instantiate(Manager.Data.ItemData.Values[data.ItemId]);
             for(int i = 0; i < data.Count; i++)
             {
                 _farmingInven.AddItem(item);
@@ -71,7 +71,7 @@ public class FarmingObject : MonoBehaviour, IInteractable
         }
 
         // 혹시 위의 코드가 안될 때를 위한 보험
-        Item itemLast = Manager.Data.ItemData.Values[ItemList.Last().ItemId];
+        Item itemLast = Instantiate(Manager.Data.ItemData.Values[ItemList.Last().ItemId]);
         for (int i = 0; i < ItemList.Last().Count; i++)
         {
             _farmingInven.AddItem(itemLast);

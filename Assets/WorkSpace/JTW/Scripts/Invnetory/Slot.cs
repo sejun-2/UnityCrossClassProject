@@ -41,6 +41,8 @@ public class Slot
 
             if (_isCustomStack && _itemCount >= _CustomMaxItemCount) return false;
 
+            if (!IsEmpty && (_curItem.itemType == ItemType.Weapon || _curItem.itemType == ItemType.Armor)) return false;
+
             if (IsEmpty)
             {
                 _curItem = item;
@@ -56,6 +58,7 @@ public class Slot
 
     public void DeleteItem()
     {
+        _curItem.ClearEvent();
         _curItem = null;
         _itemCount = 0;
         OnItemChanged?.Invoke(_curItem);

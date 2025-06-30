@@ -1,5 +1,6 @@
 using UnityEditor.VisionOS;
 using UnityEngine;
+using System;
 
 
 public partial class PlayerStats
@@ -62,7 +63,10 @@ public class Item : ScriptableObject, IUsableID
 
     public int attackValue;
     public int defValue;
-    public int durabilityValue;
+    private int _durubilityValue;
+    public int durabilityValue { get => _durubilityValue; set { _durubilityValue = value; OnDurabilityChanged?.Invoke(value); } }
+    public int maxDrabilityValue;
+    public event Action<int> OnDurabilityChanged;
     public float attackSpeed;
 
     public int hpRecover;
@@ -105,5 +109,10 @@ public class Item : ScriptableObject, IUsableID
     public string GetID()
     {
         return index.ToString();
+    }
+
+    public void ClearEvent()
+    {
+        OnDurabilityChanged = null;
     }
 }
