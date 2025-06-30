@@ -13,7 +13,7 @@ public class Ladder : MonoBehaviour, IInteractable
     {
 
     }
-    public void RequestClimb(Transform player, bool goUp, float climbSpeed, PlayerInteraction interaction)
+    public void Interact(Transform player, bool goUp, float climbSpeed, PlayerInteraction interaction)
     {
         Vector3 from = goUp ? bottomPoint.position : topPoint.position;
         Vector3 to = goUp ? topPoint.position : bottomPoint.position;
