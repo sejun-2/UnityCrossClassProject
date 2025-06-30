@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
-    public PlayerStats _stats = new();
+    public PlayerStats _stats;
     public PlayerStats Stats 
     { 
         get => _stats; 
@@ -22,8 +22,9 @@ public class PlayerManager : Singleton<PlayerManager>
     private PlayerBuffController _buffController;
     public PlayerBuffController BuffStats;
 
-    private void Awake()
+    private void Start()
     {
+        _stats = new();
         Stats.InitStats();
         _buffController = new PlayerBuffController();
         _buffController.InitBuff();
