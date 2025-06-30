@@ -43,6 +43,7 @@ public class PlayerInteraction : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z))//z키 일단 추가는 해봄
             {
                 Manager.Player.Stats.isHiding = false;
+                Debug.Log("은신해제");
             }
             return;
         }
