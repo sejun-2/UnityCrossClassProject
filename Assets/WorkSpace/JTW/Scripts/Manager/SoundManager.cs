@@ -10,6 +10,7 @@ public class SoundManager : Singleton<SoundManager>
     public ObjectPool<SfxController> SfxPool;
 
     public float BgmVolume = 1f;
+    public float MasterVolume = 1f;
     public float SfxVolume = 1f;
 
     private AudioSource _bgmSource;
@@ -31,7 +32,7 @@ public class SoundManager : Singleton<SoundManager>
             _bgmSource.clip = clip;
             _bgmSource.Play();
 
-            _bgmSource.DOFade(BgmVolume * volume, fadeDuration);
+            _bgmSource.DOFade(MasterVolume * BgmVolume * volume, fadeDuration);
         });
     }
 
@@ -40,7 +41,7 @@ public class SoundManager : Singleton<SoundManager>
         SfxController sfx = SfxPool.Get();
         sfx.transform.parent = parent;
         sfx.transform.localPosition = Vector3.zero;
-        sfx.SfxPlay(clip, Mathf.Clamp01(SfxVolume * volume));
+        sfx.SfxPlay(clip, Mathf.Clamp01(MasterVolume * SfxVolume * volume));
     }
 
     private SfxController CreateSfx()
