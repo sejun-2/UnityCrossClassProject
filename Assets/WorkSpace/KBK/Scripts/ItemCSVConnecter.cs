@@ -35,7 +35,10 @@ public class ItemCSVConnecter
 
             int.TryParse(values[6], out item.attackValue);
             int.TryParse(values[7], out item.defValue);
-            int.TryParse(values[8], out item.durabilityValue);
+            if (string.IsNullOrEmpty(values[8]))
+            {
+                item.durabilityValue = int.Parse(values[8]);
+            }
             float.TryParse(values[9], out item.attackSpeed);
 
             int.TryParse(values[10], out item.hpRecover);

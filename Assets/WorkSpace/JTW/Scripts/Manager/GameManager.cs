@@ -47,17 +47,17 @@ public class GameManager : Singleton<GameManager>
 
             if (!string.IsNullOrEmpty(data.WeaponId))
             {
-                Manager.Player.Stats.Weapon.Value = Manager.Data.ItemData.Values[data.WeaponId];
+                Manager.Player.Stats.Weapon.Value = Instantiate(Manager.Data.ItemData.Values[data.WeaponId]);
             }
 
             if (!string.IsNullOrEmpty(data.ArmorId))
             {
-                Manager.Player.Stats.Armor.Value = Manager.Data.ItemData.Values[data.ArmorId];
+                Manager.Player.Stats.Armor.Value = Instantiate(Manager.Data.ItemData.Values[data.ArmorId]);
             }
 
             foreach (KeyValuePair<string, int> value in data.InvenData)
             {
-                Item item = Manager.Data.ItemData.Values[value.Key];
+                Item item = Instantiate(Manager.Data.ItemData.Values[value.Key]);
 
                 for(int i = 0; i < value.Value; i++)
                 {
@@ -67,7 +67,7 @@ public class GameManager : Singleton<GameManager>
 
             foreach(KeyValuePair<string, int> value in data.ItemBoxData)
             {
-                Item item = Manager.Data.ItemData.Values[value.Key];
+                Item item = Instantiate(Manager.Data.ItemData.Values[value.Key]);
 
                 for(int i = 0; i < value.Value; i++)
                 {
