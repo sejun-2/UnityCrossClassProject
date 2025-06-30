@@ -21,7 +21,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private List<List<ItemType>> _acceptTypeLists = new List<List<ItemType>>();
     private ItemSlotUIs _selectedItemSlots;
 
-    private ItemSlotUIs _categotySlots;
+    private ItemSlotUIs _categorySlots;
 
     private bool _isInItemSlots;
 
@@ -97,14 +97,14 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     private void InitItemBox()
     {
-        _categotySlots = Instantiate(_itemSlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
-        _categotySlots.SetPanelSize(new Vector2(5, 1));
+        _categorySlots = Instantiate(_itemSlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
+        _categorySlots.SetPanelSize(new Vector2(5, 1));
         for(int i = 0; i < _categorySprites.Count; i++)
         {
-            _categotySlots.AddSlotUI(maxItemCount:0);
-            _categotySlots.SlotUIs[i].ItemImage.sprite = _categorySprites[i];
+            _categorySlots.AddSlotUI(maxItemCount:0);
+            _categorySlots.SlotUIs[i].ItemImage.sprite = _categorySprites[i];
         }
-        _categotySlots.SelectSlotUI(0);
+        _categorySlots.SelectSlotUI(0);
 
         for(int i = 0; i < _categorySprites.Count; i++)
         {
@@ -207,7 +207,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
             _itemDescriptionText.text = item.description;
         }
             Destroy(_selectedItemSlots.gameObject);
-        _itemSlotsList[_categotySlots.SelectedSlotIndex] = itemSlotUIs;
+        _itemSlotsList[_categorySlots.SelectedSlotIndex] = itemSlotUIs;
         _selectedItemSlots = itemSlotUIs;
 
         
@@ -251,9 +251,9 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
-            _categotySlots.MoveSelectSlot(direction);
+            _categorySlots.MoveSelectSlot(direction);
             _selectedItemSlots.gameObject.SetActive(false);
-            _selectedItemSlots = _itemSlotsList[_categotySlots.SelectedSlotIndex];
+            _selectedItemSlots = _itemSlotsList[_categorySlots.SelectedSlotIndex];
             _selectedItemSlots.gameObject.SetActive(true);
 
         }
@@ -278,16 +278,16 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
-            if (IsTrade && direction == _tradeInvenDirection && _categotySlots.CanChangeTrade(direction))
+            if (IsTrade && direction == _tradeInvenDirection && _categorySlots.CanChangeTrade(direction))
             {
                 Deactivate();
-                _inventoryForTrade.Activate(_categotySlots.SelectedSlotIndex);
+                _inventoryForTrade.Activate(_categorySlots.SelectedSlotIndex);
                 return false;
             }
 
             if (direction.y == -1)
             {
-                if (_itemSlotsList[_categotySlots.SelectedSlotIndex].SlotUIs.Count <= 0)
+                if (_itemSlotsList[_categorySlots.SelectedSlotIndex].SlotUIs.Count <= 0)
                 {
                     return false;
                 }
@@ -301,11 +301,11 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     private void GoItemSlots()
     {
-        _categotySlots.Deactivate();
+        _categorySlots.Deactivate();
 
         _isInItemSlots = true;
         _selectedItemSlots.gameObject.SetActive(false);
-        _selectedItemSlots = _itemSlotsList[_categotySlots.SelectedSlotIndex];
+        _selectedItemSlots = _itemSlotsList[_categorySlots.SelectedSlotIndex];
         _selectedItemSlots.gameObject.SetActive(true);
         _selectedItemSlots.Activate();
 
@@ -319,7 +319,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
         _selectedItemSlots.Deactivate();
 
         _isInItemSlots = false;
-        _categotySlots.Activate();
+        _categorySlots.Activate();
 
         _itemNameText.text = "";
         _itemDescriptionText.text = "";
@@ -334,8 +334,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
-            index = SetSelectIndex(_categotySlots, index);
-            _categotySlots.Activate();
+            index = SetSelectIndex(_categorySlots, index);
+            _categorySlots.Activate();
         }
 
         _isSwitchActivate = true;
@@ -349,7 +349,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
-            _categotySlots.Deactivate();
+            _categorySlots.Deactivate();
         }
 
         _isSwitchActivate = true;
