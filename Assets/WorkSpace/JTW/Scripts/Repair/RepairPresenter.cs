@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RepairPresenter : BaseUI
 {
@@ -11,6 +12,9 @@ public class RepairPresenter : BaseUI
     private GameObject _needItemPanel;
     private TextMeshProUGUI _nameText;
     private TextMeshProUGUI _descriptionText;
+
+    private GameObject _barricadePanel;
+    private Slider _barricadeSlider;
 
 
     private List<NeedItem> _needItemList = new List<NeedItem>();
@@ -25,10 +29,20 @@ public class RepairPresenter : BaseUI
     {
         if (Input.GetKeyDown(KeyCode.Z) && _canRepair)
         {
-            Manager.Game.IsRepairObject[_repairObject.ObjectId] = true;
-            _repairObject.Repair();
+            if(_repairObject.ObjectId == "4006")
+            {
+                float changeHp = Manager.Game.BarricadeHp + 30;
+
+                Manager.Game.BarricadeHp = Mathf.Min(100, changeHp);
+            }
+            else
+            {
+                Manager.Game.IsRepairObject[_repairObject.ObjectId] = true;
+                _repairObject.Repair();
+            }
 
             Destroy(gameObject);
+            Manager.Player.Stats.isFarming = false;
         }
 
         if (Input.GetKeyDown(KeyCode.X))
@@ -45,6 +59,12 @@ public class RepairPresenter : BaseUI
 
         _needItemList = RepairDict[_repairObject.ObjectId].NeedItems;
 
+        if (repair.ObjectId == "4006")
+        {
+            _barricadePanel.SetActive(true);
+            _barricadeSlider.value = Manager.Game.BarricadeHp / 100;
+        }
+
         UpdateNeedItemList();
     }
     private void InitObjects()
@@ -52,6 +72,8 @@ public class RepairPresenter : BaseUI
         _needItemPanel = GetUI("NeedItemPanel");
         _nameText = GetUI<TextMeshProUGUI>("NameText");
         _descriptionText = GetUI<TextMeshProUGUI>("DescriptionText");
+        _barricadePanel = GetUI("BarricadePanel");
+        _barricadeSlider = GetUI<Slider>("BarricadeSlider");
     }
 
     private void UpdateNeedItemList()

@@ -16,6 +16,8 @@ public class GameManager : Singleton<GameManager>
     public bool IsInBaseCamp = true;
     public string SelectedMapName = "";
 
+    public float BarricadeHp = 100;
+
     private SaveController _saveContoroller = new SaveController();
 
     // 하루가 마무리 될 때, 즉 베이스캠프로 돌아올 때 발생
