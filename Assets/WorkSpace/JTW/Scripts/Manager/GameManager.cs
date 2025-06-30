@@ -20,6 +20,8 @@ public class GameManager : Singleton<GameManager>
 
     private SaveController _saveContoroller = new SaveController();
 
+    private PlayerStats Stats => Manager.Player.Stats;
+
     // 하루가 마무리 될 때, 즉 베이스캠프로 돌아올 때 발생
     public event Action OnDayCompleted;
 
@@ -116,8 +118,30 @@ public class GameManager : Singleton<GameManager>
 
         IsInBaseCamp = true;
 
+        Stats.ChangeHunger(-30);
+        Stats.ChangeThirst(-30);
+
+        BarricadeHp -= 20;
+
+        MoveInvenItemToItemBox();
+
         OnDayCompleted?.Invoke();
 
         _saveContoroller.SaveGameData();
     }
+
+    private void MoveInvenItemToItemBox()
+    {
+        foreach (Slot slot in Inven.SlotList)
+        {
+            if (slot.CurItem == null) continue;
+
+            int itemCount = slot.ItemCount;
+
+            for(int i = 0; i < itemCount; i++)
+            {
+                ItemBox.AddItem(slot.CurItem);
+                slot.RemoveItem();
+            }
+        }
 }
