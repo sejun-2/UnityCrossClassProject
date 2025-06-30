@@ -64,7 +64,20 @@ public class Item : ScriptableObject, IUsableID
     public int attackValue;
     public int defValue;
     private int _durubilityValue;
-    public int durabilityValue { get => _durubilityValue; set { _durubilityValue = value; OnDurabilityChanged?.Invoke(value); } }
+    public int durabilityValue 
+    { 
+        get => _durubilityValue; 
+        set 
+        { 
+            _durubilityValue = value; 
+            OnDurabilityChanged?.Invoke(value); 
+            if(_durubilityValue <= 0)
+            {
+                DestroyItem();
+            }
+        } 
+    
+    }
     public int maxDrabilityValue;
     public event Action<int> OnDurabilityChanged;
     public float attackSpeed;
@@ -114,5 +127,17 @@ public class Item : ScriptableObject, IUsableID
     public void ClearEvent()
     {
         OnDurabilityChanged = null;
+    }
+
+    private void DestroyItem()
+    {
+        if(itemType == ItemType.Weapon)
+        {
+            Manager.Player.Stats.Weapon.Value = null;
+        }
+        else if(itemType == ItemType.Armor)
+        {
+            Manager.Player.Stats.Armor.Value = null;
+        }
     }
 }

@@ -1,0 +1,77 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class TitlePopUp : BaseUI
+{
+    int selectedIndex = 0;  // 현재 선택된 버튼의 인덱스
+    Button[] menuButtons;   // 메뉴 버튼들을 저장할 배열
+
+    private void Start()
+    {
+        Debug.Log(GetEvent("TitlePopUp열림")); // UI가 시작될 때 로그를 출력합니다.
+
+        menuButtons = new Button[]
+        {
+            GetEvent("Continue")?.GetComponent<Button>(),
+            GetEvent("Preferences")?.GetComponent<Button>(),
+            GetEvent("Title")?.GetComponent<Button>(),
+            GetEvent("GameOver")?.GetComponent<Button>()
+        };
+
+        // null 체크
+        for (int i = 0; i < menuButtons.Length; i++)
+        {
+            if (menuButtons[i] == null)
+                Debug.LogError($"menuButtons[{i}]가 null입니다! 오브젝트 이름, Button 컴포넌트 확인 필요.");
+        }
+
+        // 이벤트 연결, 버튼이 클릭되었을 때 호출되는 메서드
+        GetEvent("Continue").Click += data => Manager.UI.PopUp.ClosePopUp();
+        GetEvent("Preferences").Click += data => Manager.UI.PopUp.ShowPopUp<SettingPopUp>();
+        GetEvent("Title").Click += data => SceneChanger.ChageScene(sceneName: "TitleScene");
+        GetEvent("GameOver").Click += data => Manager.UI.PopUp.ShowPopUp<EndPopUp>();
+
+        // 첫 번째 버튼 선택
+        if (menuButtons[0] != null)
+            menuButtons[0].Select();
+    }
+
+    private void Update()
+    {
+        // menuButtons 배열이 비어있거나 생성되지 않았다면 아무 것도 하지 않고 함수 종료
+        if (menuButtons == null || menuButtons.Length == 0) return;
+
+        // 위쪽 방향키가 눌렸을 때
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            // selectedIndex를 하나 줄인다. (0보다 작아지면 맨 마지막 인덱스로 순환)
+            selectedIndex = (selectedIndex - 1 + menuButtons.Length) % menuButtons.Length;
+            // 해당 인덱스의 버튼이 null이 아니면
+            if (menuButtons[selectedIndex] != null)
+                // 그 버튼을 선택(포커스) 상태로 만든다 (하이라이트 표시)
+                menuButtons[selectedIndex].Select();
+        }
+
+        // 아래쪽 방향키가 눌렸을 때
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            // selectedIndex를 하나 늘린다. (마지막 인덱스보다 커지면 0번으로 순환)
+            selectedIndex = (selectedIndex + 1) % menuButtons.Length;
+            // 해당 인덱스의 버튼이 null이 아니면
+            if (menuButtons[selectedIndex] != null)
+                // 그 버튼을 선택(포커스) 상태로 만든다 (하이라이트 표시)
+                menuButtons[selectedIndex].Select();
+        }
+
+        // Z키가 눌렸을 때
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            // 현재 선택된 버튼이 null이 아니면
+            if (menuButtons[selectedIndex] != null)
+                // 그 버튼의 onClick 이벤트(즉, 클릭 효과)를 실행한다
+                menuButtons[selectedIndex].onClick.Invoke();
+        }
+    }
+}
