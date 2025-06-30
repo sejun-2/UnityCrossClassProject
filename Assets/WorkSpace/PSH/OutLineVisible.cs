@@ -10,19 +10,12 @@ public class OutLineVisible : MonoBehaviour
     private Color _color;
     private bool _silhouetteShown = true;
 
-    [SerializeField] private GameObject linkedDarkness;
-
 
 
     private void Awake()
     {
         _outlinable = GetComponentInChildren<Outlinable>();
-        if (linkedDarkness == null)
-            _outlinable.enabled = false;
         _color = _outlinable.FrontParameters.Color;
-
-        if (linkedDarkness == null)
-            SetSilhouetteVisible();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,15 +33,7 @@ public class OutLineVisible : MonoBehaviour
             _outlinable.enabled = false;
         }
     }
-    private void Update()
-    {
-        if (linkedDarkness != null && _silhouetteShown)
-            if (!linkedDarkness.activeSelf)
-            {
-                SetSilhouetteVisible();
-                _silhouetteShown = false;
-            }
-    }
+
     public void SetSilhouetteVisible()
     {
         _outlinable.BackParameters.Color = _color;

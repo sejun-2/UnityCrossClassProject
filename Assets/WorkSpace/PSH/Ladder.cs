@@ -4,11 +4,17 @@ public class Ladder : MonoBehaviour, IInteractable
 {
     public Transform topPoint;
     public Transform bottomPoint;
-    /*
-    public Transform GetTop() => topPoint;
-    public Transform GetBottom() => bottomPoint;
-    public float ExitRange => .6f;
-    */
+
+    private void Start()
+    {
+        Vector3 topPos = topPoint.position;
+        topPos.z = 0;
+        topPoint.position = topPos;
+        Vector3 bottomPos = bottomPoint.position;
+        bottomPos.z = 0;
+        bottomPoint.position = bottomPos;
+    }
+
     public void Interact()
     {
 

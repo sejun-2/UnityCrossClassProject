@@ -17,7 +17,7 @@ public class Zombie : MonoBehaviour, IDamageable
     [SerializeField] private float _damage = 10;
     [SerializeField] private float _attackCooldown = 2;
 
-    public Transform player;
+    public Transform _playerTransform;
     public LayerMask obstacleMask;
     public Animator animator;
 
@@ -31,8 +31,22 @@ public class Zombie : MonoBehaviour, IDamageable
     {
         _spawnPos = transform.position;
         _targetPos = _spawnPos + _direction * _patrolRange;
-        //플레이어 어차피 한명이니까 찾아서 미리 세팅해두기
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            _playerTransform = playerObj.transform;
+        }
+        else
+        {
+            Debug.LogError("Player 오브젝트를 찾을 수 없습니다. 태그 확인 필요.");
+        }
         animator.SetInteger("MovingPattren", 0);//0순찰 1대기 2추격
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(_targetPos, 1);
     }
 
     void Update()
@@ -88,7 +102,7 @@ public class Zombie : MonoBehaviour, IDamageable
 
     void Chase()
     {
-        if (Mathf.Abs(player.position.y - transform.position.y) > 2f)
+        if (Mathf.Abs(_playerTransform.position.y - transform.position.y) > 2f)
         {
             StateChange(State.Patrol);
             _targetPos = _spawnPos + _direction * _patrolRange;
@@ -96,21 +110,26 @@ public class Zombie : MonoBehaviour, IDamageable
             return;
         }
 
-        if (Vector3.Distance(transform.position, player.position) <= _attackRange)//공격 사정거리 안에 들어오면 공격
+        if (Vector3.Distance(transform.position, _playerTransform.position) <= _attackRange)//공격 사정거리 안에 들어오면 공격
         {
             StateChange(State.Attack);
             _attackTimer = 0f;
             return;
         }
 
-        MoveTowards(player.position, _moveSpeed * _chaseSpeedMultiplier);
+        if (Manager.Player.Stats.isHiding)
+        {
+            StateChange(State.Patrol);
+        }
+
+        MoveTowards(_playerTransform.position, _moveSpeed * _chaseSpeedMultiplier);
     }
 
     void Attack()
     {
         _attackTimer -= Time.deltaTime;
 
-        if (Vector3.Distance(transform.position, player.position) > _attackRange)
+        if (Vector3.Distance(transform.position, _playerTransform.position) > _attackRange)
         {
             StateChange(State.Chase);
             return;
@@ -127,11 +146,13 @@ public class Zombie : MonoBehaviour, IDamageable
 
     void DetectPlayer()
     {
-        Vector3 rayOrigin = transform.position + Vector3.up;//프리팹 바뀌면 위치 높이 조정해야할 수 있음
-        Vector3 rayDir = transform.forward * Mathf.Sign(_direction.z); // 이동 방향 기준 레이 쏨
+        Vector3 rayOrigin = transform.position + Vector3.up; // 눈높이 조정
 
+        // 앞 방향 레이
+        Vector3 forwardDir = transform.forward * Mathf.Sign(_direction.z);
         RaycastHit hit;
-        if (Physics.Raycast(rayOrigin, rayDir, out hit, _detectionDistance, ~0))
+
+        if (Physics.Raycast(rayOrigin, forwardDir, out hit, _detectionDistance, ~0))
         {
             if (hit.collider.CompareTag("Player"))
             {
@@ -143,9 +164,26 @@ public class Zombie : MonoBehaviour, IDamageable
             }
         }
 
+        // 뒤 방향 레이 (사정거리 절반)
+        Vector3 backwardDir = -transform.forward * Mathf.Sign(_direction.z);
+
+        if (Physics.Raycast(rayOrigin, backwardDir, out hit, _detectionDistance * 0.5f, ~0))
+        {
+            if (hit.collider.CompareTag("Player"))
+            {
+                if (_currentState == State.Patrol || _currentState == State.Wait)
+                {
+                    StateChange(State.Chase);
+                    Debug.Log("좀비: 뒤에 플레이어 있음! 추격 시작");
+                }
+            }
+        }
+
         // Debug용 레이 표시
-        Debug.DrawRay(rayOrigin, rayDir * _detectionDistance, Color.red);
+        Debug.DrawRay(rayOrigin, forwardDir * _detectionDistance, Color.red);
+        Debug.DrawRay(rayOrigin, backwardDir * (_detectionDistance * 0.5f), Color.blue);
     }
+
 
     void MoveTowards(Vector3 target, float speed)
     {
@@ -191,6 +229,7 @@ public class Zombie : MonoBehaviour, IDamageable
         {
             case State.Patrol:
                 _currentState = State.Patrol;
+                Flip();
                 animator.SetInteger("MovingPattren", 0);
                 break;
             case State.Wait:
@@ -213,5 +252,10 @@ public class Zombie : MonoBehaviour, IDamageable
                 break;
         }
     }
-
+    public void Flip()//매쉬 한 쪽으로 치우치게 하기 위해 방향 바꿀때마다 이거 호출
+    {
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
+    }
 }
