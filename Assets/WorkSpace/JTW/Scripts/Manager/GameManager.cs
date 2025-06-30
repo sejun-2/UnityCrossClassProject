@@ -138,10 +138,11 @@ public class GameManager : Singleton<GameManager>
 
             int itemCount = slot.ItemCount;
 
-            for(int i = 0; i < itemCount; i++)
+            for (int i = 0; i < itemCount; i++)
             {
                 ItemBox.AddItem(slot.CurItem);
                 slot.RemoveItem();
             }
         }
+    }
 }
