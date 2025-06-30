@@ -18,6 +18,7 @@ public class SettingMenu : BaseUI
         {
             Manager.UI.PopUp.ShowPopUp<LangguagePopUp>();
         }
+
     }
 }
 
