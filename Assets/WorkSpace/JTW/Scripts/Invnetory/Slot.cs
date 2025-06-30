@@ -66,6 +66,8 @@ public class Slot
 
     public void RemoveItem()
     {
+        if (_curItem == null) return;
+
         _itemCount--;
         OnItemChanged?.Invoke(_curItem);
         if (_itemCount <= 0)
