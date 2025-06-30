@@ -154,11 +154,17 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
         SlotUI selectedSlotUI = _selectedItemSlots.SlotUIs[_selectedItemSlots.SelectedSlotIndex];
 
+        Item item = selectedSlotUI.Slot.CurItem;
+
+        if (item == null) return;
+
         if (IsTrade)
         {
-            Item item = selectedSlotUI.Slot.CurItem;
-
-            if (item != null)
+            if(item.itemType == ItemType.Weapon || item.itemType == ItemType.Armor)
+            {
+                selectedSlotUI.UseItem();
+            }
+            else
             {
                 if (!_inventoryForTrade.AddItem(item)) return;
                 selectedSlotUI.Slot.RemoveItem();
@@ -166,6 +172,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
+            if (item.itemType == ItemType.Weapon || item.itemType == ItemType.Armor) return;
+
             selectedSlotUI.UseItem();
         }
 
