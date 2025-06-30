@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1507957390627272417}
   - component: {fileID: 579926920561004218}
   - component: {fileID: 5841313109584876526}
+  - component: {fileID: 1884437421553727696}
   m_Layer: 0
   m_Name: Dark
   m_TagString: Untagged
@@ -106,6 +107,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1884437421553727696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5865395476715345256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 964d511f637f0954089b139d9af1d35d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7199025679946390294
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,8 +185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab1a5ea31492f554fb46707f83f5b2c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 0}
   dark: {fileID: 5865395476715345256}
+  targetTag: Interactable
 --- !u!1 &9223013093499744226
 GameObject:
   m_ObjectHideFlags: 0

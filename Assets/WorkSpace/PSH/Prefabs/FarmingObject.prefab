@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4813521955232138889}
   m_Layer: 8
   m_Name: FarmingObject
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,7 +57,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 3.8468456, z: 2.928827}
+  m_Size: {x: 1, y: 2.89, z: 2.928827}
   m_Center: {x: 0, y: 0.26177883, z: -2.0274124}
 --- !u!114 &2906495240842505770
 MonoBehaviour:

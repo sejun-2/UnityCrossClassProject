@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class RoomVisible : MonoBehaviour
 {
-    [SerializeField] Collider collider;       // 방마다 트리거
+    private Collider collider;       // 방마다 트리거
     [SerializeField] GameObject dark;         // 방마다 어둠 오브젝트
+    public string targetTag = "Interactable";
 
     private void Start()
     {
