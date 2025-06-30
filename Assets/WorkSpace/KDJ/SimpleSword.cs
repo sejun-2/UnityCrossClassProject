@@ -6,7 +6,7 @@ using UnityEngine;
 public class SimpleSword : MonoBehaviour
 {
     public float damage = 20f;           // 데미지 수치
-    public float range = 2f;             // 공격 범위
+    public float range = 20f;             // 공격 범위
     public LayerMask targetLayer;        // 공격 가능한 레이어 (Zombie)
 
     // 공격 실행
