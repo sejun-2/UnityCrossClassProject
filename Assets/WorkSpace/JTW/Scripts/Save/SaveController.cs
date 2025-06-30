@@ -25,13 +25,23 @@ public class SaveController
         Item weapon = Manager.Player.Stats.Weapon.Value;
         if (weapon != null)
         {
-            data.WeaponId = weapon.index.ToString();
+            ItemSaveData itemSaveData;
+
+            itemSaveData.Id = weapon.index.ToString();
+            itemSaveData.Durability = weapon.durabilityValue;
+
+            data.WeaponData = itemSaveData;
         }
 
         Item armor = Manager.Player.Stats.Armor.Value;
         if(armor != null)
         {
-            data.ArmorId = armor.index.ToString();
+            ItemSaveData itemSaveData;
+
+            itemSaveData.Id = armor.index.ToString();
+            itemSaveData.Durability = armor.durabilityValue;
+
+            data.ArmorData = itemSaveData;
         }
         
 
@@ -39,15 +49,18 @@ public class SaveController
         {
             if (slot.CurItem == null) continue;
 
-            string slotItemIndex = slot.CurItem.index.ToString();
+            ItemSaveData itemSaveData;
 
-            if (data.InvenData.ContainsKey(slotItemIndex))
+            itemSaveData.Id = slot.CurItem.index.ToString();
+            itemSaveData.Durability = slot.CurItem.durabilityValue;
+
+            if (data.InvenData.ContainsKey(itemSaveData))
             {
-                data.InvenData[slotItemIndex] += slot.ItemCount;
+                data.InvenData[itemSaveData] += slot.ItemCount;
             }
             else
             {
-                data.InvenData.Add(slotItemIndex, slot.ItemCount);
+                data.InvenData.Add(itemSaveData, slot.ItemCount);
             }
                 
         }
@@ -56,15 +69,18 @@ public class SaveController
         {
             if (slot.CurItem == null) continue;
 
-            string slotItemIndex = slot.CurItem.index.ToString();
+            ItemSaveData itemSaveData;
 
-            if (data.ItemBoxData.ContainsKey(slotItemIndex))
+            itemSaveData.Id = slot.CurItem.index.ToString();
+            itemSaveData.Durability = slot.CurItem.durabilityValue;
+
+            if (data.ItemBoxData.ContainsKey(itemSaveData))
             {
-                data.ItemBoxData[slotItemIndex] += slot.ItemCount;
+                data.ItemBoxData[itemSaveData] += slot.ItemCount;
             }
             else
             {
-                data.ItemBoxData.Add(slotItemIndex, slot.ItemCount);
+                data.ItemBoxData.Add(itemSaveData, slot.ItemCount);
             }
         }
 
