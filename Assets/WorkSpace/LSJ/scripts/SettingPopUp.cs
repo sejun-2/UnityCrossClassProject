@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class SettingPopUp : BaseUI
 {
-    [SerializeField] private Slider Volume;
-    [SerializeField] private Slider SoundEffects;
-    [SerializeField] private Slider BackgroundMusic;
+    [SerializeField] private Slider MasterVolume;
+    [SerializeField] private Slider BgmVolume;
+    [SerializeField] private Slider SfxVolume;
 
     private void Start()
     {
@@ -31,7 +31,10 @@ public class SettingPopUp : BaseUI
             Manager.UI.PopUp.ClosePopUp();
         }
 
-        //Manager.Player.Stats.Volume.OnChanged += (newVolume) => Volume.value = newVolume;
+        Manager.Sound.MasterVolume = MasterVolume.value; // MasterVolume 슬라이더의 값을 SoundManager의 MasterVolume에 할당합니다.
+        Manager.Sound.BgmVolume = BgmVolume.value; // BgmVolume 슬라이더의 값을 SoundManager의 BgmVolume에 할당합니다.
+        Manager.Sound.SfxVolume = SfxVolume.value; // SfxVolume 슬라이더의 값을 SoundManager의 SfxVolume에 할당합니다.
+
     }
 }
 

@@ -556,6 +556,21 @@ PrefabInstance:
       objectReference: {fileID: 1761210972}
     - target: {fileID: 1215846703468143460, guid: e25cc33d06270bf448f8c6a0102495f2,
         type: 3}
+      propertyPath: BgmVolume
+      value: 
+      objectReference: {fileID: 203795888}
+    - target: {fileID: 1215846703468143460, guid: e25cc33d06270bf448f8c6a0102495f2,
+        type: 3}
+      propertyPath: SfxVolume
+      value: 
+      objectReference: {fileID: 1031197662}
+    - target: {fileID: 1215846703468143460, guid: e25cc33d06270bf448f8c6a0102495f2,
+        type: 3}
+      propertyPath: MasterVolume
+      value: 
+      objectReference: {fileID: 1761210972}
+    - target: {fileID: 1215846703468143460, guid: e25cc33d06270bf448f8c6a0102495f2,
+        type: 3}
       propertyPath: SoundEffects
       value: 
       objectReference: {fileID: 203795888}
@@ -567,7 +582,7 @@ PrefabInstance:
     - target: {fileID: 1322003174467059824, guid: e25cc33d06270bf448f8c6a0102495f2,
         type: 3}
       propertyPath: m_Name
-      value: SoundEffects
+      value: BgmVolume
       objectReference: {fileID: 0}
     - target: {fileID: 1751086663020050755, guid: e25cc33d06270bf448f8c6a0102495f2,
         type: 3}
@@ -842,7 +857,7 @@ PrefabInstance:
     - target: {fileID: 5687728968646822426, guid: e25cc33d06270bf448f8c6a0102495f2,
         type: 3}
       propertyPath: m_Name
-      value: BackgroundMusic
+      value: SfxVolume
       objectReference: {fileID: 0}
     - target: {fileID: 7539573278335558517, guid: e25cc33d06270bf448f8c6a0102495f2,
         type: 3}
@@ -872,7 +887,7 @@ PrefabInstance:
     - target: {fileID: 7582798676547354181, guid: e25cc33d06270bf448f8c6a0102495f2,
         type: 3}
       propertyPath: m_Name
-      value: Volume
+      value: MasterVolume
       objectReference: {fileID: 0}
     - target: {fileID: 8387669151753273376, guid: e25cc33d06270bf448f8c6a0102495f2,
         type: 3}
