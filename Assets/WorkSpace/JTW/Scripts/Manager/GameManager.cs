@@ -45,19 +45,22 @@ public class GameManager : Singleton<GameManager>
             Manager.Player.Stats.Weapon = new Stat<Item>();
             Manager.Player.Stats.Armor = new Stat<Item>();
 
-            if (!string.IsNullOrEmpty(data.WeaponId))
+            if (!string.IsNullOrEmpty(data.WeaponData.Id))
             {
-                Manager.Player.Stats.Weapon.Value = Manager.Data.ItemData.Values[data.WeaponId];
+                Manager.Player.Stats.Weapon.Value = Instantiate(Manager.Data.ItemData.Values[data.WeaponData.Id]);
+                Manager.Player.Stats.Weapon.Value.durabilityValue = data.WeaponData.Durability;
             }
 
-            if (!string.IsNullOrEmpty(data.ArmorId))
+            if (!string.IsNullOrEmpty(data.ArmorData.Id))
             {
-                Manager.Player.Stats.Armor.Value = Manager.Data.ItemData.Values[data.ArmorId];
+                Manager.Player.Stats.Armor.Value = Instantiate(Manager.Data.ItemData.Values[data.ArmorData.Id]);
+                Manager.Player.Stats.Weapon.Value.durabilityValue = data.ArmorData.Durability;
             }
 
-            foreach (KeyValuePair<string, int> value in data.InvenData)
+            foreach (KeyValuePair<ItemSaveData, int> value in data.InvenData)
             {
-                Item item = Manager.Data.ItemData.Values[value.Key];
+                Item item = Instantiate(Manager.Data.ItemData.Values[value.Key.Id]);
+                item.durabilityValue = value.Key.Durability;
 
                 for(int i = 0; i < value.Value; i++)
                 {
@@ -65,11 +68,12 @@ public class GameManager : Singleton<GameManager>
                 }
             }
 
-            foreach(KeyValuePair<string, int> value in data.ItemBoxData)
+            foreach(KeyValuePair<ItemSaveData, int> value in data.ItemBoxData)
             {
-                Item item = Manager.Data.ItemData.Values[value.Key];
+                Item item = Instantiate(Manager.Data.ItemData.Values[value.Key.Id]);
+                item.durabilityValue = value.Key.Durability;
 
-                for(int i = 0; i < value.Value; i++)
+                for (int i = 0; i < value.Value; i++)
                 {
                     ItemBox.AddItem(item);
                 }
