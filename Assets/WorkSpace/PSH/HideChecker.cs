@@ -24,14 +24,17 @@ public class HideChecker : MonoBehaviour
             if (zombie != null)
             {
                 float distance = Vector3.Distance(_player.transform.position, zombieObj.transform.position);
+                Debug.Log($"{zombieObj.name} 거리: {distance}, 상태: {zombie.CurrentState}");
 
-                if (zombie.CurrentState == Zombie.State.Chase && distance < hideDistanceThreshold)
+                if ((zombie.CurrentState == Zombie.State.Chase || zombie.CurrentState == Zombie.State.Attack)
+                    && distance < hideDistanceThreshold)
                 {
+                    Debug.Log("canhide is false");
                     return false;
                 }
             }
         }
-
+        Debug.Log("canhide is true");
         return true;
     }
 }
