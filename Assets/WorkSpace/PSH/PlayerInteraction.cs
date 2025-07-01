@@ -57,6 +57,8 @@ public class PlayerInteraction : MonoBehaviour
             {
                 Manager.Player.Stats.isHiding = false;
                 animator.SetBool("IsHiding", false);
+                playerCollider.enabled = true;
+                rb.useGravity = true;
                 StateChange(State.Idle);
 
                 Debug.Log("은신해제");
@@ -87,6 +89,8 @@ public class PlayerInteraction : MonoBehaviour
             {
                 Debug.Log("은신 실행");
                 hideout.Interact(1);
+                playerCollider.enabled = false;
+                rb.useGravity = false;
                 StateChange(State.Hide);
             }
         }
@@ -169,8 +173,9 @@ public class PlayerInteraction : MonoBehaviour
     void Attack()
     {
         StateChange(State.Attack);
-    }
 
+    }
+    
     public void StateChange(State state)
     {
         switch (state)
