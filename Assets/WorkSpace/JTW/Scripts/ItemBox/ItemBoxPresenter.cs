@@ -45,6 +45,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
         if (IsTrade && Input.GetKeyDown(KeyCode.C))
         {
+            Manager.Player.BuffStats.ApplyBuff();
             Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
         }
 
