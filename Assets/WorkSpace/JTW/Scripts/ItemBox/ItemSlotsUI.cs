@@ -38,7 +38,7 @@ public class ItemSlotUIs : MonoBehaviour
 
     public bool AddSlotUI(Slot slot = null, int maxItemCount = 4)
     {
-        if(AcceptTypeList.Count != 0 && !AcceptTypeList.Contains(slot.CurItem.itemType)) return false;
+        if(slot != null && slot.CurItem != null && AcceptTypeList.Count != 0 && !AcceptTypeList.Contains(slot.CurItem.itemType)) return false;
 
         RectTransform rt = Instantiate(_slotUIPrefab, transform).GetComponent<RectTransform>();
         rt.anchoredPosition = _slotUIPosition;

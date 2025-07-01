@@ -32,6 +32,11 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private bool _isActivate = true;
     private bool _isSwitchActivate = false;
 
+    private void OnDisable()
+    {
+        _itemBox.OnDataChanged -= ResetItemSlots;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.X))
@@ -72,7 +77,10 @@ public class ItemBoxPresenter : BaseUI, IInventory
     public void SetItemBoxData(ItemBoxData itemBox, IInventory tradeInven = null, Vector2 tradeDirection = default)
     {
         _itemBox = itemBox;
-        if(tradeInven != null)
+
+        _itemBox.OnDataChanged += ResetItemSlots;
+
+        if (tradeInven != null)
         {
             _inventoryForTrade = tradeInven;
             _tradeInvenDirection = tradeDirection;
@@ -154,6 +162,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
         if (!_isInItemSlots) return;
 
         SlotUI selectedSlotUI = _selectedItemSlots.SlotUIs[_selectedItemSlots.SelectedSlotIndex];
+        int SlotUIIndex = _selectedItemSlots.SlotUIs.IndexOf(selectedSlotUI);
+        int SlotIndex = _itemBox.SlotList.IndexOf(selectedSlotUI.Slot);
 
         Item item = selectedSlotUI.Slot.CurItem;
 
@@ -180,8 +190,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
         if (selectedSlotUI.Slot.IsEmpty)
         {
-            _itemBox.SlotList.Remove(selectedSlotUI.Slot);
-            _selectedItemSlots.SlotUIs.Remove(selectedSlotUI);
+            _itemBox.SlotList.RemoveAt(SlotIndex);
+            _selectedItemSlots.SlotUIs.RemoveAt(SlotUIIndex);
 
             ResetItemSlots();
         }
@@ -193,10 +203,13 @@ public class ItemBoxPresenter : BaseUI, IInventory
                 .GetComponent<ItemSlotUIs>();
         itemSlotUIs.SetPanelSize(new Vector2(5, 4));
         itemSlotUIs.AcceptTypeList = _selectedItemSlots.AcceptTypeList;
-        foreach (SlotUI slotUI in _selectedItemSlots.SlotUIs)
+        Destroy(_selectedItemSlots.gameObject);
+
+        foreach (Slot slot in _itemBox.SlotList)
         {
-            itemSlotUIs.AddSlotUI(slotUI.Slot, int.MaxValue);
+            itemSlotUIs.AddSlotUI(slot, int.MaxValue);
         }
+
         if (!itemSlotUIs.SelectSlotUI(_selectedItemSlots.SelectedSlotIndex))
         {
             GoCategory();
@@ -207,7 +220,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
             _itemNameText.text = item.itemName;
             _itemDescriptionText.text = item.description;
         }
-            Destroy(_selectedItemSlots.gameObject);
+
         _itemSlotsList[_categorySlots.SelectedSlotIndex] = itemSlotUIs;
         _selectedItemSlots = itemSlotUIs;
 

@@ -45,7 +45,7 @@ public class CraftingPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.Z) && _canCraft && _isInResultItems)
         {
-            Item item = _selectedResultItemSlots.SlotUIs[_selectedResultItemSlots.SelectedSlotIndex].Slot.CurItem;
+            Item item = Instantiate(_selectedResultItemSlots.SlotUIs[_selectedResultItemSlots.SelectedSlotIndex].Slot.CurItem);
             Debug.Log($"{item.name} 아이템 제작");
 
             Manager.Game.ItemBox.AddItem(item);
