@@ -7,6 +7,7 @@ public class TitlePopUp : BaseUI
 {
     int selectedIndex = 0;  // 현재 선택된 버튼의 인덱스
     Button[] menuButtons;   // 메뉴 버튼들을 저장할 배열
+    private bool inputEnabled = false;
 
     private void Start()
     {
@@ -32,6 +33,12 @@ public class TitlePopUp : BaseUI
         GetEvent("Preferences").Click += data => Manager.UI.PopUp.ShowPopUp<SettingPopUp>();
         GetEvent("Title").Click += data => SceneChanger.ChageScene(sceneName: "TitleScene");
         GetEvent("GameOver").Click += data => Manager.UI.PopUp.ShowPopUp<EndPopUp>();
+
+        // Z키로 실행하기 위해, 버튼 클릭 이벤트를 배열에 추가
+        menuButtons[0].onClick.AddListener(Manager.UI.PopUp.ClosePopUp);
+        menuButtons[1].onClick.AddListener(showSerttingPopUp);
+        menuButtons[2].onClick.AddListener(ChageTitleScene);
+        menuButtons[3].onClick.AddListener(showEndPopUp);
 
         // 첫 번째 버튼 선택
         if (menuButtons[0] != null)
@@ -73,5 +80,19 @@ public class TitlePopUp : BaseUI
                 // 그 버튼의 onClick 이벤트(즉, 클릭 효과)를 실행한다
                 menuButtons[selectedIndex].onClick.Invoke();
         }
+    }
+
+    public void showSerttingPopUp() // Z키를 눌렀을 때 호출되는 메서드
+    {
+        Manager.UI.PopUp.ShowPopUp<SettingPopUp>(); // SettingPopUp을 표시합니다.
+    }
+
+    public void showEndPopUp()
+    {
+        Manager.UI.PopUp.ShowPopUp<EndPopUp>(); // EndPopUp을 표시합니다.
+    }
+    public void ChageTitleScene()
+    {
+        SceneChanger.ChageScene(sceneName: "TitleScene");   // TitleScene으로 변경합니다.
     }
 }
