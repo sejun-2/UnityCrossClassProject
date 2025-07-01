@@ -116,6 +116,8 @@ public class GameManager : Singleton<GameManager>
 
     public void ChangeScene(string sceneName)
     {
+        Manager.Player.Stats.CurrentNearby = null;
+
         if(sceneName == "BaseCamp")
         {
             DayComplete();
