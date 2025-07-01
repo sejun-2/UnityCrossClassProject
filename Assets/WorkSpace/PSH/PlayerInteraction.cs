@@ -81,7 +81,7 @@ public class PlayerInteraction : MonoBehaviour
             if (Manager.Player.Stats.CurrentNearby is Ladder ladder)
             {
                 Debug.Log("사다리 이동 시도");
-                ladder.Interact(transform, goUp, climbSpeed, this);
+                if(ladder.Interact(transform, goUp, climbSpeed, this))
                 StateChange(State.Climb);
             }
 
