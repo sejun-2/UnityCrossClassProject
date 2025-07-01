@@ -8,4 +8,12 @@ public class PlayerTest : MonoBehaviour
     {
         Manager.Player.Transform = transform;
     }
+
+    private void Update()
+    {
+        if(!Manager.Game.IsInBaseCamp && Input.GetKeyDown(KeyCode.A))
+        {
+            Manager.UI.Inven.ShowInven();
+        }
+    }
 }
