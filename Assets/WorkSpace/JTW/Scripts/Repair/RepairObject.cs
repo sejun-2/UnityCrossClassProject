@@ -26,5 +26,7 @@ public class RepairObject : MonoBehaviour, IInteractable
         GameObject obj = Resources.Load<GameObject>($"Object/{_objectId}");
 
         Instantiate(obj, transform.position, Quaternion.identity);
+
+        Destroy(gameObject);
     }
 }
