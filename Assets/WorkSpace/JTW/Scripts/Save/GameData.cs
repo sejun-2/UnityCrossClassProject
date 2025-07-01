@@ -9,14 +9,12 @@ public struct ItemSaveData
 
 public class GameData
 {
-    
-
     public PlayerStats stats;
     public ItemSaveData WeaponData;
     public ItemSaveData ArmorData;
 
-    public Dictionary<ItemSaveData, int> InvenData = new Dictionary<ItemSaveData, int>();
-    public Dictionary<ItemSaveData, int> ItemBoxData = new Dictionary<ItemSaveData, int>();
+    public List<ItemSaveData> InvenData = new List<ItemSaveData>();
+    public List<ItemSaveData> ItemBoxData = new List<ItemSaveData>();
 
     public Dictionary<string, bool> IsRepairObject = new Dictionary<string, bool>();
     public Dictionary<string, bool> IsUsedObject = new Dictionary<string, bool>();

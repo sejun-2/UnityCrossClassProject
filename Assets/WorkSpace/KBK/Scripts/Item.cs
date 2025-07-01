@@ -2,45 +2,6 @@ using UnityEditor.VisionOS;
 using UnityEngine;
 using System;
 
-
-public partial class PlayerStats
-{
-    public void ChangeHunger(float amount)
-    {
-        float changeHunger = Hunger.Value + amount;
-
-        if(changeHunger < 0)
-        {
-            Hunger.Value = 0;
-        }else if(changeHunger > 100)
-        {
-            Hunger.Value = 100;
-        }
-        else
-        {
-            Hunger.Value = (int)changeHunger;
-        }
-    }
-
-    public void ChangeThirst(float amount)
-    {
-        float changeThirst = Thirst.Value + amount;
-
-        if (changeThirst < 0)
-        {
-            Thirst.Value = 0;
-        }
-        else if (changeThirst > 100)
-        {
-            Thirst.Value = 100;
-        }
-        else
-        {
-            Thirst.Value = (int)changeThirst;
-        }
-    }
-}
-
 public enum ItemType
 {
     Material = 0,

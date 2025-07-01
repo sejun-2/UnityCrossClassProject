@@ -1,21 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-public partial class PlayerStats
-{
-    public void InitStats()
-    {
-        CurHp.Value = 100;
-        MaxHp.Value = 100;
-        Hunger.Value = 100;
-        Thirst.Value = 100;
-        Mentality.Value = 100;
-        MoveSpeed.Value = 5;
-    }
-}
 
 public class GameManager : Singleton<GameManager>
 {
@@ -73,26 +61,20 @@ public class GameManager : Singleton<GameManager>
                 Manager.Player.Stats.Weapon.Value.durabilityValue = data.ArmorData.Durability;
             }
 
-            foreach (KeyValuePair<ItemSaveData, int> value in data.InvenData)
+            foreach (ItemSaveData value in data.InvenData)
             {
-                Item item = Instantiate(Manager.Data.ItemData.Values[value.Key.Id]);
-                item.durabilityValue = value.Key.Durability;
+                Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
+                item.durabilityValue = value.Durability;
 
-                for(int i = 0; i < value.Value; i++)
-                {
-                    Inven.AddItem(item);
-                }
+                Inven.AddItem(item);
             }
 
-            foreach(KeyValuePair<ItemSaveData, int> value in data.ItemBoxData)
+            foreach(ItemSaveData value in data.ItemBoxData)
             {
-                Item item = Instantiate(Manager.Data.ItemData.Values[value.Key.Id]);
-                item.durabilityValue = value.Key.Durability;
+                Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
+                item.durabilityValue = value.Durability;
 
-                for (int i = 0; i < value.Value; i++)
-                {
-                    ItemBox.AddItem(item);
-                }
+                ItemBox.AddItem(item);
             }
 
             IsRepairObject = data.IsRepairObject;
@@ -115,6 +97,8 @@ public class GameManager : Singleton<GameManager>
 
     public void ChangeScene(string sceneName)
     {
+        Manager.Player.Stats.CurrentNearby = null;
+
         if(sceneName == "BaseCamp")
         {
             DayComplete();
@@ -125,7 +109,7 @@ public class GameManager : Singleton<GameManager>
 
     public void DayComplete()
     {
-        foreach(string key in IsUsedObject.Keys)
+        foreach(string key in IsUsedObject.Keys.ToArray())
         {
             IsUsedObject[key] = false;
         }
@@ -157,6 +141,18 @@ public class GameManager : Singleton<GameManager>
                 ItemBox.AddItem(slot.CurItem);
                 slot.RemoveItem();
             }
+        }
+
+        if(Stats.Weapon.Value != null)
+        {
+            ItemBox.AddItem(Stats.Weapon.Value);
+            Stats.Weapon.Value = null;
+        }
+
+        if(Stats.Armor.Value != null)
+        {
+            ItemBox.AddItem(Stats.Armor.Value);
+            Stats.Armor.Value = null;
         }
     }
 }

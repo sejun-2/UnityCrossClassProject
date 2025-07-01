@@ -9,10 +9,10 @@ public class RepairObject : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        //if (Manager.Game.IsRepairObject[_objectId])
-        //{
-        //    Repair();
-        //}
+        if (Manager.Game.IsRepairObject[_objectId])
+        {
+            Repair();
+        }
     }
 
     public void Interact()
@@ -26,5 +26,7 @@ public class RepairObject : MonoBehaviour, IInteractable
         GameObject obj = Resources.Load<GameObject>($"Object/{_objectId}");
 
         Instantiate(obj, transform.position, Quaternion.identity);
+
+        Destroy(gameObject);
     }
 }

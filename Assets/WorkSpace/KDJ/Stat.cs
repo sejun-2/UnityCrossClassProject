@@ -11,7 +11,12 @@ public class Stat<T>
         get => _value;
         set
         {
-            if(!_value.Equals(value))
+            if(_value == null)
+            {
+                _value = value;
+                OnChanged?.Invoke(_value);
+            }
+            else if(!_value.Equals(value))
             {
                 _value = value;
                 OnChanged?.Invoke(_value);

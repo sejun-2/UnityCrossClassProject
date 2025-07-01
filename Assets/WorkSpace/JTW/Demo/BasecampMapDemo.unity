@@ -550,7 +550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac19da8b1729f748812fb3fd12e4409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedDarkness: {fileID: 0}
 --- !u!114 &220343123
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -897,7 +896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac19da8b1729f748812fb3fd12e4409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedDarkness: {fileID: 0}
 --- !u!114 &639805773
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -1691,7 +1689,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac19da8b1729f748812fb3fd12e4409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedDarkness: {fileID: 0}
 --- !u!114 &1366800890
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -1853,7 +1850,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac19da8b1729f748812fb3fd12e4409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedDarkness: {fileID: 0}
 --- !u!114 &1382851844
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -2184,7 +2180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac19da8b1729f748812fb3fd12e4409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedDarkness: {fileID: 0}
 --- !u!114 &1468091404
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -2346,7 +2341,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac19da8b1729f748812fb3fd12e4409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedDarkness: {fileID: 0}
 --- !u!114 &1471392308
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -3444,7 +3438,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac19da8b1729f748812fb3fd12e4409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedDarkness: {fileID: 0}
 --- !u!114 &2935416466516526692
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -3530,7 +3523,7 @@ PrefabInstance:
     - target: {fileID: 4539836576179495975, guid: 06308de7ae6e47b4a863c13bf0968788,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.19
+      value: -0.26
       objectReference: {fileID: 0}
     - target: {fileID: 4539836576179495975, guid: 06308de7ae6e47b4a863c13bf0968788,
         type: 3}

@@ -20,7 +20,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public Transform Transform;
 
     private PlayerBuffController _buffController;
-    public PlayerBuffController BuffStats;
+    public PlayerBuffController BuffStats => _buffController;
 
     private void Start()
     {
