@@ -270,13 +270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48fcc55523aa7e24a8266415d8d518be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  climbSpeed: 3
-  interactDistance: 2
-  interactableLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  isFarming: 0
 --- !u!1 &218113908
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,6 +384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 360583206}
+  - component: {fileID: 360583207}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -407,13 +401,27 @@ Transform:
   m_GameObject: {fileID: 360583205}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.28, y: 0.19, z: 0}
+  m_LocalPosition: {x: 33.36, y: 0.16, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 147501639}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &360583207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360583205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6d90342130b57d48adb608762852e14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  climbSpeed: 3
 --- !u!1001 &744651173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -575,7 +583,7 @@ Transform:
   m_GameObject: {fileID: 1355790259}
   serializedVersion: 2
   m_LocalRotation: {x: 0.06850327, y: 0.12641579, z: -0.008751165, w: 0.9895705}
-  m_LocalPosition: {x: -5.7699575, y: 2.567902, z: -9.586528}
+  m_LocalPosition: {x: 30.870043, y: 2.5379019, z: -9.586527}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -807,20 +815,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d924070b4df7f0f45a6eaacdbeaf3cdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 5
-  _patrolRange: 5
-  _chaseSpeedMultiplier: 1.1
-  _waitTime: 3
-  _detectionDistance: 5
-  _attackRange: 2
-  _health: 100
-  _damage: 10
-  _attackCooldown: 1
+  currentState: 0
   player: {fileID: 147501639}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 16
-  animator: {fileID: 0}
+  baseDetectionRange: 30
+  detectionMultiplierWhenAware: 2.5
+  backDetectionMultiplier: 0.5
+  detectionThroughWallMultiplier: 0.33333334
+  slowSpeed: 3
+  fastSpeed: 8
+  attackDuration: 1
+  attackHitStart: 0.2
+  attackHitEnd: 0.6
 --- !u!1 &1720878391
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,7 +1013,7 @@ Transform:
   m_GameObject: {fileID: 1749372753}
   serializedVersion: 2
   m_LocalRotation: {x: 0.06850327, y: 0.12641579, z: -0.008751165, w: 0.9895705}
-  m_LocalPosition: {x: -5.7699575, y: 2.567902, z: -9.586528}
+  m_LocalPosition: {x: 30.870043, y: 2.5379019, z: -9.586527}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

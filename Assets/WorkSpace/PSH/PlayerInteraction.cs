@@ -1,10 +1,13 @@
+using Newtonsoft.Json;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 public partial class PlayerStats
 {
     public bool isFarming = false;//파밍중인지 나타내는 불값
-    public IInteractable CurrentNearby;//가까운 상호작용 대상
+    public bool isHiding = false;//숨었는지
+    [JsonIgnore] public IInteractable CurrentNearby;//가까운 상호작용 대상
 }
 public class PlayerInteraction : MonoBehaviour
 {
@@ -36,6 +39,17 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
+        //은신중에는 uparrow키로 은신 풀기 전까지는 다른 키 입력 불가
+        if (Manager.Player.Stats.isHiding)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z))//z키 일단 추가는 해봄
+            {
+                Manager.Player.Stats.isHiding = false;
+                Debug.Log("은신해제");
+            }
+            return;
+        }
+
         //등반 상태라면 등반함
         if (isAutoClimbing)
         {
@@ -43,7 +57,7 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        //위아래 키를 누르면 사다리 이동 시도
+        //위아래 키를 누르면 사다리 이동 시도 은신 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             bool goUp = Input.GetKeyDown(KeyCode.UpArrow);
@@ -54,6 +68,12 @@ public class PlayerInteraction : MonoBehaviour
                 Debug.Log("사다리 이동 시도");
                 ladder.Interact(transform, goUp, climbSpeed, this);
             }
+
+            if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
+            {
+                Debug.Log("은신 실행");
+                hideout.Interact(1);
+            }
         }
 
         //z키를 누르면 상호작용 시도
@@ -61,6 +81,13 @@ public class PlayerInteraction : MonoBehaviour
         {
             Manager.Player.Stats.CurrentNearby.Interact();
             Debug.Log("상호작용 실행");
+        }     
+
+        //space키를 누르면 공격 시도
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            
+            Debug.Log("공격 실행");
         }
 
         //이외에는 좌우 이동

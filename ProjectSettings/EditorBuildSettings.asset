@@ -11,4 +11,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/WorkSpace/LSJ/New Scene.unity
     guid: 87567ecd5faf8844198fdf343390be9d
+  - enabled: 1
+    path: Assets/WorkSpace/JTW/Demo2/Scene/Tutorial.unity
+    guid: 0ee673fe070d48047839f1193edf2d6c
+  - enabled: 1
+    path: Assets/WorkSpace/JTW/Demo2/Scene/BaseCamp.unity
+    guid: b527b339a503de545b6121e44a52426d
+  - enabled: 1
+    path: Assets/WorkSpace/JTW/Demo2/Scene/Hospital.unity
+    guid: 0f88ee8efb6881943a86a5ddba56a54b
+  - enabled: 1
+    path: Assets/WorkSpace/JTW/Demo2/Scene/School.unity
+    guid: ddd11a2230d67b3439b6e5415c2fcd62
   m_configObjects: {}

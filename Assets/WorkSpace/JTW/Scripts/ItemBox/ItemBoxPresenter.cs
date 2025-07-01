@@ -21,7 +21,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private List<List<ItemType>> _acceptTypeLists = new List<List<ItemType>>();
     private ItemSlotUIs _selectedItemSlots;
 
-    private ItemSlotUIs _categotySlots;
+    private ItemSlotUIs _categorySlots;
 
     private bool _isInItemSlots;
 
@@ -31,6 +31,11 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     private bool _isActivate = true;
     private bool _isSwitchActivate = false;
+
+    private void OnDisable()
+    {
+        _itemBox.OnDataChanged -= ResetItemSlots;
+    }
 
     private void Update()
     {
@@ -45,6 +50,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
         if (IsTrade && Input.GetKeyDown(KeyCode.C))
         {
+            Manager.Player.BuffStats.ApplyBuff();
+            Manager.Game.IsInBaseCamp = false;
             Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
         }
 
@@ -71,7 +78,10 @@ public class ItemBoxPresenter : BaseUI, IInventory
     public void SetItemBoxData(ItemBoxData itemBox, IInventory tradeInven = null, Vector2 tradeDirection = default)
     {
         _itemBox = itemBox;
-        if(tradeInven != null)
+
+        _itemBox.OnDataChanged += ResetItemSlots;
+
+        if (tradeInven != null)
         {
             _inventoryForTrade = tradeInven;
             _tradeInvenDirection = tradeDirection;
@@ -97,14 +107,14 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     private void InitItemBox()
     {
-        _categotySlots = Instantiate(_itemSlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
-        _categotySlots.SetPanelSize(new Vector2(5, 1));
+        _categorySlots = Instantiate(_itemSlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
+        _categorySlots.SetPanelSize(new Vector2(5, 1));
         for(int i = 0; i < _categorySprites.Count; i++)
         {
-            _categotySlots.AddSlotUI(maxItemCount:0);
-            _categotySlots.SlotUIs[i].ItemImage.sprite = _categorySprites[i];
+            _categorySlots.AddSlotUI(maxItemCount:0);
+            _categorySlots.SlotUIs[i].ItemImage.sprite = _categorySprites[i];
         }
-        _categotySlots.SelectSlotUI(0);
+        _categorySlots.SelectSlotUI(0);
 
         for(int i = 0; i < _categorySprites.Count; i++)
         {
@@ -153,12 +163,20 @@ public class ItemBoxPresenter : BaseUI, IInventory
         if (!_isInItemSlots) return;
 
         SlotUI selectedSlotUI = _selectedItemSlots.SlotUIs[_selectedItemSlots.SelectedSlotIndex];
+        int SlotUIIndex = _selectedItemSlots.SlotUIs.IndexOf(selectedSlotUI);
+        int SlotIndex = _itemBox.SlotList.IndexOf(selectedSlotUI.Slot);
+
+        Item item = selectedSlotUI.Slot.CurItem;
+
+        if (item == null) return;
 
         if (IsTrade)
         {
-            Item item = selectedSlotUI.Slot.CurItem;
-
-            if (item != null)
+            if(item.itemType == ItemType.Weapon || item.itemType == ItemType.Armor)
+            {
+                selectedSlotUI.UseItem();
+            }
+            else
             {
                 if (!_inventoryForTrade.AddItem(item)) return;
                 selectedSlotUI.Slot.RemoveItem();
@@ -166,13 +184,15 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
+            if (item.itemType == ItemType.Weapon || item.itemType == ItemType.Armor) return;
+
             selectedSlotUI.UseItem();
         }
 
         if (selectedSlotUI.Slot.IsEmpty)
         {
-            _itemBox.SlotList.Remove(selectedSlotUI.Slot);
-            _selectedItemSlots.SlotUIs.Remove(selectedSlotUI);
+            _itemBox.SlotList.RemoveAt(SlotIndex);
+            _selectedItemSlots.SlotUIs.RemoveAt(SlotUIIndex);
 
             ResetItemSlots();
         }
@@ -184,10 +204,13 @@ public class ItemBoxPresenter : BaseUI, IInventory
                 .GetComponent<ItemSlotUIs>();
         itemSlotUIs.SetPanelSize(new Vector2(5, 4));
         itemSlotUIs.AcceptTypeList = _selectedItemSlots.AcceptTypeList;
-        foreach (SlotUI slotUI in _selectedItemSlots.SlotUIs)
+        Destroy(_selectedItemSlots.gameObject);
+
+        foreach (Slot slot in _itemBox.SlotList)
         {
-            itemSlotUIs.AddSlotUI(slotUI.Slot, int.MaxValue);
+            itemSlotUIs.AddSlotUI(slot, int.MaxValue);
         }
+
         if (!itemSlotUIs.SelectSlotUI(_selectedItemSlots.SelectedSlotIndex))
         {
             GoCategory();
@@ -198,8 +221,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
             _itemNameText.text = item.itemName;
             _itemDescriptionText.text = item.description;
         }
-            Destroy(_selectedItemSlots.gameObject);
-        _itemSlotsList[_categotySlots.SelectedSlotIndex] = itemSlotUIs;
+
+        _itemSlotsList[_categorySlots.SelectedSlotIndex] = itemSlotUIs;
         _selectedItemSlots = itemSlotUIs;
 
         
@@ -243,9 +266,9 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
-            _categotySlots.MoveSelectSlot(direction);
+            _categorySlots.MoveSelectSlot(direction);
             _selectedItemSlots.gameObject.SetActive(false);
-            _selectedItemSlots = _itemSlotsList[_categotySlots.SelectedSlotIndex];
+            _selectedItemSlots = _itemSlotsList[_categorySlots.SelectedSlotIndex];
             _selectedItemSlots.gameObject.SetActive(true);
 
         }
@@ -270,16 +293,16 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
-            if (IsTrade && direction == _tradeInvenDirection && _categotySlots.CanChangeTrade(direction))
+            if (IsTrade && direction == _tradeInvenDirection && _categorySlots.CanChangeTrade(direction))
             {
                 Deactivate();
-                _inventoryForTrade.Activate(_categotySlots.SelectedSlotIndex);
+                _inventoryForTrade.Activate(_categorySlots.SelectedSlotIndex);
                 return false;
             }
 
             if (direction.y == -1)
             {
-                if (_itemSlotsList[_categotySlots.SelectedSlotIndex].SlotUIs.Count <= 0)
+                if (_itemSlotsList[_categorySlots.SelectedSlotIndex].SlotUIs.Count <= 0)
                 {
                     return false;
                 }
@@ -293,11 +316,11 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     private void GoItemSlots()
     {
-        _categotySlots.Deactivate();
+        _categorySlots.Deactivate();
 
         _isInItemSlots = true;
         _selectedItemSlots.gameObject.SetActive(false);
-        _selectedItemSlots = _itemSlotsList[_categotySlots.SelectedSlotIndex];
+        _selectedItemSlots = _itemSlotsList[_categorySlots.SelectedSlotIndex];
         _selectedItemSlots.gameObject.SetActive(true);
         _selectedItemSlots.Activate();
 
@@ -311,7 +334,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
         _selectedItemSlots.Deactivate();
 
         _isInItemSlots = false;
-        _categotySlots.Activate();
+        _categorySlots.Activate();
 
         _itemNameText.text = "";
         _itemDescriptionText.text = "";
@@ -326,8 +349,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
-            index = SetSelectIndex(_categotySlots, index);
-            _categotySlots.Activate();
+            index = SetSelectIndex(_categorySlots, index);
+            _categorySlots.Activate();
         }
 
         _isSwitchActivate = true;
@@ -341,7 +364,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
         else
         {
-            _categotySlots.Deactivate();
+            _categorySlots.Deactivate();
         }
 
         _isSwitchActivate = true;

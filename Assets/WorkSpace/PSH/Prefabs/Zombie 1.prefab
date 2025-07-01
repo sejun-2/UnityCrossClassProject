@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 3448556542613550041}
   - component: {fileID: 3245204140489503701}
   - component: {fileID: 1422377195040675297}
+  - component: {fileID: 7936995762722458665}
   m_Layer: 0
   m_Name: Zombie 1
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,11 +52,11 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.3
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -81,7 +82,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
@@ -107,7 +108,7 @@ MonoBehaviour:
   _health: 100
   _damage: 10
   _attackCooldown: 3
-  player: {fileID: 0}
+  _playerTransform: {fileID: 0}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 512
@@ -133,6 +134,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!136 &7936995762722458665
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8039752571056619241}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 0.1
+  m_Direction: 1
+  m_Center: {x: 1.21, y: 0.2, z: 0}
 --- !u!1001 &8441984741139118470
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -187,7 +211,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 95982432595508516, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1768475577105442, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1249213780765096, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1184545469800576, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1926126883143606, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1711138094497754, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1407796037277168, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1253057839788324, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1743941428319906, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1919764619155466, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1409492597593812, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1516699611162774, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1285009203329880, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1699206709058418, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1328870751800972, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1553538563227290, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1217769699460350, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1302059596723896, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1732060805122710, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1252917616148446, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1102058820091924, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1433625027385076, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1088034495885122, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1897480639402394, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1908311309512566, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1931448695258732, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
+    - {fileID: 1982068729999548, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b87cb604b959698428935c5d56bd97c0, type: 3}
