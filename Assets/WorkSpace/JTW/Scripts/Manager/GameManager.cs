@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -125,7 +126,7 @@ public class GameManager : Singleton<GameManager>
 
     public void DayComplete()
     {
-        foreach(string key in IsUsedObject.Keys)
+        foreach(string key in IsUsedObject.Keys.ToArray())
         {
             IsUsedObject[key] = false;
         }
