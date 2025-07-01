@@ -9,17 +9,26 @@ public partial class PlayerStats
     public bool isHiding = false;//숨었는지
     [JsonIgnore] public IInteractable CurrentNearby;//가까운 상호작용 대상
 }
+
 public class PlayerInteraction : MonoBehaviour
 {
+    public enum State { Idle, Run, Climb, Hide, Farm, Attack, Die }
+    private State _currentState = State.Idle;
+    public State CurrentState
+    {
+        get { return _currentState; }
+    }
+
     public float moveSpeed = 5f;
     public float climbSpeed = 3f;
 
-    private Rigidbody rb;//필요없을 거 같은데 굳이 없앨 이유도 없을거같음
+    private Rigidbody rb;
     private Collider playerCollider;
 
     private bool isAutoClimbing = false;
     private Vector3 climbTargetPos;
 
+    public Animator animator;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -35,6 +44,8 @@ public class PlayerInteraction : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.X))
             {
                 Manager.Player.Stats.isFarming = false;
+                animator.SetBool("IsFarming", false);
+                StateChange(State.Idle);
             }
             return;
         }
@@ -42,9 +53,14 @@ public class PlayerInteraction : MonoBehaviour
         //은신중에는 uparrow키로 은신 풀기 전까지는 다른 키 입력 불가
         if (Manager.Player.Stats.isHiding)
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z))//z키 일단 추가는 해봄
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 Manager.Player.Stats.isHiding = false;
+                animator.SetBool("IsHiding", false);
+                playerCollider.enabled = true;
+                rb.useGravity = true;
+                StateChange(State.Idle);
+
                 Debug.Log("은신해제");
             }
             return;
@@ -61,33 +77,38 @@ public class PlayerInteraction : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             bool goUp = Input.GetKeyDown(KeyCode.UpArrow);
-
-            
+           
             if (Manager.Player.Stats.CurrentNearby is Ladder ladder)
             {
                 Debug.Log("사다리 이동 시도");
-                ladder.Interact(transform, goUp, climbSpeed, this);
+                if(ladder.Interact(transform, goUp, climbSpeed, this))
+                StateChange(State.Climb);
             }
 
             if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
             {
-                Debug.Log("은신 실행");
-                hideout.Interact(1);
+                Debug.Log("은신 시도");
+                if (hideout.Interact(1))
+                {
+                    playerCollider.enabled = false;
+                    rb.useGravity = false;
+                    StateChange(State.Hide);
+                }
             }
         }
 
         //z키를 누르면 상호작용 시도
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
+            Debug.Log("상호작용 시도");
             Manager.Player.Stats.CurrentNearby.Interact();
-            Debug.Log("상호작용 실행");
         }     
 
         //space키를 누르면 공격 시도
         if (Input.GetKeyDown(KeyCode.Space))
-        {
-            
-            Debug.Log("공격 실행");
+        {           
+            Debug.Log("공격 시도");
+            Attack();
         }
 
         //이외에는 좌우 이동
@@ -97,6 +118,15 @@ public class PlayerInteraction : MonoBehaviour
     void MoveSideways()
     {
         float h = Input.GetAxis("Horizontal");
+
+        if (Mathf.Abs(h) > 0.01f)
+        {
+            StateChange(State.Run);
+        }
+        else
+        {
+            StateChange(State.Idle);
+        }
 
         if (h != 0f)
         {
@@ -118,6 +148,8 @@ public class PlayerInteraction : MonoBehaviour
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
         playerCollider.enabled = false;
+
+        StateChange(State.Climb);
     }
     void AutoClimb()
     {
@@ -138,5 +170,79 @@ public class PlayerInteraction : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f); // 짧은 지연 후
         playerCollider.enabled = true;
+    }
+    public void Attack()
+    {
+        Item weapon = Manager.Player.Stats.Weapon.Value;
+
+        if (weapon == null || Manager.Player.Stats.IsAttack.Value) return;
+
+        Manager.Player.Stats.IsAttack.Value = true;
+        StartCoroutine(AttackCoroutine(weapon.attackSpeed));
+        StateChange(State.Attack);
+        Debug.Log("공격 실행ffffff");
+
+        Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
+
+        Debug.DrawRay(transform.position + Vector3.up, direction * weapon.attackRange * 10, Color.red, 1f);
+        RaycastHit[] hits = Physics.RaycastAll(transform.position + Vector3.up, direction, weapon.attackRange * 10, ~0, QueryTriggerInteraction.Collide);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.gameObject.CompareTag("Zombie"))
+            {
+                IDamageable zombie = hit.collider.gameObject.GetComponent<IDamageable>();
+
+                zombie.TakeDamage(weapon.attackValue);
+
+                Debug.Log($"{hit.collider.gameObject.name}에게 {weapon.attackValue} 만큼의 데미지");
+
+                break;
+            }
+        }      
+    }
+
+    private IEnumerator AttackCoroutine(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        Manager.Player.Stats.IsAttack.Value = false;
+    }
+    
+    public void StateChange(State state)
+    {
+        switch (state)
+        {
+            case State.Idle:
+                _currentState = State.Idle;
+                animator.SetBool("IsRunning", false);
+                break;
+            case State.Run:
+                _currentState = State.Run;
+                animator.SetBool("IsRunning", true);
+                break;
+            case State.Climb:
+                _currentState = State.Climb;
+                animator.SetTrigger("Climbing");
+                break;
+            case State.Attack:
+                _currentState = State.Attack;
+                animator.SetTrigger("Attack");
+                break;
+            case State.Farm:
+                _currentState = State.Farm;
+                animator.SetBool("IsFarming", true);
+                break;
+            case State.Hide:
+                _currentState = State.Hide;
+                animator.SetBool("IsHiding", true);
+                break;
+            case State.Die:
+                _currentState = State.Die;
+                animator.SetBool("IsDead", true);
+                break;
+            default:
+                break;
+        }
     }
 }

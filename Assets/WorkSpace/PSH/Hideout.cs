@@ -26,7 +26,7 @@ public class Hideout : MonoBehaviour,IInteractable
     {
        
     }
-    public void Interact(int a)
+    public bool Interact(int a)
     {
         if (_hideChecker != null)
         {
@@ -35,12 +35,16 @@ public class Hideout : MonoBehaviour,IInteractable
                 Debug.Log("은신 성공");
                 // 은신 로직 실행
                 Manager.Player.Stats.isHiding = true;
+                return true;
             }
             else
             {
                 Debug.Log("추격 중인 좀비가 가까워서 은신 실패");
                 // 은신 실패 처리
+                return false;
             }
         }
+
+        return false;
     }
 }
