@@ -74,26 +74,20 @@ public class GameManager : Singleton<GameManager>
                 Manager.Player.Stats.Weapon.Value.durabilityValue = data.ArmorData.Durability;
             }
 
-            foreach (KeyValuePair<ItemSaveData, int> value in data.InvenData)
+            foreach (ItemSaveData value in data.InvenData)
             {
-                Item item = Instantiate(Manager.Data.ItemData.Values[value.Key.Id]);
-                item.durabilityValue = value.Key.Durability;
+                Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
+                item.durabilityValue = value.Durability;
 
-                for(int i = 0; i < value.Value; i++)
-                {
-                    Inven.AddItem(item);
-                }
+                Inven.AddItem(item);
             }
 
-            foreach(KeyValuePair<ItemSaveData, int> value in data.ItemBoxData)
+            foreach(ItemSaveData value in data.ItemBoxData)
             {
-                Item item = Instantiate(Manager.Data.ItemData.Values[value.Key.Id]);
-                item.durabilityValue = value.Key.Durability;
+                Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
+                item.durabilityValue = value.Durability;
 
-                for (int i = 0; i < value.Value; i++)
-                {
-                    ItemBox.AddItem(item);
-                }
+                ItemBox.AddItem(item);
             }
 
             IsRepairObject = data.IsRepairObject;

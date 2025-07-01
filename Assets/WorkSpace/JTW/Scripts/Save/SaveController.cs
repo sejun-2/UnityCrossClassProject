@@ -54,13 +54,9 @@ public class SaveController
             itemSaveData.Id = slot.CurItem.index.ToString();
             itemSaveData.Durability = slot.CurItem.durabilityValue;
 
-            if (data.InvenData.ContainsKey(itemSaveData))
+            for(int i = 0; i < slot.ItemCount; i++)
             {
-                data.InvenData[itemSaveData] += slot.ItemCount;
-            }
-            else
-            {
-                data.InvenData.Add(itemSaveData, slot.ItemCount);
+                data.InvenData.Add(itemSaveData);
             }
                 
         }
@@ -74,13 +70,9 @@ public class SaveController
             itemSaveData.Id = slot.CurItem.index.ToString();
             itemSaveData.Durability = slot.CurItem.durabilityValue;
 
-            if (data.ItemBoxData.ContainsKey(itemSaveData))
+            for (int i = 0; i < slot.ItemCount; i++)
             {
-                data.ItemBoxData[itemSaveData] += slot.ItemCount;
-            }
-            else
-            {
-                data.ItemBoxData.Add(itemSaveData, slot.ItemCount);
+                data.ItemBoxData.Add(itemSaveData);
             }
         }
 
