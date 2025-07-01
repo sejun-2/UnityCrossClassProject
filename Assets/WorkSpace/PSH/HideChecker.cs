@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HideCheker : MonoBehaviour
+public class HideChecker : MonoBehaviour
 {
     private GameObject _player;
    [SerializeField] float hideDistanceThreshold = 5f;

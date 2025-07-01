@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Hideout : MonoBehaviour,IInteractable
 {
-    private HideCheker _hideChecker;
+    private HideChecker _hideChecker;
     public void Interact()
     {
         if (_hideChecker != null)
