@@ -14,6 +14,7 @@ public class Stat<T>
             if(_value == null)
             {
                 _value = value;
+                OnChanged?.Invoke(_value);
             }
             else if(!_value.Equals(value))
             {

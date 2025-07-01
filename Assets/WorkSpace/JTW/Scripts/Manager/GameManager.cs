@@ -161,5 +161,17 @@ public class GameManager : Singleton<GameManager>
                 slot.RemoveItem();
             }
         }
+
+        if(Stats.Weapon.Value != null)
+        {
+            ItemBox.AddItem(Stats.Weapon.Value);
+            Stats.Weapon.Value = null;
+        }
+
+        if(Stats.Armor.Value != null)
+        {
+            ItemBox.AddItem(Stats.Armor.Value);
+            Stats.Armor.Value = null;
+        }
     }
 }
