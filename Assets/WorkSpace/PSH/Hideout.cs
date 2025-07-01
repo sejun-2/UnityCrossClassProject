@@ -2,59 +2,45 @@ using UnityEngine;
 
 public class Hideout : MonoBehaviour,IInteractable
 {
-    private GameObject _player;
+    private HideChecker _hideChecker;
+
     private void Start()
     {
-        _player = GameObject.FindGameObjectWithTag("Player");
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObj != null)
+        {
+            _hideChecker = playerObj.GetComponent<HideChecker>();
+
+            if (_hideChecker == null)
+            {
+                Debug.LogError("Player 오브젝트에 HideChecker 컴포넌트가 없습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
+        }
     }
-    [SerializeField] float hideDistanceThreshold = 5f; // 은신 불가능 거리 임계값
     public void Interact()
     {
-        GameObject nearestZombie = FindNearestZombie();
-
-        if (nearestZombie != null)
-        {
-            Debug.Log("가장 가까운 좀비는: " + nearestZombie.name);
-        }
-        else
-        {
-            Debug.Log("좀비가 없음");
-        }
-
-        float distanceToZombie = Vector3.Distance(_player.transform.position, nearestZombie.transform.position);
-
-        if (distanceToZombie < hideDistanceThreshold)
-        {
-            Debug.Log("좀비가 가까워서 숨을 수 없다");
-        }
-        else
-        {
-            Debug.Log("은신 가능");
-
-            Manager.Player.Stats.isHiding = !Manager.Player.Stats.isHiding;
-
-            if (Manager.Player.Stats.isHiding)
-            {
-                Debug.Log("숨음");
-            }
-        }       
+       
     }
-    GameObject FindNearestZombie()
+    public void Interact(int a)
     {
-        GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
-        GameObject closest = null;
-        float minDistance = Mathf.Infinity;
-
-        foreach (GameObject zombie in zombies)
+        if (_hideChecker != null)
         {
-            float distance = Vector3.Distance(Manager.Player.transform.position, zombie.transform.position);
-            if (distance < minDistance)
+            if (_hideChecker.CanHide())
             {
-                minDistance = distance;
-                closest = zombie;
+                Debug.Log("은신 성공");
+                // 은신 로직 실행
+                Manager.Player.Stats.isHiding = true;
+            }
+            else
+            {
+                Debug.Log("추격 중인 좀비가 가까워서 은신 실패");
+                // 은신 실패 처리
             }
         }
-
-        return closest;
     }
 }
