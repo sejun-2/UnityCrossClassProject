@@ -63,6 +63,8 @@ public class PlayerBuffController
         {
             Stats.Buff.Value = PlayerBuffs.Nomal;
         }
+
+        Debug.Log($"{Stats.Buff.Value} 버프 부여");
     }
 
     public void ApplyBuffStats(PlayerBuffs buff)
