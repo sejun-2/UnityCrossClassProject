@@ -88,10 +88,12 @@ public class PlayerInteraction : MonoBehaviour
             if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
             {
                 Debug.Log("은신 실행");
-                hideout.Interact(1);
-                playerCollider.enabled = false;
-                rb.useGravity = false;
-                StateChange(State.Hide);
+                if (hideout.Interact(1))
+                {
+                    playerCollider.enabled = false;
+                    rb.useGravity = false;
+                    StateChange(State.Hide);
+                }
             }
         }
 
