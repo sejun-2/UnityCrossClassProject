@@ -9,14 +9,6 @@ public partial class PlayerStats
 
 public class PlayerAttack : MonoBehaviour
 {
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Attack();
-        }
-    }
-
     public void Attack()
     {
         Item weapon = Manager.Player.Stats.Weapon.Value;

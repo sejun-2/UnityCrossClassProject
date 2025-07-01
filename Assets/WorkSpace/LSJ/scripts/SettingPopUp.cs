@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,15 +9,15 @@ public class SettingPopUp : BaseUI
     [SerializeField] private Slider BgmVolume;
     [SerializeField] private Slider SfxVolume;
 
-    int selectedIndex = 0;  // ÇöÀç ¼±ÅÃµÈ ¹öÆ°ÀÇ ÀÎµ¦½º
-    Selectable[] menus;   // ¸Ş´º ¹öÆ°µéÀ» ÀúÀåÇÒ ¹è¿­
+    int selectedIndex = 0;  // í˜„ì¬ ì„ íƒëœ ë²„íŠ¼ì˜ ì¸ë±ìŠ¤
+    Selectable[] menus;   // ë©”ë‰´ ë²„íŠ¼ë“¤ì„ ì €ì¥í•  ë°°ì—´
 
     private void Start()
     {
-        Debug.Log(GetEvent("SettingMenu¿­¸²")); // SettingMenu UI°¡ ½ÃÀÛµÉ ¶§ ·Î±×¸¦ Ãâ·ÂÇÕ´Ï´Ù.
-        // SelectButton ¹öÆ°ÀÌ Å¬¸¯µÇ¾úÀ» ¶§ È£ÃâµÇ´Â ¸Ş¼­µå
-        GetEvent("SelectButton").Click += data => Manager.UI.PopUp.ShowPopUp<LangguagePopUp>(); // LangguagePopUpÀ» Ç¥½ÃÇÕ´Ï´Ù.
-        GetEvent("SelectText").Enter += data => Manager.UI.PopUp.ShowPopUp<LangguagePopUp>();
+        Debug.Log(GetEvent("SettingMenuì—´ë¦¼")); // SettingMenu UIê°€ ì‹œì‘ë  ë•Œ ë¡œê·¸ë¥¼ ì¶œë ¥í•©ë‹ˆë‹¤.
+        // SelectButton ë²„íŠ¼ì´ í´ë¦­ë˜ì—ˆì„ ë•Œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
+        GetEvent("SelectButton").Click += data => Manager.UI.PopUp.ShowPopUp<LangguagePopUp>(); // LangguagePopUpì„ í‘œì‹œí•©ë‹ˆë‹¤.
+        GetEvent("SelectText").Click += data => Manager.UI.PopUp.ShowPopUp<LangguagePopUp>();
 
         GetEvent("ESCButton").Click += data => Manager.UI.PopUp.ClosePopUp();
         GetEvent("ESCText").Click += data => Manager.UI.PopUp.ClosePopUp();
@@ -34,38 +34,38 @@ public class SettingPopUp : BaseUI
         for (int i = 0; i < menus.Length; i++)
         {
             if (menus[i] == null)
-                Debug.LogError($"menus[{i}]°¡ nullÀÔ´Ï´Ù! ¿ÀºêÁ§Æ® ÀÌ¸§, Button ÄÄÆ÷³ÍÆ® È®ÀÎ ÇÊ¿ä.");
+                Debug.LogError($"menus[{i}]ê°€ nullì…ë‹ˆë‹¤! ì˜¤ë¸Œì íŠ¸ ì´ë¦„, Button ì»´í¬ë„ŒíŠ¸ í™•ì¸ í•„ìš”.");
         }
 
-        // Ã¹ ¹øÂ° ¹öÆ° ¼±ÅÃ
+        // ì²« ë²ˆì§¸ ë²„íŠ¼ ì„ íƒ
         if (menus[0] != null)
             menus[0].Select();
     }
 
     private void Update()
     {
-        // menuButtons ¹è¿­ÀÌ ºñ¾îÀÖ°Å³ª »ı¼ºµÇÁö ¾Ê¾Ò´Ù¸é ¾Æ¹« °Íµµ ÇÏÁö ¾Ê°í ÇÔ¼ö Á¾·á
+        // menuButtons ë°°ì—´ì´ ë¹„ì–´ìˆê±°ë‚˜ ìƒì„±ë˜ì§€ ì•Šì•˜ë‹¤ë©´ ì•„ë¬´ ê²ƒë„ í•˜ì§€ ì•Šê³  í•¨ìˆ˜ ì¢…ë£Œ
         if (menus == null || menus.Length == 0) return;
 
-        // À§ÂÊ ¹æÇâÅ°°¡ ´­·ÈÀ» ¶§
+        // ìœ„ìª½ ë°©í–¥í‚¤ê°€ ëˆŒë ¸ì„ ë•Œ
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            // selectedIndex¸¦ ÇÏ³ª ÁÙÀÎ´Ù. (0º¸´Ù ÀÛ¾ÆÁö¸é ¸Ç ¸¶Áö¸· ÀÎµ¦½º·Î ¼øÈ¯)
+            // selectedIndexë¥¼ í•˜ë‚˜ ì¤„ì¸ë‹¤. (0ë³´ë‹¤ ì‘ì•„ì§€ë©´ ë§¨ ë§ˆì§€ë§‰ ì¸ë±ìŠ¤ë¡œ ìˆœí™˜)
             selectedIndex = (selectedIndex - 1 + menus.Length) % menus.Length;
-            // ÇØ´ç ÀÎµ¦½ºÀÇ ¹öÆ°ÀÌ nullÀÌ ¾Æ´Ï¸é
+            // í•´ë‹¹ ì¸ë±ìŠ¤ì˜ ë²„íŠ¼ì´ nullì´ ì•„ë‹ˆë©´
             if (menus[selectedIndex] != null)
-                // ±× ¹öÆ°À» ¼±ÅÃ(Æ÷Ä¿½º) »óÅÂ·Î ¸¸µç´Ù (ÇÏÀÌ¶óÀÌÆ® Ç¥½Ã)
+                // ê·¸ ë²„íŠ¼ì„ ì„ íƒ(í¬ì»¤ìŠ¤) ìƒíƒœë¡œ ë§Œë“ ë‹¤ (í•˜ì´ë¼ì´íŠ¸ í‘œì‹œ)
                 menus[selectedIndex].Select();
         }
 
-        // ¾Æ·¡ÂÊ ¹æÇâÅ°°¡ ´­·ÈÀ» ¶§
+        // ì•„ë˜ìª½ ë°©í–¥í‚¤ê°€ ëˆŒë ¸ì„ ë•Œ
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            // selectedIndex¸¦ ÇÏ³ª ´Ã¸°´Ù. (¸¶Áö¸· ÀÎµ¦½ºº¸´Ù Ä¿Áö¸é 0¹øÀ¸·Î ¼øÈ¯)
+            // selectedIndexë¥¼ í•˜ë‚˜ ëŠ˜ë¦°ë‹¤. (ë§ˆì§€ë§‰ ì¸ë±ìŠ¤ë³´ë‹¤ ì»¤ì§€ë©´ 0ë²ˆìœ¼ë¡œ ìˆœí™˜)
             selectedIndex = (selectedIndex + 1) % menus.Length;
-            // ÇØ´ç ÀÎµ¦½ºÀÇ ¹öÆ°ÀÌ nullÀÌ ¾Æ´Ï¸é
+            // í•´ë‹¹ ì¸ë±ìŠ¤ì˜ ë²„íŠ¼ì´ nullì´ ì•„ë‹ˆë©´
             if (menus[selectedIndex] != null)
-                // ±× ¹öÆ°À» ¼±ÅÃ(Æ÷Ä¿½º) »óÅÂ·Î ¸¸µç´Ù (ÇÏÀÌ¶óÀÌÆ® Ç¥½Ã)
+                // ê·¸ ë²„íŠ¼ì„ ì„ íƒ(í¬ì»¤ìŠ¤) ìƒíƒœë¡œ ë§Œë“ ë‹¤ (í•˜ì´ë¼ì´íŠ¸ í‘œì‹œ)
                 menus[selectedIndex].Select();
         }
 
@@ -76,12 +76,23 @@ public class SettingPopUp : BaseUI
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Manager.UI.PopUp.ClosePopUp();
+            Manager.UI.PopUp.ShowPopUp<TitlePopUp>();
         }
 
-        Manager.Sound.MasterVolume = MasterVolume.value; // MasterVolume ½½¶óÀÌ´õÀÇ °ªÀ» SoundManagerÀÇ MasterVolume¿¡ ÇÒ´çÇÕ´Ï´Ù.
-        Manager.Sound.BgmVolume = BgmVolume.value; // BgmVolume ½½¶óÀÌ´õÀÇ °ªÀ» SoundManagerÀÇ BgmVolume¿¡ ÇÒ´çÇÕ´Ï´Ù.
-        Manager.Sound.SfxVolume = SfxVolume.value; // SfxVolume ½½¶óÀÌ´õÀÇ °ªÀ» SoundManagerÀÇ SfxVolume¿¡ ÇÒ´çÇÕ´Ï´Ù.
+        Manager.Sound.MasterVolume = MasterVolume.value; // MasterVolume ìŠ¬ë¼ì´ë”ì˜ ê°’ì„ SoundManagerì˜ MasterVolumeì— í• ë‹¹í•©ë‹ˆë‹¤.
+        Manager.Sound.BgmVolume = BgmVolume.value; // BgmVolume ìŠ¬ë¼ì´ë”ì˜ ê°’ì„ SoundManagerì˜ BgmVolumeì— í• ë‹¹í•©ë‹ˆë‹¤.
+        Manager.Sound.SfxVolume = SfxVolume.value; // SfxVolume ìŠ¬ë¼ì´ë”ì˜ ê°’ì„ SoundManagerì˜ SfxVolumeì— í• ë‹¹í•©ë‹ˆë‹¤.
 
     }
+
+    private void OnDisable()
+    {
+        // SettingPopUpì´ ë‹«í ë•Œ TitlePopUpì„ ë‹¤ì‹œ í™œì„±í™”
+        var titlePopUp = FindObjectOfType<TitlePopUp>();
+        if (titlePopUp != null)
+            titlePopUp.gameObject.SetActive(true);
+    }
+
+
 }
 

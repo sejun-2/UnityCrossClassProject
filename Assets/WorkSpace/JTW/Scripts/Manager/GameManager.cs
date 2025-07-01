@@ -155,4 +155,9 @@ public class GameManager : Singleton<GameManager>
             Stats.Armor.Value = null;
         }
     }
+
+    public void LoadSaveData()
+    {
+
+    }
 }
