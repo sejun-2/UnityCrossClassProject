@@ -33,6 +33,9 @@ public class DataTableParser<T> where T : IUsableID
             }
 
             T value = Parse(fields);
+
+            if (string.IsNullOrEmpty(value.GetID())) continue;
+
             values.Add(value.GetID(), value);
         }
 
