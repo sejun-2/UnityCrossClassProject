@@ -19,6 +19,7 @@ public class PlayerStealth : MonoBehaviour
     private Color originalColor;          // 원래 색상 저장 은신해제시에는 복원
     public Color hiddenColor = new Color(1, 1, 1, 0.3f); // 은신 시 색상 투명도도 포함
 
+
     // 게임 시작 시 초기화
     void Start()
     {
@@ -101,5 +102,13 @@ public class PlayerStealth : MonoBehaviour
         canStealth = true; // 은신 다시 가능
         Debug.Log("은신 가능 상태로 복구됨");
     }
+    public interface IInteractable
+    {
+        void Interact();
+    }
+
+  
+
 }
+
 
