@@ -87,7 +87,7 @@ public class PlayerInteraction : MonoBehaviour
 
             if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
             {
-                Debug.Log("은신 실행");
+                Debug.Log("은신 시도");
                 if (hideout.Interact(1))
                 {
                     playerCollider.enabled = false;
@@ -100,14 +100,14 @@ public class PlayerInteraction : MonoBehaviour
         //z키를 누르면 상호작용 시도
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
-            Debug.Log("상호작용 실행");
+            Debug.Log("상호작용 시도");
             Manager.Player.Stats.CurrentNearby.Interact();
         }     
 
         //space키를 누르면 공격 시도
         if (Input.GetKeyDown(KeyCode.Space))
         {           
-            Debug.Log("공격 실행");
+            Debug.Log("공격 시도");
             Attack();
         }
 
@@ -171,11 +171,42 @@ public class PlayerInteraction : MonoBehaviour
         yield return new WaitForSeconds(0.1f); // 짧은 지연 후
         playerCollider.enabled = true;
     }
-
-    void Attack()
+    public void Attack()
     {
-        StateChange(State.Attack);
+        Item weapon = Manager.Player.Stats.Weapon.Value;
 
+        if (weapon == null || Manager.Player.Stats.IsAttack.Value) return;
+
+        Manager.Player.Stats.IsAttack.Value = true;
+        StartCoroutine(AttackCoroutine(weapon.attackSpeed));
+        StateChange(State.Attack);
+        Debug.Log("공격 실행ffffff");
+
+        Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
+
+        Debug.DrawRay(transform.position + Vector3.up, direction * weapon.attackRange * 10, Color.red, 1f);
+        RaycastHit[] hits = Physics.RaycastAll(transform.position + Vector3.up, direction, weapon.attackRange * 10, ~0, QueryTriggerInteraction.Collide);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.gameObject.CompareTag("Zombie"))
+            {
+                IDamageable zombie = hit.collider.gameObject.GetComponent<IDamageable>();
+
+                zombie.TakeDamage(weapon.attackValue);
+
+                Debug.Log($"{hit.collider.gameObject.name}에게 {weapon.attackValue} 만큼의 데미지");
+
+                break;
+            }
+        }      
+    }
+
+    private IEnumerator AttackCoroutine(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        Manager.Player.Stats.IsAttack.Value = false;
     }
     
     public void StateChange(State state)
