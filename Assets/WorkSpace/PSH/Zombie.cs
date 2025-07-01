@@ -5,7 +5,11 @@ using UnityEngine;
 public class Zombie : MonoBehaviour, IDamageable
 {
     public enum State { Patrol, Wait, Chase, Attack, Dead }
-    public State _currentState = State.Patrol;
+    private State _currentState = State.Patrol;
+    public State CurrentState
+    {
+        get { return _currentState; }
+    }
 
     [SerializeField] private float _moveSpeed = 2;
     [SerializeField] private float _patrolRange = 4;

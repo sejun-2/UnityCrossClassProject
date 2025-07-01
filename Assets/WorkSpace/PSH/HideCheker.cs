@@ -16,7 +16,7 @@ public class HideCheker : MonoBehaviour
             {
                 float distance = Vector3.Distance(player.transform.position, zombieObj.transform.position);
 
-                if (zombie._currentState == Zombie.State.Chase && distance < hideDistanceThreshold)
+                if (zombie.CurrentState == Zombie.State.Chase && distance < hideDistanceThreshold)
                 {
                     Debug.Log("추격 중인 좀비가 가까워서 숨을 수 없음");
                     return false;
