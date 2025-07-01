@@ -3,7 +3,30 @@ using UnityEngine;
 public class Hideout : MonoBehaviour,IInteractable
 {
     private HideChecker _hideChecker;
+
+    private void Start()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObj != null)
+        {
+            _hideChecker = playerObj.GetComponent<HideChecker>();
+
+            if (_hideChecker == null)
+            {
+                Debug.LogError("Player 오브젝트에 HideChecker 컴포넌트가 없습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Player 태그를 가진 오브젝트를 찾을 수 없습니다.");
+        }
+    }
     public void Interact()
+    {
+       
+    }
+    public void Interact(int a)
     {
         if (_hideChecker != null)
         {
@@ -20,5 +43,4 @@ public class Hideout : MonoBehaviour,IInteractable
             }
         }
     }
-    
 }

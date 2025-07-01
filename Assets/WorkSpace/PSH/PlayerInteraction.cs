@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 public partial class PlayerStats
@@ -56,7 +57,7 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        //위아래 키를 누르면 사다리 이동 시도
+        //위아래 키를 누르면 사다리 이동 시도 은신 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             bool goUp = Input.GetKeyDown(KeyCode.UpArrow);
@@ -67,6 +68,12 @@ public class PlayerInteraction : MonoBehaviour
                 Debug.Log("사다리 이동 시도");
                 ladder.Interact(transform, goUp, climbSpeed, this);
             }
+
+            if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
+            {
+                Debug.Log("은신 실행");
+                hideout.Interact(1);
+            }
         }
 
         //z키를 누르면 상호작용 시도
@@ -74,14 +81,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             Manager.Player.Stats.CurrentNearby.Interact();
             Debug.Log("상호작용 실행");
-        }
-
-        //uparrow키를 누르면 은신 시도
-        if (Input.GetKeyDown(KeyCode.UpArrow) && Manager.Player.Stats.CurrentNearby != null)
-        {
-            Manager.Player.Stats.CurrentNearby.Interact();
-            Debug.Log("은신 실행");
-        }
+        }     
 
         //space키를 누르면 공격 시도
         if (Input.GetKeyDown(KeyCode.Space))
