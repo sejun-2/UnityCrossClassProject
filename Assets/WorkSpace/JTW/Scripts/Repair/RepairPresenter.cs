@@ -29,7 +29,16 @@ public class RepairPresenter : BaseUI
     {
         if (Input.GetKeyDown(KeyCode.Z) && _canRepair)
         {
-            if(_repairObject.ObjectId == "4006")
+
+            foreach (NeedItem need in _needItemList)
+            {
+                for (int i = 0; i < need.count; i++)
+                {
+                    Manager.Game.ItemBox.RemoveItem(need.ItemId);
+                }
+            }
+
+            if (_repairObject.ObjectId == "4006")
             {
                 float changeHp = Manager.Game.BarricadeHp + 30;
 
