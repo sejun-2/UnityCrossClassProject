@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ public partial class PlayerStats
 {
     public bool isFarming = false;//파밍중인지 나타내는 불값
     public bool isHiding = false;//숨었는지
-    public IInteractable CurrentNearby;//가까운 상호작용 대상
+    [JsonIgnore] public IInteractable CurrentNearby;//가까운 상호작용 대상
 }
 public class PlayerInteraction : MonoBehaviour
 {
