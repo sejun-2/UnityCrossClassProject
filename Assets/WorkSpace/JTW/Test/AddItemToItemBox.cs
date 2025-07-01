@@ -9,7 +9,7 @@ public class AddItemToItemBox : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Manager.Game.ItemBox.AddItem(Manager.Data.ItemData.Values[_itemId]);
+            Manager.Game.ItemBox.AddItem(Instantiate(Manager.Data.ItemData.Values[_itemId]));
             Debug.Log($"Add {_itemId} item To ItemBox");
         }
     }

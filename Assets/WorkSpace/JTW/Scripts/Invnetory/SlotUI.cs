@@ -13,8 +13,6 @@ public class SlotUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _countText;
     [SerializeField] private Image _outLine;
     [SerializeField] private Slider _durabilitySlider;
-
-    [SerializeField] private Item _testItem;
     private Slot _slot = new();
     public Slot Slot => _slot;
 
@@ -70,7 +68,7 @@ public class SlotUI : MonoBehaviour
 
     private void UpdateDurabilitySlider(int value)
     {
-        _durabilitySlider.value = _slot.CurItem.durabilityValue / _slot.CurItem.maxDrabilityValue;
+        _durabilitySlider.value = (float)_slot.CurItem.durabilityValue / _slot.CurItem.maxDrabilityValue;
     }
 
     public void UseItem()
