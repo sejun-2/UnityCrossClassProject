@@ -2,9 +2,18 @@ using UnityEngine;
 
 public class HideCheker : MonoBehaviour
 {
-    public GameObject player;
-    public float hideDistanceThreshold = 5f;
+    private GameObject _player;
+   [SerializeField] float hideDistanceThreshold = 5f;
 
+    private void Start()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player");
+
+        if (_player == null)
+        {
+            Debug.LogError("플레이어를 찾을 수 없습니다. Player 태그를 확인해주세요.");
+        }
+    }
     public bool CanHide()
     {
         GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
@@ -14,17 +23,15 @@ public class HideCheker : MonoBehaviour
             Zombie zombie = zombieObj.GetComponent<Zombie>();
             if (zombie != null)
             {
-                float distance = Vector3.Distance(player.transform.position, zombieObj.transform.position);
+                float distance = Vector3.Distance(_player.transform.position, zombieObj.transform.position);
 
                 if (zombie.CurrentState == Zombie.State.Chase && distance < hideDistanceThreshold)
                 {
-                    Debug.Log("추격 중인 좀비가 가까워서 숨을 수 없음");
                     return false;
                 }
             }
         }
 
-        Debug.Log("은신 가능");
         return true;
     }
 }
