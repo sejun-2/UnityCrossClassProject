@@ -9,8 +9,6 @@ public struct ItemSaveData
 
 public class GameData
 {
-    
-
     public PlayerStats stats;
     public ItemSaveData WeaponData;
     public ItemSaveData ArmorData;

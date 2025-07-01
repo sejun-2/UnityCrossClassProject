@@ -4,10 +4,6 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public partial class PlayerStats
-{
-    public Stat<PlayerBuffs> Buff = new();
-}
 
 public enum PlayerBuffs
 {

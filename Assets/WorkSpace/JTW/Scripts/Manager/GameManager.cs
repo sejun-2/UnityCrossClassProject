@@ -5,19 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public partial class PlayerStats
-{
-    public void InitStats()
-    {
-        CurHp.Value = 100;
-        MaxHp.Value = 100;
-        Hunger.Value = 100;
-        Thirst.Value = 100;
-        Mentality.Value = 100;
-        MoveSpeed.Value = 5;
-    }
-}
-
 public class GameManager : Singleton<GameManager>
 {
     public Inventory Inven;
