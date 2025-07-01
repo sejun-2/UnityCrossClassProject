@@ -26,6 +26,6 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
 
     public void Die()
     {
-        Manager.Game.LoadSaveData();
+        Manager.Game.GameStart();
     }
 }

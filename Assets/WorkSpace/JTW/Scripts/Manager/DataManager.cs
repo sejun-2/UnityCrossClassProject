@@ -351,6 +351,8 @@ public class DataManager : Singleton<DataManager>
             dialogue.Dialogue_kr = words[1];
             dialogue.Dialogue_en = words[2];
 
+            Manager.Game.IsTalkDialogue[words[0]] = false;
+
             return dialogue;
         });
 

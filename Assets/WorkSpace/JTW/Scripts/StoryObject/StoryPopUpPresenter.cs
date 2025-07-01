@@ -17,8 +17,7 @@ public class StoryPopUpPresenter : BaseUI
 
             if (!string.IsNullOrEmpty(dialogueId))
             {
-                string dialogue = Manager.Data.PlayerDialogueData.Values[dialogueId].Dialogue_kr;
-                Manager.UI.Inven.ShowBubbleText(dialogue);
+                Manager.UI.Inven.ShowBubbleText(dialogueId);
             }
             
         }

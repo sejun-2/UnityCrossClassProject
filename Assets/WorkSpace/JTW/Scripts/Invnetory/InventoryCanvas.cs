@@ -106,8 +106,14 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
     private GameObject _bubble;
     private Coroutine _bubbleCoroutine;
 
-    public void ShowBubbleText(string text)
+    public void ShowBubbleText(string dialogueId)
     {
+        if (Manager.Game.IsTalkDialogue[dialogueId]) return;
+
+        Manager.Game.IsTalkDialogue[dialogueId] = true;
+
+        string text = Manager.Data.PlayerDialogueData.Values[dialogueId].Dialogue_kr;
+
         if (_bubbleCoroutine != null)
         {
             StopCoroutine(_bubbleCoroutine);

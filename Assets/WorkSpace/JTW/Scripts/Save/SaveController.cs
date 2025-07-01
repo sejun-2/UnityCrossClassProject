@@ -79,6 +79,7 @@ public class SaveController
         data.IsRepairObject = Manager.Game.IsRepairObject;
         data.IsGetSubStory = Manager.Game.IsGetSubStory;
         data.IsUsedObject = Manager.Game.IsUsedObject;
+        data.IsTalkDialogue = Manager.Game.IsTalkDialogue;
 
         data.IsInBaseCamp = Manager.Game.IsInBaseCamp;
         data.SelectedMapName = Manager.Game.SelectedMapName;

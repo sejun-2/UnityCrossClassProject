@@ -13,6 +13,7 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, bool> IsRepairObject = new Dictionary<string, bool>();
     public Dictionary<string, bool> IsUsedObject = new Dictionary<string, bool>();
     public Dictionary<string, bool> IsGetSubStory = new Dictionary<string, bool>();
+    public Dictionary<string, bool> IsTalkDialogue = new Dictionary<string, bool>();
 
     public bool IsInBaseCamp = true;
     public string SelectedMapName = "";
@@ -45,53 +46,7 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            Manager.Player.Stats = data.stats;
-            Manager.Player.Stats.Weapon = new Stat<Item>();
-            Manager.Player.Stats.Armor = new Stat<Item>();
-
-            if (!string.IsNullOrEmpty(data.WeaponData.Id))
-            {
-                Manager.Player.Stats.Weapon.Value = Instantiate(Manager.Data.ItemData.Values[data.WeaponData.Id]);
-                Manager.Player.Stats.Weapon.Value.durabilityValue = data.WeaponData.Durability;
-            }
-
-            if (!string.IsNullOrEmpty(data.ArmorData.Id))
-            {
-                Manager.Player.Stats.Armor.Value = Instantiate(Manager.Data.ItemData.Values[data.ArmorData.Id]);
-                Manager.Player.Stats.Weapon.Value.durabilityValue = data.ArmorData.Durability;
-            }
-
-            foreach (ItemSaveData value in data.InvenData)
-            {
-                Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
-                item.durabilityValue = value.Durability;
-
-                Inven.AddItem(item);
-            }
-
-            foreach(ItemSaveData value in data.ItemBoxData)
-            {
-                Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
-                item.durabilityValue = value.Durability;
-
-                ItemBox.AddItem(item);
-            }
-
-            IsRepairObject = data.IsRepairObject;
-            IsUsedObject = data.IsUsedObject;
-            IsGetSubStory = data.IsGetSubStory;
-
-            IsInBaseCamp = data.IsInBaseCamp;
-            SelectedMapName = data.SelectedMapName;
-
-            if (IsInBaseCamp)
-            {
-                ChangeScene("BaseCamp");
-            }
-            else
-            {
-                ChangeScene(SelectedMapName);
-            }
+            LoadSaveData(data);
         }
     }
 
@@ -125,7 +80,7 @@ public class GameManager : Singleton<GameManager>
 
         OnDayCompleted?.Invoke();
 
-        _saveContoroller.SaveGameData();
+        SaveGameData();
     }
 
     private void MoveInvenItemToItemBox()
@@ -156,8 +111,60 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public void LoadSaveData()
+    public void SaveGameData()
     {
+        _saveContoroller.SaveGameData();
+    }
 
+    public void LoadSaveData(GameData data)
+    {
+        Manager.Player.Stats = data.stats;
+        Manager.Player.Stats.Weapon = new Stat<Item>();
+        Manager.Player.Stats.Armor = new Stat<Item>();
+
+        if (!string.IsNullOrEmpty(data.WeaponData.Id))
+        {
+            Manager.Player.Stats.Weapon.Value = Instantiate(Manager.Data.ItemData.Values[data.WeaponData.Id]);
+            Manager.Player.Stats.Weapon.Value.durabilityValue = data.WeaponData.Durability;
+        }
+
+        if (!string.IsNullOrEmpty(data.ArmorData.Id))
+        {
+            Manager.Player.Stats.Armor.Value = Instantiate(Manager.Data.ItemData.Values[data.ArmorData.Id]);
+            Manager.Player.Stats.Weapon.Value.durabilityValue = data.ArmorData.Durability;
+        }
+
+        foreach (ItemSaveData value in data.InvenData)
+        {
+            Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
+            item.durabilityValue = value.Durability;
+
+            Inven.AddItem(item);
+        }
+
+        foreach (ItemSaveData value in data.ItemBoxData)
+        {
+            Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
+            item.durabilityValue = value.Durability;
+
+            ItemBox.AddItem(item);
+        }
+
+        IsRepairObject = data.IsRepairObject;
+        IsUsedObject = data.IsUsedObject;
+        IsGetSubStory = data.IsGetSubStory;
+        IsTalkDialogue = data.IsTalkDialogue;
+
+        IsInBaseCamp = data.IsInBaseCamp;
+        SelectedMapName = data.SelectedMapName;
+
+        if (IsInBaseCamp)
+        {
+            ChangeScene("BaseCamp");
+        }
+        else
+        {
+            ChangeScene(SelectedMapName);
+        }
     }
 }
