@@ -1,17 +1,17 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TitlePopUp : BaseUI
 {
-    int selectedIndex = 0;  // ÇöÀç ¼±ÅÃµÈ ¹öÆ°ÀÇ ÀÎµ¦½º
-    Button[] menuButtons;   // ¸Ş´º ¹öÆ°µéÀ» ÀúÀåÇÒ ¹è¿­
+    int selectedIndex = 0;  // í˜„ì¬ ì„ íƒëœ ë²„íŠ¼ì˜ ì¸ë±ìŠ¤
+    Button[] menuButtons;   // ë©”ë‰´ ë²„íŠ¼ë“¤ì„ ì €ì¥í•  ë°°ì—´
     private bool inputEnabled = false;
 
     private void Start()
     {
-        Debug.Log(GetEvent("TitlePopUp¿­¸²")); // UI°¡ ½ÃÀÛµÉ ¶§ ·Î±×¸¦ Ãâ·ÂÇÕ´Ï´Ù.
+        Debug.Log(GetEvent("TitlePopUpì—´ë¦¼")); // UIê°€ ì‹œì‘ë  ë•Œ ë¡œê·¸ë¥¼ ì¶œë ¥í•©ë‹ˆë‹¤.
 
         menuButtons = new Button[]
         {
@@ -21,78 +21,97 @@ public class TitlePopUp : BaseUI
             GetEvent("GameOver")?.GetComponent<Button>()
         };
 
-        // null Ã¼Å©
+        // null ì²´í¬
         for (int i = 0; i < menuButtons.Length; i++)
         {
             if (menuButtons[i] == null)
-                Debug.LogError($"menuButtons[{i}]°¡ nullÀÔ´Ï´Ù! ¿ÀºêÁ§Æ® ÀÌ¸§, Button ÄÄÆ÷³ÍÆ® È®ÀÎ ÇÊ¿ä.");
+                Debug.LogError($"menuButtons[{i}]ê°€ nullì…ë‹ˆë‹¤! ì˜¤ë¸Œì íŠ¸ ì´ë¦„, Button ì»´í¬ë„ŒíŠ¸ í™•ì¸ í•„ìš”.");
         }
 
-        // ÀÌº¥Æ® ¿¬°á, ¹öÆ°ÀÌ Å¬¸¯µÇ¾úÀ» ¶§ È£ÃâµÇ´Â ¸Ş¼­µå
+        // ì´ë²¤íŠ¸ ì—°ê²°, ë²„íŠ¼ì´ í´ë¦­ë˜ì—ˆì„ ë•Œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
         GetEvent("Continue").Click += data => Manager.UI.PopUp.ClosePopUp();
         GetEvent("Preferences").Click += data => Manager.UI.PopUp.ShowPopUp<SettingPopUp>();
         GetEvent("Title").Click += data => SceneChanger.ChageScene(sceneName: "TitleScene");
         GetEvent("GameOver").Click += data => Manager.UI.PopUp.ShowPopUp<EndPopUp>();
 
-        // ZÅ°·Î ½ÇÇàÇÏ±â À§ÇØ, ¹öÆ° Å¬¸¯ ÀÌº¥Æ®¸¦ ¹è¿­¿¡ Ãß°¡
+        // Zí‚¤ë¡œ ì‹¤í–‰í•˜ê¸° ìœ„í•´, ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸ë¥¼ ë°°ì—´ì— ì¶”ê°€
         menuButtons[0].onClick.AddListener(Manager.UI.PopUp.ClosePopUp);
         menuButtons[1].onClick.AddListener(showSerttingPopUp);
         menuButtons[2].onClick.AddListener(ChageTitleScene);
         menuButtons[3].onClick.AddListener(showEndPopUp);
 
-        // Ã¹ ¹øÂ° ¹öÆ° ¼±ÅÃ
+        // ì²« ë²ˆì§¸ ë²„íŠ¼ ì„ íƒ
         if (menuButtons[0] != null)
             menuButtons[0].Select();
     }
 
+    private void OnEnable()
+    {
+        inputEnabled = true;
+        // íŒì—…ì´ ë‹¤ì‹œ í™œì„±í™”ë  ë•Œ ì²« ë²ˆì§¸ ë²„íŠ¼ì„ ì„ íƒ
+        if (menuButtons != null && menuButtons.Length > 0 && menuButtons[0] != null)
+        {
+            selectedIndex = 0;
+            menuButtons[0].Select();
+        }
+    }
+
+    private void OnDisable()
+    {
+        inputEnabled = false;
+    }
+
     private void Update()
     {
-        // menuButtons ¹è¿­ÀÌ ºñ¾îÀÖ°Å³ª »ı¼ºµÇÁö ¾Ê¾Ò´Ù¸é ¾Æ¹« °Íµµ ÇÏÁö ¾Ê°í ÇÔ¼ö Á¾·á
+        if (!inputEnabled) return;
+
+        // menuButtons ë°°ì—´ì´ ë¹„ì–´ìˆê±°ë‚˜ ìƒì„±ë˜ì§€ ì•Šì•˜ë‹¤ë©´ ì•„ë¬´ ê²ƒë„ í•˜ì§€ ì•Šê³  í•¨ìˆ˜ ì¢…ë£Œ
         if (menuButtons == null || menuButtons.Length == 0) return;
 
-        // À§ÂÊ ¹æÇâÅ°°¡ ´­·ÈÀ» ¶§
+        // ìœ„ìª½ ë°©í–¥í‚¤ê°€ ëˆŒë ¸ì„ ë•Œ
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            // selectedIndex¸¦ ÇÏ³ª ÁÙÀÎ´Ù. (0º¸´Ù ÀÛ¾ÆÁö¸é ¸Ç ¸¶Áö¸· ÀÎµ¦½º·Î ¼øÈ¯)
+            // selectedIndexë¥¼ í•˜ë‚˜ ì¤„ì¸ë‹¤. (0ë³´ë‹¤ ì‘ì•„ì§€ë©´ ë§¨ ë§ˆì§€ë§‰ ì¸ë±ìŠ¤ë¡œ ìˆœí™˜)
             selectedIndex = (selectedIndex - 1 + menuButtons.Length) % menuButtons.Length;
-            // ÇØ´ç ÀÎµ¦½ºÀÇ ¹öÆ°ÀÌ nullÀÌ ¾Æ´Ï¸é
+            // í•´ë‹¹ ì¸ë±ìŠ¤ì˜ ë²„íŠ¼ì´ nullì´ ì•„ë‹ˆë©´
             if (menuButtons[selectedIndex] != null)
-                // ±× ¹öÆ°À» ¼±ÅÃ(Æ÷Ä¿½º) »óÅÂ·Î ¸¸µç´Ù (ÇÏÀÌ¶óÀÌÆ® Ç¥½Ã)
+                // ê·¸ ë²„íŠ¼ì„ ì„ íƒ(í¬ì»¤ìŠ¤) ìƒíƒœë¡œ ë§Œë“ ë‹¤ (í•˜ì´ë¼ì´íŠ¸ í‘œì‹œ)
                 menuButtons[selectedIndex].Select();
         }
 
-        // ¾Æ·¡ÂÊ ¹æÇâÅ°°¡ ´­·ÈÀ» ¶§
+        // ì•„ë˜ìª½ ë°©í–¥í‚¤ê°€ ëˆŒë ¸ì„ ë•Œ
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            // selectedIndex¸¦ ÇÏ³ª ´Ã¸°´Ù. (¸¶Áö¸· ÀÎµ¦½ºº¸´Ù Ä¿Áö¸é 0¹øÀ¸·Î ¼øÈ¯)
+            // selectedIndexë¥¼ í•˜ë‚˜ ëŠ˜ë¦°ë‹¤. (ë§ˆì§€ë§‰ ì¸ë±ìŠ¤ë³´ë‹¤ ì»¤ì§€ë©´ 0ë²ˆìœ¼ë¡œ ìˆœí™˜)
             selectedIndex = (selectedIndex + 1) % menuButtons.Length;
-            // ÇØ´ç ÀÎµ¦½ºÀÇ ¹öÆ°ÀÌ nullÀÌ ¾Æ´Ï¸é
+            // í•´ë‹¹ ì¸ë±ìŠ¤ì˜ ë²„íŠ¼ì´ nullì´ ì•„ë‹ˆë©´
             if (menuButtons[selectedIndex] != null)
-                // ±× ¹öÆ°À» ¼±ÅÃ(Æ÷Ä¿½º) »óÅÂ·Î ¸¸µç´Ù (ÇÏÀÌ¶óÀÌÆ® Ç¥½Ã)
+                // ê·¸ ë²„íŠ¼ì„ ì„ íƒ(í¬ì»¤ìŠ¤) ìƒíƒœë¡œ ë§Œë“ ë‹¤ (í•˜ì´ë¼ì´íŠ¸ í‘œì‹œ)
                 menuButtons[selectedIndex].Select();
         }
 
-        // ZÅ°°¡ ´­·ÈÀ» ¶§
+        // Zí‚¤ê°€ ëˆŒë ¸ì„ ë•Œ
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            // ÇöÀç ¼±ÅÃµÈ ¹öÆ°ÀÌ nullÀÌ ¾Æ´Ï¸é
+            // í˜„ì¬ ì„ íƒëœ ë²„íŠ¼ì´ nullì´ ì•„ë‹ˆë©´
             if (menuButtons[selectedIndex] != null)
-                // ±× ¹öÆ°ÀÇ onClick ÀÌº¥Æ®(Áï, Å¬¸¯ È¿°ú)¸¦ ½ÇÇàÇÑ´Ù
+                // ê·¸ ë²„íŠ¼ì˜ onClick ì´ë²¤íŠ¸(ì¦‰, í´ë¦­ íš¨ê³¼)ë¥¼ ì‹¤í–‰í•œë‹¤
                 menuButtons[selectedIndex].onClick.Invoke();
         }
     }
 
-    public void showSerttingPopUp() // ZÅ°¸¦ ´­·¶À» ¶§ È£ÃâµÇ´Â ¸Ş¼­µå
+    public void showSerttingPopUp() // Zí‚¤ë¥¼ ëˆŒë €ì„ ë•Œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
     {
-        Manager.UI.PopUp.ShowPopUp<SettingPopUp>(); // SettingPopUpÀ» Ç¥½ÃÇÕ´Ï´Ù.
+        gameObject.SetActive(false); // TitlePopUp ë¹„í™œì„±í™”
+        Manager.UI.PopUp.ShowPopUp<SettingPopUp>(); // SettingPopUpì„ í‘œì‹œí•©ë‹ˆë‹¤.
     }
 
     public void showEndPopUp()
     {
-        Manager.UI.PopUp.ShowPopUp<EndPopUp>(); // EndPopUpÀ» Ç¥½ÃÇÕ´Ï´Ù.
+        Manager.UI.PopUp.ShowPopUp<EndPopUp>(); // EndPopUpì„ í‘œì‹œí•©ë‹ˆë‹¤.
     }
     public void ChageTitleScene()
     {
-        SceneChanger.ChageScene(sceneName: "TitleScene");   // TitleSceneÀ¸·Î º¯°æÇÕ´Ï´Ù.
+        SceneChanger.ChageScene(sceneName: "TitleScene");   // TitleSceneìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤.
     }
 }
