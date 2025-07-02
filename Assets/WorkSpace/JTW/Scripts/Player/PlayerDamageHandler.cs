@@ -5,9 +5,17 @@ using UnityEngine;
 public class PlayerDamageHandler : MonoBehaviour, IDamageable
 {
     private PlayerStats Stats => Manager.Player.Stats;
+    private Animator _animator;
+
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
 
     public void TakeDamage(float amount)
     {
+        _animator.Play("BatTakeDamage");
+
         if (Stats.CurHp.Value <= 0) return;
 
         if(Stats.Armor.Value != null)
