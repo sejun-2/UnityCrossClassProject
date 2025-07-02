@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using System.Collections;
-using System.Threading;
 using UnityEngine;
 
 public partial class PlayerStats
@@ -30,10 +29,18 @@ public class PlayerInteraction : MonoBehaviour
 
     public Animator animator;
     private PlayerAttack _playerAttack;
+    private PlayerEquipment _playerEquipment;
+    private InventoryCanvas _inventoryCanvas;
+    private bool _isInventoryOpen = false;
+
 
     private void Awake()
     {
         Manager.Player.Transform = transform;
+
+        _playerEquipment = GetComponent<PlayerEquipment>();
+        _playerAttack = GetComponent<PlayerAttack>();
+        _inventoryCanvas = GetComponentInChildren<InventoryCanvas>();
     }
     void Start()
     {
@@ -79,16 +86,25 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
+        //인벤토리 여는
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (!_isInventoryOpen)
+            {
+                _inventoryCanvas.ShowInven();
+            }
+        }
+
         //위아래 키를 누르면 사다리 이동 시도 은신 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             bool goUp = Input.GetKeyDown(KeyCode.UpArrow);
-           
+
             if (Manager.Player.Stats.CurrentNearby is Ladder ladder)
             {
                 Debug.Log("사다리 이동 시도");
-                if(ladder.Interact(transform, goUp, climbSpeed, this))
-                StateChange(State.Climb);
+                if (ladder.Interact(transform, goUp, climbSpeed, this))
+                    StateChange(State.Climb);
             }
 
             if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
@@ -108,13 +124,13 @@ public class PlayerInteraction : MonoBehaviour
         {
             Debug.Log("상호작용 시도");
             Manager.Player.Stats.CurrentNearby.Interact();
-        }     
+        }
 
         //space키를 누르면 공격 시도
         if (Input.GetKeyDown(KeyCode.Space))
-        {           
+        {
             Debug.Log("공격 시도");
-            _playerAttack.Attack();      
+            _playerAttack.Attack();
             StateChange(State.Attack);
         }
 
