@@ -85,7 +85,7 @@ public class PlayerInteraction : MonoBehaviour
         playerCollider = GetComponent<Collider>();
         Manager.Player.Stats.isFarming = false;
         groundLayer = LayerMask.GetMask("Obstacle");
-        //_playerAttack = GetComponent<PlayerAttack>();
+        _playerAttack = GetComponent<PlayerAttack>();
 
         origin = transform.position + Vector3.up * 0.1f;
 
@@ -212,7 +212,6 @@ public class PlayerInteraction : MonoBehaviour
         {
             Debug.Log("공격 시도");
             _playerAttack.Attack();
-            StateChange(State.Attack);
         }
 
         //이외에는 좌우 이동
