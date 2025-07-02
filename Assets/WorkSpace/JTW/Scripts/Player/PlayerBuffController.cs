@@ -71,10 +71,10 @@ public class PlayerBuffController
         {
             case PlayerBuffs.Full:
                 SpeedBuff = Stats.MoveSpeed.Value * 0.1f;
-                ItemBuff = 10;
+                ItemBuff = 0.1f;
                 break;
             case PlayerBuffs.Fear:
-                ItemBuff = -10;
+                ItemBuff = -0.1f;
                 break;
             case PlayerBuffs.Paranoia:
                 SpeedBuff = Stats.MoveSpeed.Value * 0.1f;
@@ -88,7 +88,7 @@ public class PlayerBuffController
                 break;
             case PlayerBuffs.Helplessness:
                 SpeedBuff = -(Stats.MoveSpeed.Value * 0.1f);
-                ItemBuff = -10;
+                ItemBuff = -0.1f;
                 break;
             case PlayerBuffs.Nomal:
                 break;

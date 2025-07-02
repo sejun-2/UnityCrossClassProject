@@ -26,6 +26,7 @@ public partial class PlayerStats
         Thirst.Value = 100;
         Mentality.Value = 100;
         MoveSpeed.Value = 5;
+        Buff.Value = PlayerBuffs.Nomal;
     }
 
     public void ChangeHp(float amount)

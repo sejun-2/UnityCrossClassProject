@@ -6,7 +6,6 @@ using Unity.Burst.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
-using static UnityEditor.Progress;
 
 public class DataManager : Singleton<DataManager>
 {
@@ -85,8 +84,8 @@ public class DataManager : Singleton<DataManager>
             item.itemName = words[1].Trim();
             item.description = words[2].Trim();
             string iconName = words[6].Trim();
-            string iconPath = $"Assets/Imports/UnityCrossClassProject_Assets/Icons/{words[0]}.png";
-            Sprite icon = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+            string iconPath = $"Icons/{words[0]}";
+            Sprite icon = Resources.Load<Sprite>(iconPath);
             item.icon = icon;
 
             int.TryParse(words[7], out item.itemTier);
@@ -325,8 +324,8 @@ public class DataManager : Singleton<DataManager>
             Manager.Game.IsGetSubStory[words[0]] = false;
 
             string iconName = words[1].Trim();
-            string iconPath = $"Assets/Imports/UnityCrossClassProject_Assets/Icons/{iconName}.png";
-            Sprite icon = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+            string iconPath = $"Icons/{iconName}";
+            Sprite icon = Resources.Load<Sprite>(iconPath);
             story.Icon = icon;
             story.Name = words[2];
             story.Description = words[3];
@@ -378,8 +377,8 @@ public class DataManager : Singleton<DataManager>
             storyInteraction.ID = words[0];
 
             string iconName = words[1].Trim();
-            string iconPath = $"Assets/Imports/UnityCrossClassProject_Assets/StoryInteractionIcon/{iconName}.png";
-            Sprite icon = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+            string iconPath = $"StoryInteractionIcon/{iconName}";
+            Sprite icon = Resources.Load<Sprite>(iconPath);
             storyInteraction.Icon = icon;
 
             storyInteraction.Description_kr = words[2];
