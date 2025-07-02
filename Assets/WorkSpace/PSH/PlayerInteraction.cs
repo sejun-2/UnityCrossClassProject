@@ -33,18 +33,8 @@ public class PlayerInteraction : MonoBehaviour
     public LayerMask groundLayer;
 
     public Animator animator;
-    private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
-    private readonly int hashIsClimbing = Animator.StringToHash("IsClimbing");
-    private readonly int hashIsHiding = Animator.StringToHash("IsHiding");
-    private readonly int hashIsFarming = Animator.StringToHash("IsFarming");
-    private readonly int hashAttackTrigger = Animator.StringToHash("Attack");
-    private readonly int hashClimbingTrigger = Animator.StringToHash("Climbing");
-    private readonly int hashDeadTrigger = Animator.StringToHash("Dead");
 
-    private readonly int hashIdle = Animator.StringToHash("Idle");
-    private readonly int hashRun = Animator.StringToHash("Run");
     private readonly int hashClimb = Animator.StringToHash("Climb");
-    private readonly int hashAttack = Animator.StringToHash("Attack");
     private readonly int hashFarm = Animator.StringToHash("Farm");
     private readonly int hashHide = Animator.StringToHash("Hide");
     private readonly int hashDie = Animator.StringToHash("Die");
@@ -282,81 +272,6 @@ public class PlayerInteraction : MonoBehaviour
         yield return new WaitForSeconds(0.1f); // 짧은 지연 후
         playerCollider.enabled = true;
     }
-
-    /* public void StateChange(State state)
-     {
-         switch (state)
-         {
-             case State.Idle:
-                 _currentState = State.Idle;
-                 animator.SetBool(hashIsRunning, false);
-                 break;
-             case State.Run:
-                 _currentState = State.Run;
-                 animator.SetBool(hashIsRunning, true);
-                 break;
-             case State.Climb:
-                 _currentState = State.Climb;
-                 animator.SetTrigger("Climbing");
-                 break;
-             case State.Attack:
-                 _currentState = State.Attack;
-                 animator.SetTrigger("Attack");
-                 break;
-             case State.Farm:
-                 _currentState = State.Farm;
-                 animator.SetBool("IsFarming", true);
-                 break;
-             case State.Hide:
-                 _currentState = State.Hide;
-                 animator.SetBool("IsHiding", true);
-                 break;
-             case State.Die:
-                 _currentState = State.Die;
-                 animator.SetTrigger("Dead");
-                 break;
-             default:
-                 break;
-         }
-     }*/
-
-    /* public void StateChange(State state)
-     {
-         switch (state)
-         {
-             case State.Idle:
-                 _currentState = State.Idle;
-                 animator.SetBool(hashIsRunning, false);
-                 break;
-             case State.Run:
-                 _currentState = State.Run;
-                 animator.SetBool(hashIsRunning, true);
-                 break;
-             case State.Climb:
-                 _currentState = State.Climb;
-                 animator.SetTrigger(hashClimbingTrigger);
-                 break;
-             case State.Attack:
-                 _currentState = State.Attack;
-                 animator.SetTrigger(hashAttackTrigger);
-                 break;
-             case State.Farm:
-                 _currentState = State.Farm;
-                 animator.SetBool(hashIsFarming, true);
-                 break;
-             case State.Hide:
-                 _currentState = State.Hide;
-                 animator.SetBool(hashIsHiding, true);
-                 break;
-             case State.Die:
-                 _currentState = State.Die;
-                 animator.SetTrigger(hashDeadTrigger);
-                 break;
-             default:
-                 break;
-         }
-     }*/
-
     public void StateChange(State state)
     {
         _currentState = state;
@@ -372,9 +287,6 @@ public class PlayerInteraction : MonoBehaviour
             case State.Climb:
                 animator.Play(hashClimb);
                 Debug.Log("등반ㅁㄴㅇㄻㄴㅇㄹ");
-                break;
-            case State.Attack:
-                animator.Play(hashAttack);
                 break;
             case State.Farm:
                 animator.Play(hashFarm);
