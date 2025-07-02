@@ -13,7 +13,7 @@ public partial class PlayerStats
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public enum State { Idle, Run, Climb, Hide, Farm, Attack, Die }
+    public enum State { Idle, Run, Climb, Hide, Farm, Stair, Attack, Die }
     private State _currentState = State.Idle;
     public State CurrentState
     {
@@ -39,6 +39,7 @@ public class PlayerInteraction : MonoBehaviour
     private readonly int hashHide = Animator.StringToHash("Hide");
     private readonly int hashDie = Animator.StringToHash("Die");
     private readonly int hashDoor = Animator.StringToHash("Door");
+    private readonly int hashStair = Animator.StringToHash("Stair");
 
 
     [SerializeField] float crossFadeTime = .1f;
@@ -180,7 +181,20 @@ public class PlayerInteraction : MonoBehaviour
                     StateChange(State.Hide);
                 }
             }
+
+            //위 아래키를 누르면 계단 이동시도
+            if (Manager.Player.Stats.CurrentNearby is Stair stair)
+            {
+                Debug.Log("계단 이동 시도");
+                if (stair.Interact(transform, goUp))
+                {
+                    StateChange(State.Stair);
+                }
+            }
+
         }
+
+
         //파밍중, 낙하중에는 다른 키 입력 불가
         if (Manager.Player.Stats.isFarming || !isGrounded)
         {
@@ -287,6 +301,9 @@ public class PlayerInteraction : MonoBehaviour
             case State.Climb:
                 animator.Play(hashClimb);
                 Debug.Log("등반ㅁㄴㅇㄻㄴㅇㄹ");
+                break;
+            case State.Stair:
+                animator.Play(hashStair);               
                 break;
             case State.Farm:
                 animator.Play(hashFarm);
