@@ -1,10 +1,7 @@
 using Newtonsoft.Json;
-using System;
 using System.Collections;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using static UnityEngine.UI.Image;
 
 public partial class PlayerStats
 {
@@ -51,6 +48,8 @@ public class PlayerInteraction : MonoBehaviour
     private readonly int hashFarm = Animator.StringToHash("Farm");
     private readonly int hashHide = Animator.StringToHash("Hide");
     private readonly int hashDie = Animator.StringToHash("Die");
+    private readonly int hashDoor = Animator.StringToHash("Door");
+
 
     [SerializeField] float crossFadeTime = .1f;
 
@@ -62,9 +61,13 @@ public class PlayerInteraction : MonoBehaviour
     //테스트용 텍스트
     [SerializeField] TextMeshProUGUI stateText;
 
+    //지면 확인용 스피어캐스트 변수
     [SerializeField] Vector3 origin;
     [SerializeField] float checkRadius = 0.2f;
     [SerializeField] float checkDistance = 0.1f;
+
+    //상호작용 대기 시간
+    private WaitForSeconds wait1Sec;
 
     private void Awake()
     {
@@ -73,6 +76,8 @@ public class PlayerInteraction : MonoBehaviour
         _playerEquipment = GetComponent<PlayerEquipment>();
         _playerAttack = GetComponent<PlayerAttack>();
         _inventoryCanvas = GetComponentInChildren<InventoryCanvas>();
+
+        wait1Sec = new WaitForSeconds(1f);
     }
     void Start()
     {
@@ -80,7 +85,7 @@ public class PlayerInteraction : MonoBehaviour
         playerCollider = GetComponent<Collider>();
         Manager.Player.Stats.isFarming = false;
         groundLayer = LayerMask.GetMask("Obstacle");
-
+        //_playerAttack = GetComponent<PlayerAttack>();
 
         origin = transform.position + Vector3.up * 0.1f;
 
@@ -118,7 +123,7 @@ public class PlayerInteraction : MonoBehaviour
         //Debug.Log($"{hit.collider.gameObject.name}");
         //isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.5f, groundLayer);
 
-       
+
 
         //은신중에는 uparrow키로 은신 풀기 전까지는 다른 키 입력 불가
         if (Manager.Player.Stats.isHiding)
@@ -151,7 +156,7 @@ public class PlayerInteraction : MonoBehaviour
                 _inventoryCanvas.ShowInven();
             }
         }
-
+       
         //위아래 키를 누르면 사다리 이동 시도 은신 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -160,8 +165,11 @@ public class PlayerInteraction : MonoBehaviour
             if (Manager.Player.Stats.CurrentNearby is Ladder ladder)
             {
                 Debug.Log("사다리 이동 시도");
-                if (ladder.Interact(transform, goUp, climbSpeed, this))
+                if (ladder.Climb(transform, goUp, climbSpeed, this))
+                {
+                    StartCoroutine(RotateAndRestore());
                     StateChange(State.Climb);
+                }
             }
 
             if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
@@ -183,8 +191,20 @@ public class PlayerInteraction : MonoBehaviour
         //z키를 누르면 상호작용 시도
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
+            GameObject target = (Manager.Player.Stats.CurrentNearby as MonoBehaviour).gameObject;
+
             Debug.Log("상호작용 시도");
-            Manager.Player.Stats.CurrentNearby.Interact();
+            if (target.CompareTag("Door"))
+            {
+                StartCoroutine(NotRotateAndInteract());
+                animator.Play(hashDoor);
+            }
+            else
+            {
+                StartCoroutine(RotateAndInteract());
+                animator.Play(hashFarm);
+            }
+                
         }
 
         //space키를 누르면 공격 시도
@@ -365,4 +385,46 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
+    public void RotateToInteract()
+    {
+        Vector3 scale = transform.localScale;
+        Vector3 rotation = transform.eulerAngles;
+
+        rotation.y = 90f * scale.x * -1;
+        transform.eulerAngles = rotation;
+    }
+
+    public void RestoreRotation()
+    {
+        transform.rotation = Quaternion.identity;
+    }
+
+    private IEnumerator RotateAndInteract()
+    {
+        RotateToInteract();
+
+        yield return wait1Sec;
+
+        Manager.Player.Stats.CurrentNearby.Interact();
+
+        RestoreRotation();
+    }
+
+    private IEnumerator RotateAndRestore()
+    {
+        RotateToInteract();
+
+        yield return wait1Sec;
+
+        RestoreRotation();
+    }
+
+    private IEnumerator NotRotateAndInteract()
+    {
+        
+        yield return wait1Sec;
+
+        Manager.Player.Stats.CurrentNearby.Interact();
+
+    }
 }
