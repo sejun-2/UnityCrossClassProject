@@ -143,7 +143,7 @@ public class Zombie : MonoBehaviour, IDamageable
         {
             Debug.Log($"좀비가 공격 플레이어 {_damage} 대미지");
             StateChange(State.Attack);
-            //player.GetComponent<PlayerHealth>().TakeDamage((int)_damage);
+            Manager.Player.Transform.GetComponent<IDamageable>().TakeDamage(_damage);
             _attackTimer = _attackCooldown;
         }
     }
