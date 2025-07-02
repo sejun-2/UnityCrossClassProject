@@ -1,5 +1,6 @@
 using EPOOutline;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OutLineVisible : MonoBehaviour
 {
@@ -18,6 +19,16 @@ public class OutLineVisible : MonoBehaviour
         _color = _outlinable.FrontParameters.Color;
     }
 
+    private void Start()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        //베이스캠프에서는 이렇게 해라
+        if (currentScene == "BaseCamp")
+        {
+            SetSilhouetteVisible();
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

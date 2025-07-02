@@ -19,7 +19,7 @@ public class Ladder : MonoBehaviour, IInteractable
     {
 
     }
-    public bool Interact(Transform player, bool goUp, float climbSpeed, PlayerInteraction interaction)
+    public bool Climb(Transform player, bool goUp, float climbSpeed, PlayerInteraction interaction)
     {
         float distToTop = Vector3.Distance(player.position, topPoint.position);
         float distToBottom = Vector3.Distance(player.position, bottomPoint.position);
