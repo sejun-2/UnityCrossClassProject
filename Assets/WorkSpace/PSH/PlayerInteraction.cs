@@ -1,11 +1,14 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public partial class PlayerStats
 {
     public bool isFarming = false;//파밍중인지 나타내는 불값
     public bool isHiding = false;//숨었는지
+    public bool isFalling = false;//떨어지는 중인지
     [JsonIgnore] public IInteractable CurrentNearby;//가까운 상호작용 대상
 }
 
@@ -28,11 +31,31 @@ public class PlayerInteraction : MonoBehaviour
     private Vector3 climbTargetPos;
 
     public Animator animator;
+    private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
+    private readonly int hashIsClimbing = Animator.StringToHash("IsClimbing");
+    private readonly int hashIsHiding = Animator.StringToHash("IsHiding");
+    private readonly int hashIsFarming = Animator.StringToHash("IsFarming");
+    private readonly int hashAttackTrigger = Animator.StringToHash("Attack");
+    private readonly int hashClimbingTrigger = Animator.StringToHash("Climbing");
+    private readonly int hashDeadTrigger = Animator.StringToHash("Dead");
+
+    private readonly int hashIdle = Animator.StringToHash("Idle");
+    private readonly int hashRun = Animator.StringToHash("Run");
+    private readonly int hashClimb = Animator.StringToHash("Climb");
+    private readonly int hashAttack = Animator.StringToHash("Attack");
+    private readonly int hashFarm = Animator.StringToHash("Farm");
+    private readonly int hashHide = Animator.StringToHash("Hide");
+    private readonly int hashDie = Animator.StringToHash("Die");
+
+    [SerializeField] float crossFadeTime = .1f;
+
     private PlayerAttack _playerAttack;
     private PlayerEquipment _playerEquipment;
     private InventoryCanvas _inventoryCanvas;
     private bool _isInventoryOpen = false;
 
+    //테스트용 텍스트
+    [SerializeField] TextMeshProUGUI stateText;
 
     private void Awake()
     {
@@ -51,8 +74,11 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
-        //파밍중에는 x키로 닫기 전까지는 다른 키 입력 불가
-        if (Manager.Player.Stats.isFarming)
+        //테스트용
+        stateText.text = $"{_currentState}";
+
+        //파밍중, 낙하중에는 다른 키 입력 불가
+        if (Manager.Player.Stats.isFarming || Manager.Player.Stats.isFalling)
         {
             return;
         }
@@ -189,40 +215,113 @@ public class PlayerInteraction : MonoBehaviour
         playerCollider.enabled = true;
     }
 
+    /* public void StateChange(State state)
+     {
+         switch (state)
+         {
+             case State.Idle:
+                 _currentState = State.Idle;
+                 animator.SetBool(hashIsRunning, false);
+                 break;
+             case State.Run:
+                 _currentState = State.Run;
+                 animator.SetBool(hashIsRunning, true);
+                 break;
+             case State.Climb:
+                 _currentState = State.Climb;
+                 animator.SetTrigger("Climbing");
+                 break;
+             case State.Attack:
+                 _currentState = State.Attack;
+                 animator.SetTrigger("Attack");
+                 break;
+             case State.Farm:
+                 _currentState = State.Farm;
+                 animator.SetBool("IsFarming", true);
+                 break;
+             case State.Hide:
+                 _currentState = State.Hide;
+                 animator.SetBool("IsHiding", true);
+                 break;
+             case State.Die:
+                 _currentState = State.Die;
+                 animator.SetTrigger("Dead");
+                 break;
+             default:
+                 break;
+         }
+     }*/
+
+    /* public void StateChange(State state)
+     {
+         switch (state)
+         {
+             case State.Idle:
+                 _currentState = State.Idle;
+                 animator.SetBool(hashIsRunning, false);
+                 break;
+             case State.Run:
+                 _currentState = State.Run;
+                 animator.SetBool(hashIsRunning, true);
+                 break;
+             case State.Climb:
+                 _currentState = State.Climb;
+                 animator.SetTrigger(hashClimbingTrigger);
+                 break;
+             case State.Attack:
+                 _currentState = State.Attack;
+                 animator.SetTrigger(hashAttackTrigger);
+                 break;
+             case State.Farm:
+                 _currentState = State.Farm;
+                 animator.SetBool(hashIsFarming, true);
+                 break;
+             case State.Hide:
+                 _currentState = State.Hide;
+                 animator.SetBool(hashIsHiding, true);
+                 break;
+             case State.Die:
+                 _currentState = State.Die;
+                 animator.SetTrigger(hashDeadTrigger);
+                 break;
+             default:
+                 break;
+         }
+     }*/
+
     public void StateChange(State state)
     {
+        _currentState = state;
+
         switch (state)
         {
             case State.Idle:
-                _currentState = State.Idle;
                 animator.SetBool("IsRunning", false);
                 break;
             case State.Run:
-                _currentState = State.Run;
                 animator.SetBool("IsRunning", true);
                 break;
             case State.Climb:
-                _currentState = State.Climb;
-                animator.SetTrigger("Climbing");
+                animator.Play(hashClimb);
+                Debug.Log("등반ㅁㄴㅇㄻㄴㅇㄹ");
                 break;
             case State.Attack:
-                _currentState = State.Attack;
-                animator.SetTrigger("Attack");
+                animator.Play(hashAttack);
                 break;
             case State.Farm:
-                _currentState = State.Farm;
-                animator.SetBool("IsFarming", true);
+                animator.Play(hashFarm);
                 break;
             case State.Hide:
-                _currentState = State.Hide;
+                animator.CrossFade(hashHide, crossFadeTime);
                 animator.SetBool("IsHiding", true);
+                Debug.Log("숨기ㅁㄹㄴㅇㄻㅇㄴ");
                 break;
             case State.Die:
-                _currentState = State.Die;
-                animator.SetBool("IsDead", true);
+                animator.Play(hashDie);
                 break;
             default:
                 break;
         }
     }
+
 }
