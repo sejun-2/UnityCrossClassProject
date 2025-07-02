@@ -235,6 +235,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Bunker_Ceiling_Concrete_01
       objectReference: {fileID: 0}
+    - target: {fileID: 1784291577708030, guid: c988eb4e2578dd849a61402c03c5ee84, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4474041616254550, guid: c988eb4e2578dd849a61402c03c5ee84, type: 3}
       propertyPath: m_LocalScale.x
       value: 5
@@ -305,6 +309,11 @@ PrefabInstance:
     - target: {fileID: 3070116508158452935, guid: 06308de7ae6e47b4a863c13bf0968788,
         type: 3}
       propertyPath: m_Name
+      value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 3070116508158452935, guid: 06308de7ae6e47b4a863c13bf0968788,
+        type: 3}
+      propertyPath: m_TagString
       value: Door
       objectReference: {fileID: 0}
     - target: {fileID: 3864588840647499945, guid: 06308de7ae6e47b4a863c13bf0968788,
@@ -427,6 +436,10 @@ PrefabInstance:
     - target: {fileID: 1722187356160046, guid: c2418ccb7814aa64d8e64256f6a7c25e, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Bunker_Concrete_Floor_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1722187356160046, guid: c2418ccb7814aa64d8e64256f6a7c25e, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4976568635257212, guid: c2418ccb7814aa64d8e64256f6a7c25e, type: 3}
       propertyPath: m_LocalScale.x
