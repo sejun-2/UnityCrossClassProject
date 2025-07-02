@@ -438,6 +438,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6029173690491769268}
+  - component: {fileID: 435115294393835656}
   m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
@@ -473,6 +474,31 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.000012398}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &435115294393835656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070921424535359467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd30b87262cbea048a0ec93e71cf999b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HpSlider: {fileID: 9082046706901035225}
+  HungerSlider: {fileID: 5400556770075549144}
+  ThirstSlider: {fileID: 7852668670776804278}
+  MentalitySlider: {fileID: 1932790115309893618}
+  BuffsImage: {fileID: 5590899535526080624}
+  BuffIcons:
+  - {fileID: 0}
+  - {fileID: 21300000, guid: e52f03a7cd7195b42b716b3cdbb5ef63, type: 3}
+  - {fileID: 21300000, guid: 8a2b10b6376043544b7d4cb92dbdc14a, type: 3}
+  - {fileID: 21300000, guid: 80c80b2089fee60429e224e4248de2dd, type: 3}
+  - {fileID: 21300000, guid: e545ddb8793ee944da6483a7ad2ea70e, type: 3}
+  - {fileID: 21300000, guid: 3aa8406ca29878e418e4da9d3baa49c2, type: 3}
+  - {fileID: 21300000, guid: 5803c3e259bb06942bdfea5b7d93b565, type: 3}
 --- !u!1 &1410708015556083338
 GameObject:
   m_ObjectHideFlags: 0
@@ -596,14 +622,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.49803922}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9977ea33c0f54624cb5cbaed2a55ee12, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1580,7 +1606,7 @@ GameObject:
   - component: {fileID: 3266219414079128268}
   - component: {fileID: 7852668670776804278}
   m_Layer: 5
-  m_Name: water
+  m_Name: Thirst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2478,7 +2504,7 @@ GameObject:
   - component: {fileID: 3417119255989813238}
   - component: {fileID: 1932790115309893618}
   m_Layer: 5
-  m_Name: mentality
+  m_Name: Mentality
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
