@@ -71,6 +71,7 @@ public class GameManager : Singleton<GameManager>
 
         IsInBaseCamp = true;
 
+        Stats.Buff.Value = PlayerBuffs.Nomal;
         Stats.ChangeHunger(-30);
         Stats.ChangeThirst(-30);
 
