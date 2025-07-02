@@ -28,20 +28,21 @@ public class GameUI : MonoBehaviour
         // Player의 Buff 값이 바뀔 때마다 UI 갱신
         Manager.Player.Stats.Buff.OnChanged += UpdateBuffIcon;
         UpdateBuffIcon(Manager.Player.Stats.Buff.Value); // 최초 상태도 반영
-    }
 
-    private void Update()
-    {
         // 체력 변화 이벤트 구독
         Manager.Player.Stats.CurHp.OnChanged += OnCurHpChanged;
         Manager.Player.Stats.MaxHp.OnChanged += OnMaxHpChanged;
+
         UpdateHpBar(Manager.Player.Stats.CurHp.Value, Manager.Player.Stats.MaxHp.Value);
-        Debug.LogError("MaxHp값 : " + Manager.Player.Stats.MaxHp.Value);
-        Debug.LogError("CurHp값 : " + Manager.Player.Stats.CurHp.Value);
 
         Manager.Player.Stats.Hunger.OnChanged += (newHunger) => HungerSlider.value = newHunger;
         Manager.Player.Stats.Thirst.OnChanged += (newWater) => ThirstSlider.value = newWater;
         Manager.Player.Stats.Mentality.OnChanged += (newMentality) => MentalitySlider.value = newMentality;
+    }
+
+    private void Update()
+    {
+
 
         // 버프 이미지 업데이트
 
