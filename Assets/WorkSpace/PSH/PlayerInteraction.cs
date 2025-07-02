@@ -54,12 +54,6 @@ public class PlayerInteraction : MonoBehaviour
         //파밍중에는 x키로 닫기 전까지는 다른 키 입력 불가
         if (Manager.Player.Stats.isFarming)
         {
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                Manager.Player.Stats.isFarming = false;
-                animator.SetBool("IsFarming", false);
-                StateChange(State.Idle);
-            }
             return;
         }
 
