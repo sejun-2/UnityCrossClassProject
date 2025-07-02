@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public partial class PlayerStats
+{
+    public Stat<bool> IsTakeDamage = new();
+}
+
 public class PlayerDamageHandler : MonoBehaviour, IDamageable
 {
     private PlayerStats Stats => Manager.Player.Stats;
@@ -14,11 +19,13 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
 
     public void TakeDamage(float amount)
     {
-        _animator.Play("BatTakeDamage");
-
         if (Stats.CurHp.Value <= 0) return;
 
-        if(Stats.Armor.Value != null)
+        Manager.Player.Stats.IsTakeDamage.Value = true;
+        StartCoroutine(TakeDamageCoroutine());
+        _animator.Play("BatTakeDamage");
+
+        if (Stats.Armor.Value != null)
         {
             amount = Mathf.Max(0, amount - Stats.Armor.Value.defValue);
             Stats.Armor.Value.durabilityValue--;
@@ -35,5 +42,12 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
     public void Die()
     {
         Manager.Game.GameStart();
+    }
+
+    public IEnumerator TakeDamageCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+
+        Manager.Player.Stats.IsTakeDamage.Value = false;
     }
 }
