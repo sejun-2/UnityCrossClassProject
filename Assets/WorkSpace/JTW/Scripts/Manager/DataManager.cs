@@ -20,6 +20,7 @@ public class DataManager : Singleton<DataManager>
     private const string _ItemSearchTableURL = "https://docs.google.com/spreadsheets/d/1acWhQmMpqq8mlE_XdDYcHdSh0Os9_zTbLrw_5cfV_P0/export?format=csv&gid=0";
     private const string _storyDescriptionTableURL = "https://docs.google.com/spreadsheets/d/1jRBAj27nZM4DmqJFzzZAhh8zO3jYZ3TV3wdA2bwf7Fk/export?format=csv&gid=0";
     private const string _playerDialogueTableURL = "https://docs.google.com/spreadsheets/d/1aMfYaGA6_9bvLPwBczY-up_UYgHt4Lg4W-OtRcmY-fU/export?format=csv&gid=0";
+    private const string _storyInteractionTableURL = "https://docs.google.com/spreadsheets/d/1xXIKjSYGImAvAOTsWEFn2g5vRKb1eiMiiPU-nt60pd4/export?format=csv&gid=0";
 
     public DataTableParser<Item> ItemData;
     public DataTableParser<CraftingData> CraftingData;
@@ -29,6 +30,7 @@ public class DataManager : Singleton<DataManager>
     public DataTableParser<ItemDropData> ItemDropData;
     public DataTableParser<StoryDescriptionData> StoryDescriptionData;
     public DataTableParser<PlayerDialogueData> PlayerDialogueData;
+    public DataTableParser<StoryInteractionData> StoryInteractionData;
 
     private void Awake()
     {
@@ -40,6 +42,7 @@ public class DataManager : Singleton<DataManager>
         StartCoroutine(DownloadDropRoutine());
         StartCoroutine(DownloadStoryRoutine());
         StartCoroutine(DownloadPlayerDialogueRoutine());
+        StartCoroutine(DownloadStoryInteractionRoutine());
     }
 
     #region DownloadItem
@@ -351,10 +354,49 @@ public class DataManager : Singleton<DataManager>
             dialogue.Dialogue_kr = words[1];
             dialogue.Dialogue_en = words[2];
 
+            Manager.Game.IsTalkDialogue[words[0]] = false;
+
             return dialogue;
         });
 
         PlayerDialogueData.Load(dataCsv);
     }
+    #endregion
+
+    #region DownloadStoryInteraction
+
+    IEnumerator DownloadStoryInteractionRoutine()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(_storyInteractionTableURL);
+        yield return request.SendWebRequest();
+        string dataCsv = request.downloadHandler.text;
+
+        StoryInteractionData = new DataTableParser<StoryInteractionData>(words =>
+        {
+            StoryInteractionData storyInteraction = new();
+
+            storyInteraction.ID = words[0];
+
+            string iconName = words[1].Trim();
+            string iconPath = $"Assets/Imports/UnityCrossClassProject_Assets/StoryInteractionIcon/{iconName}.png";
+            Sprite icon = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+            storyInteraction.Icon = icon;
+
+            storyInteraction.Description_kr = words[2];
+            storyInteraction.Description_en = words[3];
+
+            for(int i = 4; i < 6; i++)
+            {
+                if (string.IsNullOrEmpty(words[i])) break;
+
+                storyInteraction.PlayerDialogueIndexList.Add(words[i]);
+            }
+
+            return storyInteraction;
+        });
+
+        StoryInteractionData.Load(dataCsv);
+    }
+
     #endregion
 }

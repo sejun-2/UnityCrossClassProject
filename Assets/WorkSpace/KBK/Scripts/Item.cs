@@ -24,13 +24,14 @@ public class Item : ScriptableObject, IUsableID
 
     public int attackValue;
     public int defValue;
+    [SerializeField]
     private int _durubilityValue;
     public int durabilityValue 
     { 
         get => _durubilityValue; 
         set 
         { 
-            _durubilityValue = value; 
+            _durubilityValue = value;
             OnDurabilityChanged?.Invoke(value); 
             if(_durubilityValue <= 0)
             {

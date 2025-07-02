@@ -44,14 +44,24 @@ public class EquipmentSlot : MonoBehaviour
 
     public void UpdateSlotData(Item item = null)
     {
+        if (_itemImage != null)
+        {
+            if (item != null)
+            {
+                _itemImage.sprite = item.icon;
+            }
+            else
+            {
+                _itemImage.sprite = null;
+            }
+        }
+
         _slot.RemoveItem();
 
         if (item == null) return;
 
         _slot.AddItem(item);
 
-        if (_itemImage != null)
-            _itemImage.sprite = _slot.CurItem.icon;
     }
 
     public void UpdateDurabilityData(Item item = null)
@@ -72,6 +82,6 @@ public class EquipmentSlot : MonoBehaviour
 
     private void UpdateDurabilitySlider(int value)
     {
-        _durabilitySlider.value = _slot.CurItem.durabilityValue / _slot.CurItem.maxDrabilityValue;
+        _durabilitySlider.value = (float)_slot.CurItem.durabilityValue / _slot.CurItem.maxDrabilityValue;
     }
 }

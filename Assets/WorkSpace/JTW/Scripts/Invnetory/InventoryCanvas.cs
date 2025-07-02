@@ -106,50 +106,64 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
     private GameObject _bubble;
     private Coroutine _bubbleCoroutine;
 
-    public void ShowBubbleText(string text)
+    public void ShowBubbleText(string dialogueId) => ShowBubbleText(new List<string>() { dialogueId });
+
+    public void ShowBubbleText(List<string> dialogueIdList)
     {
+        if (dialogueIdList.Count <= 0) return;
+        if (Manager.Game.IsTalkDialogue[dialogueIdList[0]]) return;
+
         if (_bubbleCoroutine != null)
         {
             StopCoroutine(_bubbleCoroutine);
             Destroy(_bubble);
         }
 
-        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/Bubble");
-
-        _bubble = Instantiate(prefab, transform);
-
-        BubbleText bubbleText = _bubble.GetComponent<BubbleText>();
-        bubbleText.SetText(text);
-
-        _bubbleCoroutine = StartCoroutine(BubbleTextCoroutine(_bubble));
+        _bubbleCoroutine = StartCoroutine(BubbleTextCoroutine(dialogueIdList));
     }
 
-    private IEnumerator BubbleTextCoroutine(GameObject bubble)
+    private IEnumerator BubbleTextCoroutine(List<string> dialogueIdList)
     {
-        float timer = 5f;
-
-        RectTransform bubbleRt = bubble.GetComponent<RectTransform>();
-
-        Vector3 offset = new Vector3(0, 2, 0);
-
-        while (timer > 0)
+        foreach(string dialogueId in dialogueIdList)
         {
-            if (bubble == null) break;
+            Manager.Game.IsTalkDialogue[dialogueId] = true;
 
-            timer -= Time.deltaTime;
-            Vector3 pos = Manager.Player.Transform.position + offset;
+            string text = Manager.Data.PlayerDialogueData.Values[dialogueId].Dialogue_kr;
 
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
+            GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/Bubble");
 
-            bubbleRt.position = screenPos;
+            _bubble = Instantiate(prefab, transform);
 
-            yield return null;
+            BubbleText bubbleText = _bubble.GetComponent<BubbleText>();
+            bubbleText.SetText(text);
+
+            float timer = 5f;
+
+            RectTransform bubbleRt = _bubble.GetComponent<RectTransform>();
+
+            Vector3 offset = new Vector3(0, 2, 0);
+
+            while (timer > 0)
+            {
+                if (_bubble == null) break;
+
+                timer -= Time.deltaTime;
+                Vector3 pos = Manager.Player.Transform.position + offset;
+
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
+
+                bubbleRt.position = screenPos;
+
+                yield return null;
+            }
+
+            if (_bubble != null)
+            {
+                Destroy(_bubble);
+            }
         }
 
-        if(bubble != null)
-        {
-            Destroy(bubble);
-        }
+       
     }
     #endregion
 
@@ -158,5 +172,14 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/MapUI");
 
         Instantiate(prefab, transform);
+    }
+
+    public void ShowStoryInteractionPopUp(string storyInteractionId)
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/StoryInteractionPopUp");
+
+        StoryInteractionPopUpPresenter pre = Instantiate(prefab, transform).GetComponent<StoryInteractionPopUpPresenter>();
+
+        pre.InitStory(storyInteractionId);
     }
 }

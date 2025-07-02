@@ -18,7 +18,6 @@ public class PlayerAttack : MonoBehaviour
         Manager.Player.Stats.IsAttack.Value = true;
         StartCoroutine(AttackCoroutine(weapon.attackSpeed));
         // 해당 어택 애니메이션 제작
-        Debug.Log("공격 실행ffffff");
 
         Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
 
@@ -32,6 +31,8 @@ public class PlayerAttack : MonoBehaviour
                 IDamageable zombie = hit.collider.gameObject.GetComponent<IDamageable>();
 
                 zombie.TakeDamage(weapon.attackValue);
+
+                weapon.durabilityValue--;
 
                 Debug.Log($"{hit.collider.gameObject.name}에게 {weapon.attackValue} 만큼의 데미지");
 

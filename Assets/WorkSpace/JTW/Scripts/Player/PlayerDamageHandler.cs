@@ -10,6 +10,12 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
     {
         if (Stats.CurHp.Value <= 0) return;
 
+        if(Stats.Armor.Value != null)
+        {
+            amount = Mathf.Max(0, amount - Stats.Armor.Value.defValue);
+            Stats.Armor.Value.durabilityValue--;
+        }
+
         Stats.ChangeHp(-amount);
 
         if(Stats.CurHp.Value <= 0)
@@ -20,6 +26,6 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
 
     public void Die()
     {
-        Manager.Game.LoadSaveData();
+        Manager.Game.GameStart();
     }
 }
