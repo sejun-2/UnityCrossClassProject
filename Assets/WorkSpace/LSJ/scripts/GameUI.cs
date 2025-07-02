@@ -25,10 +25,6 @@ public class GameUI : MonoBehaviour
         //Manager.Player.Stats.MaxHp.Value = 100; // 기본값 설정
         //Manager.Player.Stats.CurHp.Value = 60; // 기본값 설정 
 
-        // Player의 Buff 값이 바뀔 때마다 UI 갱신
-        Manager.Player.Stats.Buff.OnChanged += UpdateBuffIcon;
-        UpdateBuffIcon(Manager.Player.Stats.Buff.Value); // 최초 상태도 반영
-
         // 체력 변화 이벤트 구독
         Manager.Player.Stats.CurHp.OnChanged += OnCurHpChanged;
         Manager.Player.Stats.MaxHp.OnChanged += OnMaxHpChanged;
@@ -38,6 +34,13 @@ public class GameUI : MonoBehaviour
         Manager.Player.Stats.Hunger.OnChanged += (newHunger) => HungerSlider.value = newHunger;
         Manager.Player.Stats.Thirst.OnChanged += (newWater) => ThirstSlider.value = newWater;
         Manager.Player.Stats.Mentality.OnChanged += (newMentality) => MentalitySlider.value = newMentality;
+
+        // 초기 버프 상태를 Nomal로 설정
+        Manager.Player.Stats.Buff.Value = PlayerBuffs.Nomal;
+
+        // Player의 Buff 값이 바뀔 때마다 UI 갱신
+        Manager.Player.Stats.Buff.OnChanged += UpdateBuffIcon;
+        UpdateBuffIcon(Manager.Player.Stats.Buff.Value); // 최초 상태도 반영
     }
 
     private void Update()
@@ -69,6 +72,15 @@ public class GameUI : MonoBehaviour
 
     public void UpdateBuffIcon(PlayerBuffs buff)
     {
+        // Nomal(0)일 때는 이미지 숨김
+        if (buff == PlayerBuffs.Nomal)
+        {
+            //if (BuffsImage != null)
+                BuffsImage.enabled = false;
+            return;
+        }
+
+        // PlayerBuffs를 int로 변환하여 인덱스로 사용
         int idx = (int)buff;
         if (BuffsImage != null && BuffIcons != null && idx >= 0 && idx < BuffIcons.Length)
         {
