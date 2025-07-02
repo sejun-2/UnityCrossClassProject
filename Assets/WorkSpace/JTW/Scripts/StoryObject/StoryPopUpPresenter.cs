@@ -11,6 +11,7 @@ public class StoryPopUpPresenter : BaseUI
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Player.Stats.isFarming = false;
             Destroy(this.gameObject);
 
             string dialogueId = Manager.Data.StoryDescriptionData.Values[_storyId].PlayerDialogueID;

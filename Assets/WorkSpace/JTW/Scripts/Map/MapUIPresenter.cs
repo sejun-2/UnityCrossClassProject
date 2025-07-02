@@ -27,6 +27,12 @@ public class MapUIPresenter : BaseUI
             Manager.UI.Inven.ShowTradeItemBox();
             Destroy(gameObject);
         }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Manager.Player.Stats.isFarming = false;
+            Destroy(gameObject);
+        }
     }
 
     private void InitMapUI()

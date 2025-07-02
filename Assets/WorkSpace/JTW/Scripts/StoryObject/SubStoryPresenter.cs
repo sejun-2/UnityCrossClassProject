@@ -21,6 +21,7 @@ public class SubStoryPresenter : BaseUI
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Player.Stats.isFarming = false;
             Destroy(this.gameObject);
         }
 

@@ -25,6 +25,10 @@ public class InventoryPresenter : BaseUI, IInventory
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
+            if (!IsTrade)
+            {
+                Manager.Player.Stats.isFarming = false;
+            }
             Destroy(this.gameObject);
         }
 

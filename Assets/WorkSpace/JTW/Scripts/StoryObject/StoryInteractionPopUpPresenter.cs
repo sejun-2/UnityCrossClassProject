@@ -19,6 +19,7 @@ public class StoryInteractionPopUpPresenter : BaseUI
 
             Manager.UI.Inven.ShowBubbleText(dialogueList);
 
+            Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }
     }
