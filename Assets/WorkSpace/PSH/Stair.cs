@@ -4,12 +4,46 @@ using UnityEngine.UI;
 
 public class Stair : MonoBehaviour, IInteractable
 {
-    public Transform pointUp;   // 위쪽 포인트
-    public Transform pointDown; // 아래쪽 포인트
+    private Transform pointUp;   // 위쪽 포인트
+    private Transform pointDown; // 아래쪽 포인트
 
     [SerializeField] private Image fadeImage; // 검정 패널 이미지
     [SerializeField] private float fadeDuration = 0.5f;
 
+    private void Start()
+    {
+        // 자식 중 이름으로 pointUp, pointDown 찾기
+        Transform[] children = GetComponentsInChildren<Transform>();
+
+        foreach (Transform child in children)
+        {
+            if (child.name == "PointUp")
+                pointUp = child;
+            else if (child.name == "PointDown")
+                pointDown = child;
+        }
+
+        // Player 태그 오브젝트에서 FadeImage 찾기
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObj != null)
+        {
+            Image image = playerObj.GetComponentInChildren<Image>();
+
+            if (image != null)
+            {
+                fadeImage = image;
+            }
+            else
+            {
+                Debug.LogError("FadeImage라는 이름의 자식 오브젝트를 Player 안에서 찾을 수 없습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Player 태그 오브젝트를 찾을 수 없습니다.");
+        }
+    }
     public bool Interact(Transform player, bool goUp)
     {
         float distToUp = Vector3.Distance(player.position, pointUp.position);
