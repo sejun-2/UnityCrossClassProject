@@ -29,6 +29,12 @@ public class PlayerInteraction : MonoBehaviour
     private Vector3 climbTargetPos;
 
     public Animator animator;
+    private PlayerAttack _playerAttack;
+
+    private void Awake()
+    {
+        Manager.Player.Transform = transform;
+    }
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -108,7 +114,8 @@ public class PlayerInteraction : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {           
             Debug.Log("공격 시도");
-            Attack();
+            _playerAttack.Attack();      
+            StateChange(State.Attack);
         }
 
         //이외에는 좌우 이동
@@ -171,44 +178,7 @@ public class PlayerInteraction : MonoBehaviour
         yield return new WaitForSeconds(0.1f); // 짧은 지연 후
         playerCollider.enabled = true;
     }
-    public void Attack()
-    {
-        Item weapon = Manager.Player.Stats.Weapon.Value;
 
-        if (weapon == null || Manager.Player.Stats.IsAttack.Value) return;
-
-        Manager.Player.Stats.IsAttack.Value = true;
-        StartCoroutine(AttackCoroutine(weapon.attackSpeed));
-        StateChange(State.Attack);
-        Debug.Log("공격 실행ffffff");
-
-        Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
-
-        Debug.DrawRay(transform.position + Vector3.up, direction * weapon.attackRange * 10, Color.red, 1f);
-        RaycastHit[] hits = Physics.RaycastAll(transform.position + Vector3.up, direction, weapon.attackRange * 10, ~0, QueryTriggerInteraction.Collide);
-
-        foreach (RaycastHit hit in hits)
-        {
-            if (hit.collider.gameObject.CompareTag("Zombie"))
-            {
-                IDamageable zombie = hit.collider.gameObject.GetComponent<IDamageable>();
-
-                zombie.TakeDamage(weapon.attackValue);
-
-                Debug.Log($"{hit.collider.gameObject.name}에게 {weapon.attackValue} 만큼의 데미지");
-
-                break;
-            }
-        }      
-    }
-
-    private IEnumerator AttackCoroutine(float time)
-    {
-        yield return new WaitForSeconds(time);
-
-        Manager.Player.Stats.IsAttack.Value = false;
-    }
-    
     public void StateChange(State state)
     {
         switch (state)
