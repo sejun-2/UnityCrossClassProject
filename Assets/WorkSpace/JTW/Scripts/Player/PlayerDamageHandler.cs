@@ -31,7 +31,7 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
             Stats.Armor.Value.durabilityValue--;
         }
 
-        Stats.ChangeHp(-amount);
+        Stats.ChangeHp(-(amount * Manager.Player.BuffStats.VulnerableDebuff));
 
         if(Stats.CurHp.Value <= 0)
         {
