@@ -45,6 +45,10 @@ public class ItemBoxPresenter : BaseUI, IInventory
             {
                 Manager.UI.Inven.ShowMapUI();
             }
+            else
+            {
+                Manager.Player.Stats.isFarming = false;
+            }
             Destroy(this.gameObject);
         }
 

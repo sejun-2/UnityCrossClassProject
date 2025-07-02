@@ -56,6 +56,7 @@ public class RepairPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }
     }

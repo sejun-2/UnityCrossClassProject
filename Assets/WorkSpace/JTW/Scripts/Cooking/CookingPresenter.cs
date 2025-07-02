@@ -49,6 +49,7 @@ public class CookingPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }
     }
