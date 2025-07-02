@@ -123,7 +123,14 @@ public class PlayerInteraction : MonoBehaviour
         //Debug.Log($"{hit.collider.gameObject.name}");
         //isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.5f, groundLayer);
 
-
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            _isInventoryOpen = false;
+        }
+        if (_isInventoryOpen)
+        {
+            return;
+        }
 
         //은신중에는 uparrow키로 은신 풀기 전까지는 다른 키 입력 불가
         if (Manager.Player.Stats.isHiding)
@@ -154,6 +161,7 @@ public class PlayerInteraction : MonoBehaviour
             if (!_isInventoryOpen)
             {
                 _inventoryCanvas.ShowInven();
+                _isInventoryOpen = true;
             }
         }
        
