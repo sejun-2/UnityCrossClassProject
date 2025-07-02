@@ -2,7 +2,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public partial class PlayerStats
 {
@@ -29,6 +31,9 @@ public class PlayerInteraction : MonoBehaviour
 
     private bool isAutoClimbing = false;
     private Vector3 climbTargetPos;
+
+    private bool isGrounded;
+    public LayerMask groundLayer;
 
     public Animator animator;
     private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
@@ -57,6 +62,10 @@ public class PlayerInteraction : MonoBehaviour
     //테스트용 텍스트
     [SerializeField] TextMeshProUGUI stateText;
 
+    [SerializeField] Vector3 origin;
+    [SerializeField] float checkRadius = 0.2f;
+    [SerializeField] float checkDistance = 0.1f;
+
     private void Awake()
     {
         Manager.Player.Transform = transform;
@@ -70,18 +79,46 @@ public class PlayerInteraction : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerCollider = GetComponent<Collider>();
         Manager.Player.Stats.isFarming = false;
-    }
+        groundLayer = LayerMask.GetMask("Obstacle");
 
+
+        origin = transform.position + Vector3.up * 0.1f;
+
+    }
+    private void OnDrawGizmos()
+    {
+        // 플레이어가 활성화되어 있을 때만 그리기
+        if (Application.isPlaying)
+        {
+            Gizmos.color = Color.red;
+
+
+            Vector3 direction = Vector3.down;
+            // 시작 구체
+            Gizmos.DrawWireSphere(origin, checkRadius);
+
+            // 끝 구체
+            Gizmos.DrawWireSphere(origin + direction * checkDistance, checkRadius);
+
+            // 사이를 Cylinder처럼 연결하기 위해 DrawLine 4방향 예시
+            Gizmos.DrawLine(origin + Vector3.forward * checkRadius, origin + direction * checkDistance + Vector3.forward * checkRadius);
+            Gizmos.DrawLine(origin - Vector3.forward * checkRadius, origin + direction * checkDistance - Vector3.forward * checkRadius);
+            Gizmos.DrawLine(origin + Vector3.right * checkRadius, origin + direction * checkDistance + Vector3.right * checkRadius);
+            Gizmos.DrawLine(origin - Vector3.right * checkRadius, origin + direction * checkDistance - Vector3.right * checkRadius);
+        }
+    }
     void Update()
     {
         //테스트용
-        stateText.text = $"{_currentState}";
+        stateText.text = $"{_currentState} {isGrounded}";
 
-        //파밍중, 낙하중에는 다른 키 입력 불가
-        if (Manager.Player.Stats.isFarming || Manager.Player.Stats.isFalling)
-        {
-            return;
-        }
+        origin = transform.position + Vector3.up;
+        //땅을 밟고 있니
+        isGrounded = Physics.SphereCast(origin, checkRadius, Vector3.down, out RaycastHit hit, checkDistance, groundLayer);
+        //Debug.Log($"{hit.collider.gameObject.name}");
+        //isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.5f, groundLayer);
+
+       
 
         //은신중에는 uparrow키로 은신 풀기 전까지는 다른 키 입력 불가
         if (Manager.Player.Stats.isHiding)
@@ -138,7 +175,11 @@ public class PlayerInteraction : MonoBehaviour
                 }
             }
         }
-
+        //파밍중, 낙하중에는 다른 키 입력 불가
+        if (Manager.Player.Stats.isFarming || !isGrounded)
+        {
+            return;
+        }
         //z키를 누르면 상호작용 시도
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
