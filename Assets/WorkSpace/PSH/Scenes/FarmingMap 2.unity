@@ -1125,6 +1125,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ladder
       objectReference: {fileID: 0}
+    - target: {fileID: 2319113685764780658, guid: b5d4c8d0cfd479745bfa2791e6ae73d1,
+        type: 3}
+      propertyPath: audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 5da44b9f0ed488d4192120f0254cc047, type: 3}
     - target: {fileID: 6875464522361035677, guid: b5d4c8d0cfd479745bfa2791e6ae73d1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1575,6 +1580,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3585067365659313325, guid: 1070eb6a4ad027748a16834a7cebf88a,
+        type: 3}
+      propertyPath: audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: eae1625ec7ae5d14380b2d975550162b, type: 3}
     - target: {fileID: 9054556055289873127, guid: 1070eb6a4ad027748a16834a7cebf88a,
         type: 3}
       propertyPath: m_Name
