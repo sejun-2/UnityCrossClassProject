@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour, IDamageable
+public class Zombie : MonoBehaviour
 {
-    public enum State { Patrol, Wait, Chase, Attack, Dead }
+    public enum State { Patrol, Wait, Chase, Attack, Dead, TakeDamage }
     private State _currentState = State.Patrol;
     public State CurrentState
     {
@@ -18,12 +18,14 @@ public class Zombie : MonoBehaviour, IDamageable
     [SerializeField, Tooltip("플레이어 감지 범위")] private float _detectionDistance = 5;
     [SerializeField] private float _attackRange = 2;
     [SerializeField] private float _health = 100;
+    public float Health { get => _health; set { _health = value; } }
     [SerializeField] private float _damage = 10;
     [SerializeField] private float _attackCooldown = 2;
 
     public Transform _playerTransform;
     public LayerMask obstacleMask;
     public Animator animator;
+    private ZombieAttack _attack;
 
     private Vector3 _spawnPos;
     private Vector3 _targetPos;
@@ -35,6 +37,7 @@ public class Zombie : MonoBehaviour, IDamageable
     {
         _spawnPos = transform.position;
         _targetPos = _spawnPos + _direction * _patrolRange;
+        _attack = GetComponent<ZombieAttack>();
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
@@ -45,6 +48,7 @@ public class Zombie : MonoBehaviour, IDamageable
         {
             Debug.LogError("Player 오브젝트를 찾을 수 없습니다. 태그 확인 필요.");
         }
+        animator = GetComponentInChildren<Animator>();
         animator.SetInteger("MovingPattren", 0);//0순찰 1대기 2추격
     }
     private void OnDrawGizmos()
@@ -55,7 +59,7 @@ public class Zombie : MonoBehaviour, IDamageable
 
     void Update()
     {
-        if (_currentState != State.Dead)
+        if (_currentState == State.Patrol || _currentState == State.Wait)
             DetectPlayer();
 
         switch (_currentState)
@@ -126,26 +130,28 @@ public class Zombie : MonoBehaviour, IDamageable
             StateChange(State.Patrol);
         }
 
+        Vector3 rayOrigin = transform.position + Vector3.up; // 눈높이 조정
+
+        // 앞 방향 레이
+        Vector3 forwardDir = transform.forward * Mathf.Sign(_direction.z);
+        RaycastHit hit;
+
+        if (Physics.Raycast(rayOrigin, forwardDir, out hit, _detectionDistance * 2, ~0))
+        {
+            if (!hit.collider.CompareTag("Player"))
+            {
+                StateChange(State.Wait);
+                _waitTimer = _waitTime;
+                Debug.Log("좀비: 추격 종료");
+            }
+        }
+
+
         MoveTowards(_playerTransform.position, _moveSpeed * _chaseSpeedMultiplier);
     }
 
     void Attack()
     {
-        _attackTimer -= Time.deltaTime;
-
-        if (Vector3.Distance(transform.position, _playerTransform.position) > _attackRange)
-        {
-            StateChange(State.Chase);
-            return;
-        }
-
-        if (_attackTimer <= 0f)
-        {
-            Debug.Log($"좀비가 공격 플레이어 {_damage} 대미지");
-            StateChange(State.Attack);
-            Manager.Player.Transform.GetComponent<IDamageable>().TakeDamage(_damage);
-            _attackTimer = _attackCooldown;
-        }
     }
 
     void DetectPlayer()
@@ -160,11 +166,8 @@ public class Zombie : MonoBehaviour, IDamageable
         {
             if (hit.collider.CompareTag("Player"))
             {
-                if (_currentState == State.Patrol || _currentState == State.Wait)
-                {
-                    StateChange(State.Chase);
-                    Debug.Log("좀비: 앞에 플레이어 있음! 추격 시작");
-                }
+                StateChange(State.Chase);
+                Debug.Log("좀비: 앞에 플레이어 있음! 추격 시작");
             }
         }
 
@@ -175,11 +178,8 @@ public class Zombie : MonoBehaviour, IDamageable
         {
             if (hit.collider.CompareTag("Player"))
             {
-                if (_currentState == State.Patrol || _currentState == State.Wait)
-                {
-                    StateChange(State.Chase);
-                    Debug.Log("좀비: 뒤에 플레이어 있음! 추격 시작");
-                }
+                StateChange(State.Chase);
+                Debug.Log("좀비: 앞에 플레이어 있음! 추격 시작");
             }
         }
 
@@ -210,25 +210,17 @@ public class Zombie : MonoBehaviour, IDamageable
     }
 
 
-    public void TakeDamage(float amount)
-    {
-        if (_currentState == State.Dead) return;
-
-        _health -= amount;
-        if (_health <= 0)
-        {
-            StateChange(State.Dead);
-            StartCoroutine(DieAfterDelay());
-        }
-    }
     private IEnumerator DieAfterDelay()
     {
         yield return new WaitForSeconds(3f);
         gameObject.SetActive(false);
         // 또는 Destroy(gameObject);
     }
+
     public void StateChange(State state)
     {
+        Debug.Log(state);
+
         switch (state)
         {
             case State.Patrol:
@@ -246,11 +238,15 @@ public class Zombie : MonoBehaviour, IDamageable
                 break;
             case State.Attack:
                 _currentState = State.Attack;
-                animator.SetTrigger("Attack");
+                _attack.Attack();
                 break;
             case State.Dead:
                 _currentState = State.Dead;
+                StartCoroutine(DieAfterDelay());
                 animator.SetBool("IsDead", true);
+                break;
+            case State.TakeDamage:
+                _currentState = State.TakeDamage;
                 break;
             default:
                 break;
