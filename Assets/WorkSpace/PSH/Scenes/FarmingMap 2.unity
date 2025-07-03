@@ -1130,6 +1130,11 @@ PrefabInstance:
       propertyPath: audioClip
       value: 
       objectReference: {fileID: 8300000, guid: 5da44b9f0ed488d4192120f0254cc047, type: 3}
+    - target: {fileID: 3889022603722403083, guid: b5d4c8d0cfd479745bfa2791e6ae73d1,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6875464522361035677, guid: b5d4c8d0cfd479745bfa2791e6ae73d1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2300,6 +2305,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5865395476715345256, guid: 201511537cbd74740a65703429ce146a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9223013093499744226, guid: 201511537cbd74740a65703429ce146a,
         type: 3}
       propertyPath: m_Name
@@ -2533,6 +2543,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8205809843996988837, guid: 1aba0c482d8ea9a48ac96e641b98b955,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 103.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 8205809843996988837, guid: 1aba0c482d8ea9a48ac96e641b98b955,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 103.99
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

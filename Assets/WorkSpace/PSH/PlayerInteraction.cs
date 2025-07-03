@@ -35,6 +35,7 @@ public class PlayerInteraction : MonoBehaviour
 
     public Animator animator;
 
+    private readonly int hashIdle = Animator.StringToHash("Idle");
     private readonly int hashClimb = Animator.StringToHash("Climb");
     private readonly int hashFarm = Animator.StringToHash("Farm");
     private readonly int hashHide = Animator.StringToHash("Hide");
@@ -213,6 +214,8 @@ public class PlayerInteraction : MonoBehaviour
         //z키를 누르면 상호작용 시도
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
+            
+
             GameObject target = (Manager.Player.Stats.CurrentNearby as MonoBehaviour).gameObject;
 
             Debug.Log("상호작용 시도");
@@ -227,7 +230,7 @@ public class PlayerInteraction : MonoBehaviour
                 StartCoroutine(RotateAndInteract());
                 animator.Play(hashFarm);
             }
-                
+
         }
 
         //인벤토리 여는
@@ -378,7 +381,7 @@ public class PlayerInteraction : MonoBehaviour
 
         // 파밍 종료
         slider.gameObject.SetActive(false);
-        //Manager.Player.Stats.isFarming = false;
+        animator.SetBool("IsRunning", false);
 
         RestoreRotation();
     }
