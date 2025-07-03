@@ -112,7 +112,7 @@ public class PlayerInteraction : MonoBehaviour
     void Update()
     {
         //테스트용
-        stateText.text = $"{_currentState} {isGrounded} {Manager.Player.Stats.Weapon.Value}";
+        stateText.text = $"{Manager.Player.Stats.isFarming}";
 
         origin = transform.position + Vector3.up;
         //땅을 밟고 있니
@@ -134,6 +134,7 @@ public class PlayerInteraction : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             _isInventoryOpen = false;
+            Manager.Player.Stats.isFarming = false;
         }
         if (_isInventoryOpen)
         {
@@ -163,15 +164,7 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        //인벤토리 여는
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            if (!_isInventoryOpen)
-            {
-                _inventoryCanvas.ShowInven();
-                _isInventoryOpen = true;
-            }
-        }
+        
        
         //위아래 키를 누르면 사다리 이동 시도 은신 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
@@ -235,6 +228,16 @@ public class PlayerInteraction : MonoBehaviour
                 animator.Play(hashFarm);
             }
                 
+        }
+
+        //인벤토리 여는
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (!_isInventoryOpen)
+            {
+                _inventoryCanvas.ShowInven();
+                _isInventoryOpen = true;
+            }
         }
 
         //space키를 누르면 공격 시도
@@ -375,7 +378,7 @@ public class PlayerInteraction : MonoBehaviour
 
         // 파밍 종료
         slider.gameObject.SetActive(false);
-        Manager.Player.Stats.isFarming = false;
+        //Manager.Player.Stats.isFarming = false;
 
         RestoreRotation();
     }
@@ -398,6 +401,5 @@ public class PlayerInteraction : MonoBehaviour
         Manager.Player.Stats.CurrentNearby.Interact();
 
         Manager.Player.Stats.isFarming = false;
-
     }
 }
