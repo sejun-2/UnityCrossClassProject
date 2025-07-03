@@ -26,6 +26,7 @@ public class PlayerAttack : MonoBehaviour
         _animator.Play("BatAttack");
 
         Manager.Player.Stats.IsAttack.Value = true;
+        Manager.Player.Stats.isFarming = true;
         StartCoroutine(AttackCoroutine(weapon.attackSpeed));
     }
 
@@ -62,5 +63,6 @@ public class PlayerAttack : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         Manager.Player.Stats.IsAttack.Value = false;
+        Manager.Player.Stats.isFarming = false;
     }
 }
