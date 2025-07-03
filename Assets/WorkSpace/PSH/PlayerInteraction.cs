@@ -113,7 +113,7 @@ public class PlayerInteraction : MonoBehaviour
     void Update()
     {
         //테스트용
-        stateText.text = $"{Manager.Player.Stats.isFarming}";
+        stateText.text = $"farming{Manager.Player.Stats.isFarming} climbing{Manager.Player.Stats.isClimbing} isGrounded{isGrounded}";
 
         origin = transform.position + Vector3.up;
         //땅을 밟고 있니
@@ -164,13 +164,12 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
         //파밍중, 낙하중에는 다른 키 입력 불가 단 등반시는 예외
-        if (!Manager.Player.Stats.isClimbing)
-        {
-            if (Manager.Player.Stats.isFarming || !isGrounded)
+       
+            if (Manager.Player.Stats.isClimbing ||Manager.Player.Stats.isFarming || !isGrounded)
             {
                 return;
             }
-        }
+        
   
         //위아래 키를 누르면 사다리 이동 시도 은신 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
@@ -299,14 +298,12 @@ public class PlayerInteraction : MonoBehaviour
 
             Debug.Log("사다리 자동 이동 완료");
 
-            StartCoroutine(ReenableColliderAfterDelay());
+            playerCollider.enabled = true;
+            if (isGrounded)
+            {
+                Manager.Player.Stats.isClimbing = false;
+            }
         }
-    }
-
-    IEnumerator ReenableColliderAfterDelay()
-    {
-        yield return new WaitForSeconds(0.1f); // 짧은 지연 후
-        playerCollider.enabled = true;
     }
     public void StateChange(State state)
     {
@@ -354,8 +351,7 @@ public class PlayerInteraction : MonoBehaviour
 
     public void RestoreRotation()
     {
-        transform.rotation = Quaternion.identity;
-        Manager.Player.Stats.isClimbing = false;
+        transform.rotation = Quaternion.identity;        
     }
 
     private IEnumerator RotateAndInteract()
