@@ -10,6 +10,8 @@ public class Stair : MonoBehaviour, IInteractable
     [SerializeField] private Image fadeImage; // 검정 패널 이미지
     [SerializeField] private float fadeDuration = 0.5f;
 
+    [SerializeField] AudioClip audioClip;
+
     private void Start()
     {
         // 자식 중 이름으로 pointUp, pointDown 찾기
@@ -65,6 +67,7 @@ public class Stair : MonoBehaviour, IInteractable
 
         Transform target = goUp ? pointUp : pointDown;
         StartCoroutine(FadeTeleport(player, target.position));
+        Manager.Sound.SfxPlay(audioClip,transform,1);
         return true;
     }
 

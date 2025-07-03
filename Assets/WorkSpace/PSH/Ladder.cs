@@ -5,6 +5,7 @@ public class Ladder : MonoBehaviour, IInteractable
     public Transform topPoint;
     public Transform bottomPoint;
 
+    [SerializeField] AudioClip audioClip;
     private void Start()
     {
         Vector3 topPos = topPoint.position;
@@ -44,6 +45,7 @@ public class Ladder : MonoBehaviour, IInteractable
         Vector3 to = goUp ? topPoint.position : bottomPoint.position;
 
         interaction.StartClimb(from, to);
+        Manager.Sound.SfxPlay(audioClip, transform, 1);
         return true;
     }
 }
