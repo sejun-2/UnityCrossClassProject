@@ -219,8 +219,6 @@ public class Zombie : MonoBehaviour
 
     public void StateChange(State state)
     {
-        Debug.Log(state);
-
         switch (state)
         {
             case State.Patrol:
