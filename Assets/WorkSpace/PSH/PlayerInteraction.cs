@@ -158,15 +158,19 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
+        //파밍중, 낙하중에는 다른 키 입력 불가
+        if (Manager.Player.Stats.isFarming || !isGrounded)
+        {
+            return;
+        }
+
         //등반 상태라면 등반함
         if (isAutoClimbing)
         {
             AutoClimb();
             return;
         }
-
-        
-       
+  
         //위아래 키를 누르면 사다리 이동 시도 은신 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -205,12 +209,6 @@ public class PlayerInteraction : MonoBehaviour
 
         }
 
-
-        //파밍중, 낙하중에는 다른 키 입력 불가
-        if (Manager.Player.Stats.isFarming || !isGrounded)
-        {
-            return;
-        }
         //z키를 누르면 상호작용 시도
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {

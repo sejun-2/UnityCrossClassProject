@@ -64,7 +64,7 @@ public class Stair : MonoBehaviour, IInteractable
             Debug.Log("이미 계단 아래에 있음. 아래로 이동 불가.");
             return false;
         }
-
+        Manager.Player.Stats.isFarming = true;
         Transform target = goUp ? pointUp : pointDown;
         StartCoroutine(FadeTeleport(player, target.position));
         Manager.Sound.SfxPlay(audioClip,transform,1);
@@ -96,6 +96,8 @@ public class Stair : MonoBehaviour, IInteractable
 
         c.a = targetAlpha;
         fadeImage.color = c;
+        Manager.Player.Stats.isFarming = false;
+
     }
 
     // IInteractable 기본 구현
