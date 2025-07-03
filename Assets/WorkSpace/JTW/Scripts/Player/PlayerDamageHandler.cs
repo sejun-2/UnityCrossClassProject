@@ -22,6 +22,7 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
         if (Stats.CurHp.Value <= 0) return;
 
         Manager.Player.Stats.IsTakeDamage.Value = true;
+        Manager.Player.Stats.isFarming = true;
         StartCoroutine(TakeDamageCoroutine());
         _animator.Play("BatTakeDamage");
 
@@ -49,5 +50,6 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(1f);
 
         Manager.Player.Stats.IsTakeDamage.Value = false;
+        Manager.Player.Stats.isFarming = false;
     }
 }
