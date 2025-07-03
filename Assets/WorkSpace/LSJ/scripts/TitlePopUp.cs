@@ -30,7 +30,7 @@ public class TitlePopUp : BaseUI
 
         // 이벤트 연결, 버튼이 클릭되었을 때 호출되는 메서드
         GetEvent("Continue").Click += data => Manager.UI.PopUp.ClosePopUp();
-        GetEvent("Preferences").Click += data => Manager.UI.PopUp.ShowPopUp<SettingPopUp>();
+        GetEvent("Preferences").Click += data => Manager.UI.PopUp.ShowPopUp<SettingPop>();
         GetEvent("Title").Click += data => SceneChanger.ChageScene(sceneName: "TitleScene");
         GetEvent("GameOver").Click += data => Manager.UI.PopUp.ShowPopUp<EndPopUp>();
 
@@ -102,7 +102,7 @@ public class TitlePopUp : BaseUI
 
     public void showSerttingPopUp() // Z키를 눌렀을 때 호출되는 메서드
     {
-        SettingPopUp SP = Manager.UI.PopUp.ShowPopUp<SettingPopUp>(); // SettingPopUp을 표시합니다.
+        SettingPop SP = Manager.UI.PopUp.ShowPopUp<SettingPop>(); // SettingPopUp을 표시합니다.
         SP.TitleMenu = gameObject;
         gameObject.SetActive(false); // TitlePopUp 비활성화
     }

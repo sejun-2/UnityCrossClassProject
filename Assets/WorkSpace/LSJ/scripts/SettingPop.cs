@@ -1,50 +1,51 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SettingPopUp : BaseUI
+public class SettingPop : BaseUI
 {
-    [Header("ÅÇ ¹öÆ°")]
+    [Header("íƒ­ ë²„íŠ¼")]
     [SerializeField] private Button SoundButton;
     [SerializeField] private Button LanguageButton;
 
-    [Header("ÆĞ³Î")]
+    [Header("íŒ¨ë„")]
     [SerializeField] private GameObject SoundPanel;
     [SerializeField] private GameObject LanguagePanel;
 
-    [Header("½½¶óÀÌ´õ")]
+    [Header("ìŠ¬ë¼ì´ë”")]
     [SerializeField] public Slider MasterVolume;
     [SerializeField] public Slider BgmVolume;
     [SerializeField] public Slider SfxVolume;
 
-    [Header("»ç¿îµå ÆĞ³Î ³» ³×ºñ°ÔÀÌ¼Ç")]
-    [SerializeField] private Selectable[] SoundSelectables; // MasterVolume, BgmVolume, SfxVolume µî
-    [Header("¾ğ¾î ÆĞ³Î ³» ³×ºñ°ÔÀÌ¼Ç")]
-    [SerializeField] private Selectable[] LanguageSelectables; // ¾ğ¾î °ü·Ã ¹öÆ° µî
+    [Header("ì‚¬ìš´ë“œ íŒ¨ë„ ë‚´ ë„¤ë¹„ê²Œì´ì…˜")]
+    [SerializeField] private Selectable[] SoundSelectables; // MasterVolume, BgmVolume, SfxVolume ë“±
+    [Header("ì–¸ì–´ íŒ¨ë„ ë‚´ ë„¤ë¹„ê²Œì´ì…˜")]
+    [SerializeField] private Selectable[] LanguageSelectables; // ì–¸ì–´ ê´€ë ¨ ë²„íŠ¼ ë“±
 
-    [Header("¸ŞÀÎ ¸Ş´º ÂüÁ¶")]
-    [SerializeField] private MainMenuPopUp mainMenuPopUp; // Inspector¿¡¼­ MainMenuPopUp ¿¬°á
 
-    int selectedIndex = 0;  // ÇöÀç ¼±ÅÃµÈ ¹öÆ°ÀÇ ÀÎµ¦½º
+    int selectedIndex = 0;  // í˜„ì¬ ì„ íƒëœ ë²„íŠ¼ì˜ ì¸ë±ìŠ¤
     private Selectable[] currentSelectables;
+    //Selectable[] menus;   // ë©”ë‰´ ë²„íŠ¼ë“¤ì„ ì €ì¥í•  ë°°ì—´
 
-    private void OnEnable()
-    {
-        // Setting Ã¢ÀÌ ¿­¸± ¶§ Ã¹ ÅÇ È°¼ºÈ­ ¹× Ã¹ ¿ä¼Ò Æ÷Ä¿½º
-        SwitchTab(0);
-    }
+    [SerializeField] public GameObject TitleMenu; //  UI ì˜¤ë¸Œì íŠ¸
 
     private void Start()
     {
-        Debug.Log(GetEvent("SettingPopUp¿­¸²")); // SettingMenu UI°¡ ½ÃÀÛµÉ ¶§ ·Î±×¸¦ Ãâ·ÂÇÕ´Ï´Ù.
+        Debug.Log(GetEvent("SettingMenuì—´ë¦¼")); // SettingMenu UIê°€ ì‹œì‘ë  ë•Œ ë¡œê·¸ë¥¼ ì¶œë ¥í•©ë‹ˆë‹¤.
+        // SelectButton ë²„íŠ¼ì´ í´ë¦­ë˜ì—ˆì„ ë•Œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
+        GetEvent("SelectButton").Click += data => Manager.UI.PopUp.ShowPopUp<LangguagePopUp>(); // LangguagePopUpì„ í‘œì‹œí•©ë‹ˆë‹¤.
+        GetEvent("SelectText").Click += data => Manager.UI.PopUp.ShowPopUp<LangguagePopUp>();
 
-        // ÅÇ ¹öÆ° Å¬¸¯ ÀÌº¥Æ® ¿¬°á (¸¶¿ì½º Å¬¸¯¿ë, Å°º¸µå´Â ZÅ°·Î Ã³¸®)
+        GetEvent("ESCButton").Click += data => Manager.UI.PopUp.ClosePopUp();
+        GetEvent("ESCText").Click += data => Manager.UI.PopUp.ClosePopUp();
+
+        // íƒ­ ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸ ì—°ê²° (ë§ˆìš°ìŠ¤ í´ë¦­ìš©, í‚¤ë³´ë“œëŠ” Zí‚¤ë¡œ ì²˜ë¦¬)
         SoundButton.onClick.AddListener(() => SwitchTab(0));
         LanguageButton.onClick.AddListener(() => SwitchTab(1));
 
-        // ÃÖÃÊ »ç¿îµå ÅÇ È°¼ºÈ­
+        // ìµœì´ˆ ì‚¬ìš´ë“œ íƒ­ í™œì„±í™”
         SwitchTab(0);
     }
 
@@ -54,11 +55,11 @@ public class SettingPopUp : BaseUI
         SoundPanel.SetActive(isSound);
         LanguagePanel.SetActive(!isSound);
 
-        // ÅÇ ¹öÆ° ÇÏÀÌ¶óÀÌÆ®(¼±ÅÃ) È¿°ú
+        // íƒ­ ë²„íŠ¼ í•˜ì´ë¼ì´íŠ¸(ì„ íƒ) íš¨ê³¼
         SoundButton.interactable = !isSound;
         LanguageButton.interactable = isSound;
 
-        // ÇöÀç ¼±ÅÃ °¡´ÉÇÑ UI ¹è¿­ ±³Ã¼
+        // í˜„ì¬ ì„ íƒ ê°€ëŠ¥í•œ UI ë°°ì—´ êµì²´
         currentSelectables = isSound ? SoundSelectables : LanguageSelectables;
         selectedIndex = 0;
         if (currentSelectables != null && currentSelectables.Length > 0 && currentSelectables[0] != null)
@@ -69,10 +70,10 @@ public class SettingPopUp : BaseUI
 
     private void Update()
     {
-        // ÇöÀç ¼±ÅÃ °¡´ÉÇÑ UI ¿ä¼Ò°¡ ¾øÀ¸¸é ¾Æ¹« ÀÛ¾÷µµ ÇÏÁö ¾ÊÀ½
+        // í˜„ì¬ ì„ íƒ ê°€ëŠ¥í•œ UI ìš”ì†Œê°€ ì—†ìœ¼ë©´ ì•„ë¬´ ì‘ì—…ë„ í•˜ì§€ ì•ŠìŒ
         if (currentSelectables == null || currentSelectables.Length == 0) return;
 
-        // À§/¾Æ·¡ ¹æÇâÅ°·Î ¼±ÅÃ ÀÌµ¿
+        // ìœ„/ì•„ë˜ ë°©í–¥í‚¤ë¡œ ì„ íƒ ì´ë™
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             selectedIndex = (selectedIndex - 1 + currentSelectables.Length) % currentSelectables.Length;
@@ -84,10 +85,10 @@ public class SettingPopUp : BaseUI
             SelectCurrent();
         }
 
-        // ÁÂ/¿ì ¹æÇâÅ°´Â ½½¶óÀÌ´õ¿¡¼­¸¸ °ª Á¶Àı ¿ëµµ·Î »ç¿ë (ÅÇ ÀüÈ¯ ±İÁö)
-        // ÅÇ ÀüÈ¯Àº ¿ÀÁ÷ ZÅ°·Î SoundButton/LanguageButtonÀ» ´­·¶À» ¶§¸¸!
+        // ì¢Œ/ìš° ë°©í–¥í‚¤ëŠ” ìŠ¬ë¼ì´ë”ì—ì„œë§Œ ê°’ ì¡°ì ˆ ìš©ë„ë¡œ ì‚¬ìš© (íƒ­ ì „í™˜ ê¸ˆì§€)
+        // íƒ­ ì „í™˜ì€ ì˜¤ì§ Zí‚¤ë¡œ SoundButton/LanguageButtonì„ ëˆŒë €ì„ ë•Œë§Œ!
 
-        // ZÅ°·Î ÇöÀç ¼±ÅÃµÈ ¹öÆ° Å¬¸¯(¹öÆ°¸¸)
+        // Zí‚¤ë¡œ í˜„ì¬ ì„ íƒëœ ë²„íŠ¼ í´ë¦­(ë²„íŠ¼ë§Œ)
         if (Input.GetKeyDown(KeyCode.Z))
         {
             var sel = currentSelectables[selectedIndex];
@@ -108,14 +109,15 @@ public class SettingPopUp : BaseUI
             }
         }
 
-        // xÅ°·Î ÆË¾÷ ´İ±â
-        if (Input.GetKeyDown(KeyCode.X))
+        // ESCí‚¤ë¡œ íŒì—… ë‹«ê¸°
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            OnCloseSetting();
+            TitleMenu.SetActive(true);
+            gameObject.SetActive(false);
 
         }
 
-        // »ç¿îµå °ª ½Ç½Ã°£ ¹İ¿µ
+        // ì‚¬ìš´ë“œ ê°’ ì‹¤ì‹œê°„ ë°˜ì˜
         if (MasterVolume != null && BgmVolume != null && SfxVolume != null && Manager.Sound != null)
         {
             Manager.Sound.MasterVolume = MasterVolume.value;
@@ -130,17 +132,16 @@ public class SettingPopUp : BaseUI
             EventSystem.current.SetSelectedGameObject(currentSelectables[selectedIndex].gameObject);
     }
 
-    // X¹öÆ°, ESC µî¿¡¼­ È£Ãâ
-    public void OnCloseSetting()
-    {
-        // Setting ¿ÀºêÁ§Æ® ºñÈ°¼ºÈ­
-        gameObject.SetActive(false);
+    private void OnDisable()
+    { 
+        if (TitleMenu != null)
+        {
+            Debug.Log("SettingPopUp OnDisable í˜¸ì¶œë¨");
+            TitleMenu.SetActive(true);
+        }
 
-        // ¸ŞÀÎ ¸Ş´º º¹±Í
-        if (mainMenuPopUp != null)
-            mainMenuPopUp.gameObject.SetActive(true);
-        else
-            Manager.UI.PopUp.ShowPopUp<MainMenuPopUp>();
     }
 
+
 }
+

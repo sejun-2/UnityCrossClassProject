@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MainMenuPopUp : BaseUI
 {
     int selectedIndex = 0;  // 현재 선택된 버튼의 인덱스
     Button[] menuButtons;   // 메뉴 버튼들을 저장할 배열
-    private bool inputEnabled = false;
+    private bool inputEnabled = true; // 기본값 true
+
+    [Header("외부 메뉴 오브젝트")]
+    [SerializeField] private GameObject Setting; // Inspector에서 Setting 오브젝트 연결
 
     private void Start()
     {
@@ -41,8 +45,8 @@ public class MainMenuPopUp : BaseUI
 
     private void OnEnable()
     {
+        Debug.Log("MainMenuPopUp OnEnable 호출!");
         inputEnabled = true;
-        // 팝업이 다시 활성화될 때 첫 번째 버튼을 선택
         if (menuButtons != null && menuButtons.Length > 0 && menuButtons[0] != null)
         {
             selectedIndex = 0;
@@ -96,18 +100,44 @@ public class MainMenuPopUp : BaseUI
 
     public void showSerttingPopUp() // Z키를 눌렀을 때 호출되는 메서드
     {
-        SettingPopUp SP = Manager.UI.PopUp.ShowPopUp<SettingPopUp>(); // SettingPopUp을 표시합니다.
-        SP.TitleMenu = gameObject;
-        gameObject.SetActive(false); // TitlePopUp 비활성화
+        Manager.UI.PopUp.ShowPopUp<SettingPopUp>(); // SettingPopUp을 표시합니다.
+
+        // Setting 오브젝트 활성화
+        if (Setting != null)
+            Setting.SetActive(true);
+
+        gameObject.SetActive(false); // MainMenuPopUp 비활성화
     }
 
+    // 게임 종료 팝업을 표시하는 메서드
     public void showEndPopUp()
     {
-        Manager.UI.PopUp.ShowPopUp<EndPopUp>(); // EndPopUp을 표시합니다.
+        Manager.UI.PopUp.ShowPopUp<EndPopUp>();
     }
 
+    // 타이틀 씬으로 이동하는 메서드
     public void ChageTitleScene()
     {
-        SceneChanger.ChageScene(sceneName: "TitleScene");   // TitleScene으로 변경합니다.
+        SceneChanger.ChageScene(sceneName: "TitleScene");
     }
+
+    // SettingPopUp에서 호출
+    public void ReturnToMenu()
+    {
+        Debug.Log("ReturnToMenu 실행");
+        // Setting 오브젝트 비활성화
+        if (Setting != null)
+            Setting.SetActive(false);
+
+        // MainMenuPopUp 다시 활성화
+        gameObject.SetActive(true);
+
+        // 첫 번째 버튼에 포커스
+        if (menuButtons != null && menuButtons.Length > 0 && menuButtons[0] != null)
+        {
+            selectedIndex = 0;
+            menuButtons[0].Select();
+        }
+    }
+
 }

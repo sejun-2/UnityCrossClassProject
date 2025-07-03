@@ -71,11 +71,10 @@ public class GameUI : MonoBehaviour
 
     public void UpdateBuffIcon(PlayerBuffs buff)
     {
-        // �� ���� ���� ��Ȳ���� Image ��ü�� Destroy �Ǵ� ��Ȳ�� �߻�
-        // �׶� Image ������ Null���� ���°� ������ null üũ
+        // BuffsImage가 null인 경우, 즉 UI가 비활성화되었거나 할당되지 않은 경우
         if (BuffsImage == null) return;
 
-        // Nomal(0)�� ���� �̹��� ����
+        // PlayerBuffs가 Nomal인 경우, 즉 버프가 없는 상태라면
         if (buff == PlayerBuffs.Nomal)
         {
             //if (BuffsImage != null)
