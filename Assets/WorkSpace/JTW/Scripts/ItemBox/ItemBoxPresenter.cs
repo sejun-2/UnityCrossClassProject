@@ -32,6 +32,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private bool _isActivate = true;
     private bool _isSwitchActivate = false;
 
+    private GameObject _dangerPopUp;
+
     private void OnDisable()
     {
         _itemBox.OnDataChanged -= ResetItemSlots;
@@ -39,6 +41,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     private void Update()
     {
+        if (_dangerPopUp != null) return;
+
         if (Input.GetKeyDown(KeyCode.X))
         {
             if (IsTrade)
@@ -54,9 +58,19 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
         if (IsTrade && Input.GetKeyDown(KeyCode.C))
         {
-            Manager.Player.BuffStats.ApplyBuff();
-            Manager.Game.IsInBaseCamp = false;
-            Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
+            if(Manager.Game.BarricadeHp <= 60
+                || Manager.Player.Stats.Hunger.Value <= 80
+                || Manager.Player.Stats.Thirst.Value <= 60
+                || Manager.Player.Stats.Mentality.Value <= 30)
+            {
+                _dangerPopUp = Manager.UI.Inven.ShowDangerPopUp();
+            }
+            else
+            {
+                Manager.Player.BuffStats.ApplyBuff();
+                Manager.Game.IsInBaseCamp = false;
+                Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
+            }
         }
 
         if (!_isActivate) return;

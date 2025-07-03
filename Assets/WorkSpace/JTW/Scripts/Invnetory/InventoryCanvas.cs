@@ -182,4 +182,11 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
         pre.InitStory(storyInteractionId);
     }
+
+    public GameObject ShowDangerPopUp()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/DangerPopUp");
+
+        return Instantiate(prefab, transform);
+    }
 }
