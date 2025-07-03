@@ -69,7 +69,7 @@ public class GameManager : Singleton<GameManager>
 
         Stats.Buff.Value = PlayerBuffs.Nomal;
         Stats.ChangeHunger(-40);
-        Stats.ChangeThirst(-20);
+        Stats.ChangeThirst(-30);
         Stats.ChangeMentality(-15);
 
         BarricadeHp -= 20;
