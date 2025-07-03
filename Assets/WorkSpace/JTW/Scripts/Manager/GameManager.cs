@@ -68,8 +68,9 @@ public class GameManager : Singleton<GameManager>
         IsInBaseCamp = true;
 
         Stats.Buff.Value = PlayerBuffs.Nomal;
-        Stats.ChangeHunger(-30);
-        Stats.ChangeThirst(-30);
+        Stats.ChangeHunger(-40);
+        Stats.ChangeThirst(-20);
+        Stats.ChangeMentality(-15);
 
         BarricadeHp -= 20;
 

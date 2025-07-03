@@ -47,7 +47,7 @@ public class SoundManager : Singleton<SoundManager>
         });
     }
 
-    public void SfxPlay(AudioClip clip, Transform parent, float volume)
+    public void SfxPlay(AudioClip clip, Transform parent, float volume = 1)
     {
         SfxController sfx = SfxPool.Get();
         sfx.transform.parent = parent;
