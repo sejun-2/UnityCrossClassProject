@@ -55,11 +55,6 @@ public class GameManager : Singleton<GameManager>
     {
         Manager.Player.Stats.CurrentNearby = null;
 
-        if(sceneName == "BaseCamp")
-        {
-            DayComplete();
-        }
-
         SceneManager.LoadScene(sceneName);
     }
 
