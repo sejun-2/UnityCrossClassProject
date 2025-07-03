@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SilhouetteDisable : MonoBehaviour
@@ -13,9 +11,23 @@ public class SilhouetteDisable : MonoBehaviour
 
         Gizmos.DrawWireCube(Vector3.zero, transform.localScale);
     }
+
+    private void Start()
+    {
+        Collider[] colliders = Physics.OverlapBox(transform.position, transform.localScale / 2, transform.rotation, ~0, QueryTriggerInteraction.Collide);
+        foreach (Collider col in colliders)
+        {
+            OutLineVisible react = col.GetComponent<OutLineVisible>();
+            if (react != null)
+            {
+                react.SetSilhouetteVisible();
+            }
+        }
+    }
+
     private void OnDisable()
     {
-        Collider[] colliders = Physics.OverlapBox(transform.position, transform.localScale / 2, transform.rotation);
+        Collider[] colliders = Physics.OverlapBox(transform.position, transform.localScale / 2, transform.rotation, ~0, QueryTriggerInteraction.Collide);
 
         foreach (Collider col in colliders)
         {
@@ -25,7 +37,7 @@ public class SilhouetteDisable : MonoBehaviour
                 OutLineVisible react = col.GetComponent<OutLineVisible>();
                 if (react != null)
                 {
-                    react.SetSilhouetteVisible();
+                    react.SetSilhouetteInvisible();
                 }
             }
         }

@@ -2,12 +2,13 @@ using Newtonsoft.Json;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class PlayerStats
 {
     public bool isFarming = false;//파밍중인지 나타내는 불값
     public bool isHiding = false;//숨었는지
-    public bool isFalling = false;//떨어지는 중인지
+    public bool isClimbing = false;//떨어지는 중인지
     [JsonIgnore] public IInteractable CurrentNearby;//가까운 상호작용 대상
 }
 
@@ -34,6 +35,7 @@ public class PlayerInteraction : MonoBehaviour
 
     public Animator animator;
 
+    private readonly int hashIdle = Animator.StringToHash("Idle");
     private readonly int hashClimb = Animator.StringToHash("Climb");
     private readonly int hashFarm = Animator.StringToHash("Farm");
     private readonly int hashHide = Animator.StringToHash("Hide");
@@ -62,6 +64,8 @@ public class PlayerInteraction : MonoBehaviour
 
     //무기프리팹
     [SerializeField] GameObject playerWeaponPrefab;
+
+    [SerializeField] Slider slider;
     private void Awake()
     {
         Manager.Player.Transform = transform;
@@ -81,7 +85,7 @@ public class PlayerInteraction : MonoBehaviour
         _playerAttack = GetComponent<PlayerAttack>();
 
         origin = transform.position + Vector3.up * 0.1f;
-
+        slider.gameObject.SetActive(false);
         playerWeaponPrefab.SetActive(false);
     }
     private void OnDrawGizmos()
@@ -109,7 +113,7 @@ public class PlayerInteraction : MonoBehaviour
     void Update()
     {
         //테스트용
-        stateText.text = $"{_currentState} {isGrounded} {Manager.Player.Stats.Weapon.Value}";
+        stateText.text = $"farming{Manager.Player.Stats.isFarming} climbing{Manager.Player.Stats.isClimbing} isGrounded{isGrounded}";
 
         origin = transform.position + Vector3.up;
         //땅을 밟고 있니
@@ -131,6 +135,7 @@ public class PlayerInteraction : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             _isInventoryOpen = false;
+            Manager.Player.Stats.isFarming = false;
         }
         if (_isInventoryOpen)
         {
@@ -152,24 +157,20 @@ public class PlayerInteraction : MonoBehaviour
             }
             return;
         }
-
         //등반 상태라면 등반함
         if (isAutoClimbing)
         {
             AutoClimb();
             return;
         }
-
-        //인벤토리 여는
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            if (!_isInventoryOpen)
-            {
-                _inventoryCanvas.ShowInven();
-                _isInventoryOpen = true;
-            }
-        }
+        //파밍중, 낙하중에는 다른 키 입력 불가 단 등반시는 예외
        
+            if (Manager.Player.Stats.isClimbing ||Manager.Player.Stats.isFarming || !isGrounded)
+            {
+                return;
+            }
+        
+  
         //위아래 키를 누르면 사다리 이동 시도 은신 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -208,12 +209,6 @@ public class PlayerInteraction : MonoBehaviour
 
         }
 
-
-        //파밍중, 낙하중에는 다른 키 입력 불가
-        if (Manager.Player.Stats.isFarming || !isGrounded)
-        {
-            return;
-        }
         //z키를 누르면 상호작용 시도
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
@@ -231,7 +226,17 @@ public class PlayerInteraction : MonoBehaviour
                 StartCoroutine(RotateAndInteract());
                 animator.Play(hashFarm);
             }
-                
+
+        }
+
+        //인벤토리 여는
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (!_isInventoryOpen)
+            {
+                _inventoryCanvas.ShowInven();
+                _isInventoryOpen = true;
+            }
         }
 
         //space키를 누르면 공격 시도
@@ -271,6 +276,7 @@ public class PlayerInteraction : MonoBehaviour
 
     public void StartClimb(Vector3 from, Vector3 to)
     {
+        Manager.Player.Stats.isClimbing = true;
         transform.position = from;
         climbTargetPos = to;
         isAutoClimbing = true;
@@ -292,14 +298,12 @@ public class PlayerInteraction : MonoBehaviour
 
             Debug.Log("사다리 자동 이동 완료");
 
-            StartCoroutine(ReenableColliderAfterDelay());
+            playerCollider.enabled = true;
+            if (isGrounded)
+            {
+                Manager.Player.Stats.isClimbing = false;
+            }
         }
-    }
-
-    IEnumerator ReenableColliderAfterDelay()
-    {
-        yield return new WaitForSeconds(0.1f); // 짧은 지연 후
-        playerCollider.enabled = true;
     }
     public void StateChange(State state)
     {
@@ -347,19 +351,36 @@ public class PlayerInteraction : MonoBehaviour
 
     public void RestoreRotation()
     {
-        transform.rotation = Quaternion.identity;
+        transform.rotation = Quaternion.identity;        
     }
 
     private IEnumerator RotateAndInteract()
     {
         RotateToInteract();
 
-        yield return wait1Sec;
+        // 슬라이더 UI 활성화 및 초기화
+        slider.gameObject.SetActive(true);
+        slider.value = 0f;
+
+        float timer = 0f;
+        float duration = 1f;
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            slider.value = Mathf.Clamp01(timer / duration);
+            yield return null;
+        }
 
         Manager.Player.Stats.CurrentNearby.Interact();
 
+        // 파밍 종료
+        slider.gameObject.SetActive(false);
+        animator.SetBool("IsRunning", false);
+
         RestoreRotation();
     }
+
 
     private IEnumerator RotateAndRestore()
     {
@@ -378,6 +399,5 @@ public class PlayerInteraction : MonoBehaviour
         Manager.Player.Stats.CurrentNearby.Interact();
 
         Manager.Player.Stats.isFarming = false;
-
     }
 }
