@@ -57,6 +57,7 @@ public class SubStoryPresenter : BaseUI
         }
         else
         {
+            _itemIconImage.gameObject.SetActive(false);
             GetUI<TextMeshProUGUI>("ItemNameText").text = "";
             GetUI<TextMeshProUGUI>("ItemDescriptionText").text = "";
         }
@@ -102,12 +103,14 @@ public class SubStoryPresenter : BaseUI
 
         if (data != null)
         {
+            _itemIconImage.gameObject.SetActive(true);
             _itemIconImage.sprite = data.Icon;
             GetUI<TextMeshProUGUI>("ItemNameText").text = data.Name;
             GetUI<TextMeshProUGUI>("ItemDescriptionText").text = data.Description;
         }
         else
         {
+            _itemIconImage.gameObject.SetActive(false);
             GetUI<TextMeshProUGUI>("ItemNameText").text = "";
             GetUI<TextMeshProUGUI>("ItemDescriptionText").text = "";
         }

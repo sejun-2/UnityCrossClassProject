@@ -41,6 +41,7 @@ public class GameManager : Singleton<GameManager>
 
         if (data == null)
         {
+            InitGameData();
             Manager.Player.Stats.InitStats();
             ChangeScene("Tutorial");
         }
@@ -54,11 +55,6 @@ public class GameManager : Singleton<GameManager>
     {
         Manager.Player.Stats.CurrentNearby = null;
 
-        if(sceneName == "BaseCamp")
-        {
-            DayComplete();
-        }
-
         SceneManager.LoadScene(sceneName);
     }
 
@@ -71,8 +67,10 @@ public class GameManager : Singleton<GameManager>
 
         IsInBaseCamp = true;
 
-        Stats.ChangeHunger(-30);
+        Stats.Buff.Value = PlayerBuffs.Nomal;
+        Stats.ChangeHunger(-40);
         Stats.ChangeThirst(-30);
+        Stats.ChangeMentality(-15);
 
         BarricadeHp -= 20;
 
@@ -116,8 +114,41 @@ public class GameManager : Singleton<GameManager>
         _saveContoroller.SaveGameData();
     }
 
+    private void InitGameData()
+    {
+        Manager.Player.Stats = new PlayerStats();
+
+        Inven = new Inventory();
+        ItemBox = new ItemBoxData();
+
+        IsRepairObject = new Dictionary<string, bool>();
+        IsUsedObject = new Dictionary<string, bool>();
+        foreach (string str in Manager.Data.RefairData.Values.Keys.ToArray())
+        {
+            IsRepairObject[str] = false;
+            IsUsedObject[str] = false;
+        }
+
+        IsGetSubStory = new Dictionary<string, bool>();
+        foreach (string str in Manager.Data.StoryDescriptionData.Values.Keys.ToArray())
+        {
+            IsGetSubStory[str] = false;
+        }
+
+        IsTalkDialogue = new Dictionary<string, bool>();
+        foreach (string str in Manager.Data.PlayerDialogueData.Values.Keys.ToArray())
+        {
+            IsTalkDialogue[str] = false;
+        }
+
+        IsInBaseCamp = false;
+        SelectedMapName = "Tutorial";
+    }
+
     public void LoadSaveData(GameData data)
     {
+        InitGameData();
+
         Manager.Player.Stats = data.stats;
         Manager.Player.Stats.Weapon = new Stat<Item>();
         Manager.Player.Stats.Armor = new Stat<Item>();

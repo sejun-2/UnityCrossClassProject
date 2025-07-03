@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,15 +10,31 @@ public partial class PlayerStats
 
 public class PlayerAttack : MonoBehaviour
 {
+    private Animator _animator;
+
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
     public void Attack()
     {
         Item weapon = Manager.Player.Stats.Weapon.Value;
 
         if (weapon == null || Manager.Player.Stats.IsAttack.Value) return;
 
+        _animator.Play("BatAttack");
+
         Manager.Player.Stats.IsAttack.Value = true;
+        Manager.Player.Stats.isFarming = true;
         StartCoroutine(AttackCoroutine(weapon.attackSpeed));
-        // 해당 어택 애니메이션 제작
+    }
+
+    private void TryAttack()
+    {
+        Debug.Log("공ㅇㅇㅇㅇ겨ㅕㅕㅕㅕ시ㅣㅣㅣ도ㅗ이ㅓㅣ");
+
+        Item weapon = Manager.Player.Stats.Weapon.Value;
 
         Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
 
@@ -46,5 +63,6 @@ public class PlayerAttack : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         Manager.Player.Stats.IsAttack.Value = false;
+        Manager.Player.Stats.isFarming = false;
     }
 }

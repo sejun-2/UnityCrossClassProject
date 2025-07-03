@@ -25,7 +25,7 @@ public class InventoryPresenter : BaseUI, IInventory
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if (!IsTrade)
+            if (!IsTrade || (_tradeInvenDirection == Vector2.up || _tradeInvenDirection == Vector2.down))
             {
                 Manager.Player.Stats.isFarming = false;
             }
@@ -60,6 +60,8 @@ public class InventoryPresenter : BaseUI, IInventory
 
     public void SetInventory(Inventory inven, IInventory tradeInven = null, Vector2 tradeInvenDirection = default)
     {
+
+
         _inven = inven;
         if(tradeInven != null)
         {

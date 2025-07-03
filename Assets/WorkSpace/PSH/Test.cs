@@ -7,7 +7,7 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            zombie.TakeDamage(1000f);
+            zombie.GetComponent<ZombieDamageHandler>().TakeDamage(1000f);
             Debug.Log("");
         }
         if (Input.GetKeyDown(KeyCode.T))

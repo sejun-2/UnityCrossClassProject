@@ -35,8 +35,10 @@ public class GameUI : MonoBehaviour
         Manager.Player.Stats.Thirst.OnChanged += (newWater) => ThirstSlider.value = newWater;
         Manager.Player.Stats.Mentality.OnChanged += (newMentality) => MentalitySlider.value = newMentality;
 
-        // 초기 버프 상태를 Nomal로 설정
-        Manager.Player.Stats.Buff.Value = PlayerBuffs.Nomal;
+        // ó�� UI�� ������ ��, �ѹ��� ������ ���� �°� value ���� ����
+        HungerSlider.value = Manager.Player.Stats.Hunger.Value;
+        ThirstSlider.value = Manager.Player.Stats.Thirst.Value;
+        MentalitySlider.value = Manager.Player.Stats.Mentality.Value;
 
         // Player의 Buff 값이 바뀔 때마다 UI 갱신
         Manager.Player.Stats.Buff.OnChanged += UpdateBuffIcon;
@@ -69,7 +71,11 @@ public class GameUI : MonoBehaviour
 
     public void UpdateBuffIcon(PlayerBuffs buff)
     {
-        // Nomal(0)일 때는 이미지 숨김
+        // �� ���� ���� ��Ȳ���� Image ��ü�� Destroy �Ǵ� ��Ȳ�� �߻�
+        // �׶� Image ������ Null���� ���°� ������ null üũ
+        if (BuffsImage == null) return;
+
+        // Nomal(0)�� ���� �̹��� ����
         if (buff == PlayerBuffs.Nomal)
         {
             //if (BuffsImage != null)

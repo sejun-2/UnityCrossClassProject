@@ -47,6 +47,11 @@ public class FarmingObject : MonoBehaviour, IInteractable
 
         float randomValue = Random.value;
 
+        if(probability < 1)
+        {
+            probability += Manager.Player.BuffStats.ItemBuff;
+        }
+
         return probability >= randomValue;
     }
 
