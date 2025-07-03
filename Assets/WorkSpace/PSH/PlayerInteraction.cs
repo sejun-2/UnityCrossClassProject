@@ -206,6 +206,7 @@ public class PlayerInteraction : MonoBehaviour
             GameObject target = (Manager.Player.Stats.CurrentNearby as MonoBehaviour).gameObject;
 
             Debug.Log("상호작용 시도");
+            Manager.Player.Stats.isFarming = true;
             if (target.CompareTag("Door"))
             {
                 StartCoroutine(NotRotateAndInteract());
@@ -361,6 +362,8 @@ public class PlayerInteraction : MonoBehaviour
         yield return wait1Sec;
 
         Manager.Player.Stats.CurrentNearby.Interact();
+
+        Manager.Player.Stats.isFarming = false;
 
     }
 }
