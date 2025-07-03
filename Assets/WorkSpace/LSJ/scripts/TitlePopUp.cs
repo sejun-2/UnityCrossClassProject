@@ -21,12 +21,12 @@ public class TitlePopUp : BaseUI
             GetEvent("GameOver")?.GetComponent<Button>()
         };
 
-        // null 체크
-        for (int i = 0; i < menuButtons.Length; i++)
-        {
-            if (menuButtons[i] == null)
-                Debug.LogError($"menuButtons[{i}]가 null입니다! 오브젝트 이름, Button 컴포넌트 확인 필요.");
-        }
+        // Debug -> null 체크
+        //for (int i = 0; i < menuButtons.Length; i++)
+        //{
+        //    if (menuButtons[i] == null)
+        //        Debug.LogError($"menuButtons[{i}]가 null입니다! 오브젝트 이름, Button 컴포넌트 확인 필요.");
+        //}
 
         // 이벤트 연결, 버튼이 클릭되었을 때 호출되는 메서드
         GetEvent("Continue").Click += data => Manager.UI.PopUp.ClosePopUp();
@@ -102,16 +102,19 @@ public class TitlePopUp : BaseUI
 
     public void showSerttingPopUp() // Z키를 눌렀을 때 호출되는 메서드
     {
+        SettingPopUp SP = Manager.UI.PopUp.ShowPopUp<SettingPopUp>(); // SettingPopUp을 표시합니다.
+        SP.TitleMenu = gameObject;
         gameObject.SetActive(false); // TitlePopUp 비활성화
-        Manager.UI.PopUp.ShowPopUp<SettingPopUp>(); // SettingPopUp을 표시합니다.
     }
 
     public void showEndPopUp()
     {
         Manager.UI.PopUp.ShowPopUp<EndPopUp>(); // EndPopUp을 표시합니다.
     }
+
     public void ChageTitleScene()
     {
         SceneChanger.ChageScene(sceneName: "TitleScene");   // TitleScene으로 변경합니다.
     }
+
 }

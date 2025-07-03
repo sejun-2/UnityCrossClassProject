@@ -1,31 +1,31 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
 {
-    [SerializeField] private Slider HpSlider; // Inspector¿¡¼­ HP ½½¶óÀÌ´õ ¿¬°á
+    [SerializeField] private Slider HpSlider; // Inspectorì—ì„œ HP ìŠ¬ë¼ì´ë” ì—°ê²°
     [SerializeField] private Slider HungerSlider; 
     [SerializeField] private Slider ThirstSlider; 
     [SerializeField] private Slider MentalitySlider;
 
-    [SerializeField] public Image BuffsImage; // ¹öÇÁ ÀÌ¹ÌÁö ¿¬°á
-    public Sprite[] BuffIcons; // PlayerBuffs ¼ø¼­´ë·Î Sprite ÇÒ´ç
+    [SerializeField] public Image BuffsImage; // ë²„í”„ ì´ë¯¸ì§€ ì—°ê²°
+    public Sprite[] BuffIcons; // PlayerBuffs ìˆœì„œëŒ€ë¡œ Sprite í• ë‹¹
 
     private void Start()
     {
-        //ÃÊ±âÈ­ ½Ã hpSlider¿Í playerStats°¡ ÇÒ´çµÇ¾ú´ÂÁö È®ÀÎ
+        //ì´ˆê¸°í™” ì‹œ hpSliderì™€ playerStatsê°€ í• ë‹¹ë˜ì—ˆëŠ”ì§€ í™•ì¸
         if (HpSlider == null)
-            Debug.LogError("hpSlider°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+            Debug.LogError("hpSliderê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
         if (Manager.Player.Stats == null)
         {
-            Debug.LogError("playerStats°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+            Debug.LogError("playerStatsê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
         }
-        //Manager.Player.Stats.MaxHp.Value = 100; // ±âº»°ª ¼³Á¤
-        //Manager.Player.Stats.CurHp.Value = 60; // ±âº»°ª ¼³Á¤ 
+        //Manager.Player.Stats.MaxHp.Value = 100; // ê¸°ë³¸ê°’ ì„¤ì •
+        //Manager.Player.Stats.CurHp.Value = 60; // ê¸°ë³¸ê°’ ì„¤ì • 
 
-        // Ã¼·Â º¯È­ ÀÌº¥Æ® ±¸µ¶
+        // ì²´ë ¥ ë³€í™” ì´ë²¤íŠ¸ êµ¬ë…
         Manager.Player.Stats.CurHp.OnChanged += OnCurHpChanged;
         Manager.Player.Stats.MaxHp.OnChanged += OnMaxHpChanged;
 
@@ -35,19 +35,16 @@ public class GameUI : MonoBehaviour
         Manager.Player.Stats.Thirst.OnChanged += (newWater) => ThirstSlider.value = newWater;
         Manager.Player.Stats.Mentality.OnChanged += (newMentality) => MentalitySlider.value = newMentality;
 
-        // ÃÊ±â ¹öÇÁ »óÅÂ¸¦ Nomal·Î ¼³Á¤
+        // ì´ˆê¸° ë²„í”„ ìƒíƒœë¥¼ Nomalë¡œ ì„¤ì •
         Manager.Player.Stats.Buff.Value = PlayerBuffs.Nomal;
 
-        // PlayerÀÇ Buff °ªÀÌ ¹Ù²ð ¶§¸¶´Ù UI °»½Å
+        // Playerì˜ Buff ê°’ì´ ë°”ë€” ë•Œë§ˆë‹¤ UI ê°±ì‹ 
         Manager.Player.Stats.Buff.OnChanged += UpdateBuffIcon;
-        UpdateBuffIcon(Manager.Player.Stats.Buff.Value); // ÃÖÃÊ »óÅÂµµ ¹Ý¿µ
+        UpdateBuffIcon(Manager.Player.Stats.Buff.Value); // ìµœì´ˆ ìƒíƒœë„ ë°˜ì˜
     }
 
     private void Update()
     {
-
-
-        // ¹öÇÁ ÀÌ¹ÌÁö ¾÷µ¥ÀÌÆ®
 
     }
 
@@ -72,24 +69,27 @@ public class GameUI : MonoBehaviour
 
     public void UpdateBuffIcon(PlayerBuffs buff)
     {
-        // Nomal(0)ÀÏ ¶§´Â ÀÌ¹ÌÁö ¼û±è
+        // Nomal(0)ì¼ ë•ŒëŠ” ì´ë¯¸ì§€ ìˆ¨ê¹€
         if (buff == PlayerBuffs.Nomal)
         {
             //if (BuffsImage != null)
-                BuffsImage.enabled = false;
+                BuffsImage.enabled = false; // ì´ë¯¸ì§€ ìˆ¨ê¹€
             return;
         }
 
-        // PlayerBuffs¸¦ int·Î º¯È¯ÇÏ¿© ÀÎµ¦½º·Î »ç¿ë
+        // PlayerBuffsë¥¼ intë¡œ ë³€í™˜í•˜ì—¬ ì¸ë±ìŠ¤ë¡œ ì‚¬ìš© -> PlayerBuffs ì—´ê±°í˜•ì˜ ê°’ì€ 0ë¶€í„° ì‹œìž‘í•˜ë¯€ë¡œ ì§ì ‘ ì¸ë±ìŠ¤ë¡œ ì‚¬ìš© ê°€ëŠ¥
         int idx = (int)buff;
+        // BuffIcons ë°°ì—´ì´ nullì´ ì•„ë‹ˆê³ , ì¸ë±ìŠ¤ê°€ ìœ íš¨í•œì§€ í™•ì¸
         if (BuffsImage != null && BuffIcons != null && idx >= 0 && idx < BuffIcons.Length)
         {
+            // ì•„ì´ì½˜ì´ ì¡´ìž¬í•˜ëŠ” ê²½ìš°ì—ë§Œ ì´ë¯¸ì§€ ì—…ë°ì´íŠ¸
             BuffsImage.sprite = BuffIcons[idx];
+            // ì•„ì´ì½˜ì´ ì¡´ìž¬í•˜ë©´ ì´ë¯¸ì§€ í‘œì‹œ
             BuffsImage.enabled = true;
         }
         else
         {
-            BuffsImage.enabled = false; // È¤½Ã ¾ÆÀÌÄÜÀÌ ¾øÀ¸¸é ÀÌ¹ÌÁö ¼û±è
+            BuffsImage.enabled = false; // í˜¹ì‹œ ì•„ì´ì½˜ì´ ì—†ìœ¼ë©´ ì´ë¯¸ì§€ ìˆ¨ê¹€
         }
     }
 

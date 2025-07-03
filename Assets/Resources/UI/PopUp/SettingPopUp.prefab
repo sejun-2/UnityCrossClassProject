@@ -2949,7 +2949,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.476
+  m_Value: 0.79
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3310,7 +3310,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.9
+  m_Value: 0.77
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3481,7 +3481,7 @@ GameObject:
   - component: {fileID: 3301587312866285738}
   - component: {fileID: 9154924861799525832}
   m_Layer: 5
-  m_Name: Button (Legacy) (1)
+  m_Name: RightButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3528,7 +3528,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.4627451, g: 0.45882353, b: 0.45882353, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3569,7 +3569,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0, g: 0, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -3681,7 +3681,7 @@ GameObject:
   - component: {fileID: 4905995412688161538}
   - component: {fileID: 71372842443633803}
   m_Layer: 5
-  m_Name: Button (Legacy)
+  m_Name: LeftButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3728,7 +3728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.4627451, g: 0.45882353, b: 0.45882353, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3769,7 +3769,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0, g: 0, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -3999,6 +3999,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a86feef3a13b5ef419a264a9caf25ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SoundButton: {fileID: 1751086663020050755}
+  LanguageButton: {fileID: 8387669151753273376}
+  SoundPanel: {fileID: 3666892884986731606}
+  LanguagePanel: {fileID: 1888990425269674670}
   MasterVolume: {fileID: 532380585041492461}
   BgmVolume: {fileID: 8726273673560994623}
   SfxVolume: {fileID: 1862150863212334370}
+  SoundSelectables:
+  - {fileID: 1751086663020050755}
+  - {fileID: 8387669151753273376}
+  - {fileID: 532380585041492461}
+  - {fileID: 8726273673560994623}
+  - {fileID: 1862150863212334370}
+  LanguageSelectables:
+  - {fileID: 1751086663020050755}
+  - {fileID: 8387669151753273376}
+  - {fileID: 71372842443633803}
+  - {fileID: 9154924861799525832}
+  TitleMenu: {fileID: 0}
