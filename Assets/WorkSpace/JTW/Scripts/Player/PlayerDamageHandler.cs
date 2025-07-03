@@ -26,6 +26,11 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
         StartCoroutine(TakeDamageCoroutine());
         _animator.Play("BatTakeDamage");
 
+        if(Random.value < 0.1)
+        {
+            Manager.Player.Stats.Buff.Value = PlayerBuffs.Fear;
+        }
+
         if (Stats.Armor.Value != null)
         {
             amount = Mathf.Max(0, amount - Stats.Armor.Value.defValue);
