@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class PlayerStats
 {
@@ -62,6 +63,8 @@ public class PlayerInteraction : MonoBehaviour
 
     //무기프리팹
     [SerializeField] GameObject playerWeaponPrefab;
+
+    [SerializeField] Slider slider;
     private void Awake()
     {
         Manager.Player.Transform = transform;
@@ -81,7 +84,7 @@ public class PlayerInteraction : MonoBehaviour
         _playerAttack = GetComponent<PlayerAttack>();
 
         origin = transform.position + Vector3.up * 0.1f;
-
+        slider.gameObject.SetActive(false);
         playerWeaponPrefab.SetActive(false);
     }
     private void OnDrawGizmos()
@@ -354,12 +357,29 @@ public class PlayerInteraction : MonoBehaviour
     {
         RotateToInteract();
 
-        yield return wait1Sec;
+        // 슬라이더 UI 활성화 및 초기화
+        slider.gameObject.SetActive(true);
+        slider.value = 0f;
+
+        float timer = 0f;
+        float duration = 1f;
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            slider.value = Mathf.Clamp01(timer / duration);
+            yield return null;
+        }
 
         Manager.Player.Stats.CurrentNearby.Interact();
 
+        // 파밍 종료
+        slider.gameObject.SetActive(false);
+        Manager.Player.Stats.isFarming = false;
+
         RestoreRotation();
     }
+
 
     private IEnumerator RotateAndRestore()
     {
