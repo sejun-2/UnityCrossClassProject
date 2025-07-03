@@ -8,7 +8,7 @@ public partial class PlayerStats
 {
     public bool isFarming = false;//파밍중인지 나타내는 불값
     public bool isHiding = false;//숨었는지
-    public bool isFalling = false;//떨어지는 중인지
+    public bool isClimbing = false;//떨어지는 중인지
     [JsonIgnore] public IInteractable CurrentNearby;//가까운 상호작용 대상
 }
 
@@ -157,18 +157,19 @@ public class PlayerInteraction : MonoBehaviour
             }
             return;
         }
-
-        //파밍중, 낙하중에는 다른 키 입력 불가
-        if (Manager.Player.Stats.isFarming || !isGrounded)
-        {
-            return;
-        }
-
         //등반 상태라면 등반함
         if (isAutoClimbing)
         {
             AutoClimb();
             return;
+        }
+        //파밍중, 낙하중에는 다른 키 입력 불가 단 등반시는 예외
+        if (!Manager.Player.Stats.isClimbing)
+        {
+            if (Manager.Player.Stats.isFarming || !isGrounded)
+            {
+                return;
+            }
         }
   
         //위아래 키를 누르면 사다리 이동 시도 은신 시도
@@ -212,8 +213,6 @@ public class PlayerInteraction : MonoBehaviour
         //z키를 누르면 상호작용 시도
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
-            
-
             GameObject target = (Manager.Player.Stats.CurrentNearby as MonoBehaviour).gameObject;
 
             Debug.Log("상호작용 시도");
@@ -278,6 +277,7 @@ public class PlayerInteraction : MonoBehaviour
 
     public void StartClimb(Vector3 from, Vector3 to)
     {
+        Manager.Player.Stats.isClimbing = true;
         transform.position = from;
         climbTargetPos = to;
         isAutoClimbing = true;
@@ -355,6 +355,7 @@ public class PlayerInteraction : MonoBehaviour
     public void RestoreRotation()
     {
         transform.rotation = Quaternion.identity;
+        Manager.Player.Stats.isClimbing = false;
     }
 
     private IEnumerator RotateAndInteract()
