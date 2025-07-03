@@ -60,6 +60,8 @@ public class PlayerInteraction : MonoBehaviour
     //상호작용 대기 시간
     private WaitForSeconds wait1Sec;
 
+    //무기프리팹
+    [SerializeField] GameObject playerWeaponPrefab;
     private void Awake()
     {
         Manager.Player.Transform = transform;
@@ -80,6 +82,7 @@ public class PlayerInteraction : MonoBehaviour
 
         origin = transform.position + Vector3.up * 0.1f;
 
+        playerWeaponPrefab.SetActive(false);
     }
     private void OnDrawGizmos()
     {
@@ -106,7 +109,7 @@ public class PlayerInteraction : MonoBehaviour
     void Update()
     {
         //테스트용
-        stateText.text = $"{_currentState} {isGrounded}";
+        stateText.text = $"{_currentState} {isGrounded} {Manager.Player.Stats.Weapon.Value}";
 
         origin = transform.position + Vector3.up;
         //땅을 밟고 있니
@@ -114,6 +117,17 @@ public class PlayerInteraction : MonoBehaviour
         //Debug.Log($"{hit.collider.gameObject.name}");
         //isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.5f, groundLayer);
 
+        //무기를 장착중이니
+        if (Manager.Player.Stats.Weapon.Value != null)
+        {
+            playerWeaponPrefab.SetActive(true);
+        }
+        else
+        {
+            playerWeaponPrefab.SetActive(false);
+        }
+
+        //인벤토리 닫으면 변수 바꿔줘야해서
         if (Input.GetKeyDown(KeyCode.X))
         {
             _isInventoryOpen = false;
