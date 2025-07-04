@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public partial class PlayerStats
 {
-    public bool isFarming = false;//ÆÄ¹ÖÁßÀÎÁö ³ªÅ¸³»´Â ºÒ°ª
-    private bool isHiding = false;//¼û¾ú´ÂÁö
+    public bool isFarming = false;//íŒŒë°ì¤‘ì¸ì§€ ë‚˜íƒ€ë‚´ëŠ” ë¶ˆê°’
+    private bool isHiding = false;//ìˆ¨ì—ˆëŠ”ì§€
     public bool IsHiding
     {
         get => isHiding;
@@ -28,8 +28,8 @@ public partial class PlayerStats
     public event Action OnHideStarted;
     public event Action OnHideEnded;
 
-    public bool isClimbing = false;//¶³¾îÁö´Â ÁßÀÎÁö
-    [JsonIgnore] public IInteractable CurrentNearby;//°¡±î¿î »óÈ£ÀÛ¿ë ´ë»ó
+    public bool isClimbing = false;//ë–¨ì–´ì§€ëŠ” ì¤‘ì¸ì§€
+    [JsonIgnore] public IInteractable CurrentNearby;//ê°€ê¹Œìš´ ìƒí˜¸ì‘ìš© ëŒ€ìƒ
 }
 
 public class PlayerInteraction : MonoBehaviour
@@ -88,30 +88,30 @@ public class PlayerInteraction : MonoBehaviour
     private PlayerEquipment _playerEquipment;
     private InventoryCanvas _inventoryCanvas;
 
-    //Å×½ºÆ®¿ë ÅØ½ºÆ®
+    //í…ŒìŠ¤íŠ¸ìš© í…ìŠ¤íŠ¸
     [SerializeField] TextMeshProUGUI stateText;
 
-    //Áö¸é È®ÀÎ¿ë ½ºÇÇ¾îÄ³½ºÆ® º¯¼ö
+    //ì§€ë©´ í™•ì¸ìš© ìŠ¤í”¼ì–´ìºìŠ¤íŠ¸ ë³€ìˆ˜
     [SerializeField] Vector3 origin;
     [SerializeField] float checkRadius = 0.2f;
     [SerializeField] float checkDistance = 0.1f;
 
-    //»óÈ£ÀÛ¿ë ´ë±â ½Ã°£
+    //ìƒí˜¸ì‘ìš© ëŒ€ê¸° ì‹œê°„
     private WaitForSeconds wait1Sec;
 
-    //¹«±âÇÁ¸®ÆÕ
+    //ë¬´ê¸°í”„ë¦¬íŒ¹
     [SerializeField] GameObject playerWeaponPrefab;
 
     [SerializeField] Slider slider;
 
-    //»ç¿îµå
+    //ì‚¬ìš´ë“œ
     [SerializeField] AudioClip audioClipHide;
     [SerializeField] AudioClip audioClipHiding;
     [SerializeField] AudioClip audioClipFalling;
     [SerializeField] AudioClip audioClipLanding;
     [SerializeField] AudioClip audioClipWalking;
     [SerializeField] AudioClip audioClipFarming;
-    //¾×¼Ç
+    //ì•¡ì…˜
 
     private void Awake()
     {
@@ -142,20 +142,20 @@ public class PlayerInteraction : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        // ÇÃ·¹ÀÌ¾î°¡ È°¼ºÈ­µÇ¾î ÀÖÀ» ¶§¸¸ ±×¸®±â
+        // í”Œë ˆì´ì–´ê°€ í™œì„±í™”ë˜ì–´ ìˆì„ ë•Œë§Œ ê·¸ë¦¬ê¸°
         if (Application.isPlaying)
         {
             Gizmos.color = Color.red;
 
 
             Vector3 direction = Vector3.down;
-            // ½ÃÀÛ ±¸Ã¼
+            // ì‹œì‘ êµ¬ì²´
             Gizmos.DrawWireSphere(origin, checkRadius);
 
-            // ³¡ ±¸Ã¼
+            // ë êµ¬ì²´
             Gizmos.DrawWireSphere(origin + direction * checkDistance, checkRadius);
 
-            // »çÀÌ¸¦ CylinderÃ³·³ ¿¬°áÇÏ±â À§ÇØ DrawLine 4¹æÇâ ¿¹½Ã
+            // ì‚¬ì´ë¥¼ Cylinderì²˜ëŸ¼ ì—°ê²°í•˜ê¸° ìœ„í•´ DrawLine 4ë°©í–¥ ì˜ˆì‹œ
             Gizmos.DrawLine(origin + Vector3.forward * checkRadius, origin + direction * checkDistance + Vector3.forward * checkRadius);
             Gizmos.DrawLine(origin - Vector3.forward * checkRadius, origin + direction * checkDistance - Vector3.forward * checkRadius);
             Gizmos.DrawLine(origin + Vector3.right * checkRadius, origin + direction * checkDistance + Vector3.right * checkRadius);
@@ -164,19 +164,19 @@ public class PlayerInteraction : MonoBehaviour
     }
     void Update()
     {
-        //Å×½ºÆ®¿ë
+        //í…ŒìŠ¤íŠ¸ìš©
         if (stateText != null)
         {
             stateText.text = $"farming{Manager.Player.Stats.isFarming} climbing{Manager.Player.Stats.isClimbing} isGrounded{_isGrounded}";
         }
-
+        
         origin = transform.position + Vector3.up;
-        //¶¥À» ¹â°í ÀÖ´Ï
+        //ë•…ì„ ë°Ÿê³  ìˆë‹ˆ
         IsGrounded = Physics.SphereCast(origin, checkRadius, Vector3.down, out RaycastHit hit, checkDistance, groundLayer);
         //Debug.Log($"{hit.collider.gameObject.name}");
         //isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.5f, groundLayer);
 
-        //¹«±â¸¦ ÀåÂøÁßÀÌ´Ï
+        //ë¬´ê¸°ë¥¼ ì¥ì°©ì¤‘ì´ë‹ˆ
         if (Manager.Player.Stats.Weapon.Value != null)
         {
             playerWeaponPrefab.SetActive(true);
@@ -186,7 +186,7 @@ public class PlayerInteraction : MonoBehaviour
             playerWeaponPrefab.SetActive(false);
         }
 
-        //ÀÎº¥Åä¸® ¿©´Â
+        //ì¸ë²¤í† ë¦¬ ì—¬ëŠ”
         if (Input.GetKeyDown(KeyCode.X))
         {
             if (!Manager.Player.Stats.isFarming)
@@ -211,7 +211,7 @@ public class PlayerInteraction : MonoBehaviour
             }
         }           
 
-        //Àº½ÅÁß¿¡´Â uparrowÅ°·Î Àº½Å Ç®±â Àü±îÁö´Â ´Ù¸¥ Å° ÀÔ·Â ºÒ°¡
+        //ì€ì‹ ì¤‘ì—ëŠ” uparrowí‚¤ë¡œ ì€ì‹  í’€ê¸° ì „ê¹Œì§€ëŠ” ë‹¤ë¥¸ í‚¤ ì…ë ¥ ë¶ˆê°€
         if (Manager.Player.Stats.IsHiding)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -222,32 +222,32 @@ public class PlayerInteraction : MonoBehaviour
                 rb.useGravity = true;
                 StateChange(State.Idle);
                 Manager.Sound.SfxPlay(audioClipHide, transform, 1);
-                Debug.Log("Àº½ÅÇØÁ¦");
+                Debug.Log("ì€ì‹ í•´ì œ");
             }
             return;
         }
 
-        //µî¹İ »óÅÂ¶ó¸é µî¹İÇÔ
+        //ë“±ë°˜ ìƒíƒœë¼ë©´ ë“±ë°˜í•¨
         if (isAutoClimbing)
         {
             AutoClimb();
             return;
         }
 
-        //ÆÄ¹ÖÁß, ³«ÇÏÁß, µî¹İÁß¿¡´Â ´Ù¸¥ Å° ÀÔ·Â ºÒ°¡
+        //íŒŒë°ì¤‘, ë‚™í•˜ì¤‘, ë“±ë°˜ì¤‘ì—ëŠ” ë‹¤ë¥¸ í‚¤ ì…ë ¥ ë¶ˆê°€
         if (Manager.Player.Stats.isClimbing || Manager.Player.Stats.isFarming || !_isGrounded)
         {
             return;
         }
 
-        //À§¾Æ·¡ Å°¸¦ ´©¸£¸é »ç´Ù¸® ÀÌµ¿ ½Ãµµ Àº½Å ½Ãµµ
+        //ìœ„ì•„ë˜ í‚¤ë¥¼ ëˆ„ë¥´ë©´ ì‚¬ë‹¤ë¦¬ ì´ë™ ì‹œë„ ì€ì‹  ì‹œë„
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             bool goUp = Input.GetKeyDown(KeyCode.UpArrow);
 
             if (Manager.Player.Stats.CurrentNearby is Ladder ladder)
             {
-                Debug.Log("»ç´Ù¸® ÀÌµ¿ ½Ãµµ");
+                Debug.Log("ì‚¬ë‹¤ë¦¬ ì´ë™ ì‹œë„");
                 if (ladder.Climb(transform, goUp, climbSpeed, this))
                 {
                     StartCoroutine(RotateAndRestore());
@@ -257,7 +257,7 @@ public class PlayerInteraction : MonoBehaviour
 
             if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
             {
-                Debug.Log("Àº½Å ½Ãµµ");
+                Debug.Log("ì€ì‹  ì‹œë„");
                 if (hideout.Interact(1))
                 {
 
@@ -268,10 +268,10 @@ public class PlayerInteraction : MonoBehaviour
                 }
             }
 
-            //À§ ¾Æ·¡Å°¸¦ ´©¸£¸é °è´Ü ÀÌµ¿½Ãµµ
+            //ìœ„ ì•„ë˜í‚¤ë¥¼ ëˆ„ë¥´ë©´ ê³„ë‹¨ ì´ë™ì‹œë„
             if (Manager.Player.Stats.CurrentNearby is Stair stair)
             {
-                Debug.Log("°è´Ü ÀÌµ¿ ½Ãµµ");
+                Debug.Log("ê³„ë‹¨ ì´ë™ ì‹œë„");
                 if (stair.Interact(transform, goUp))
                 {
                     StateChange(State.Stair);
@@ -280,20 +280,20 @@ public class PlayerInteraction : MonoBehaviour
 
         }
 
-        //zÅ°¸¦ ´©¸£¸é »óÈ£ÀÛ¿ë ½Ãµµ
+        //zí‚¤ë¥¼ ëˆ„ë¥´ë©´ ìƒí˜¸ì‘ìš© ì‹œë„
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
             if (Manager.Player.Stats.CurrentNearby is Ladder ||
                 Manager.Player.Stats.CurrentNearby is Stair ||
                 Manager.Player.Stats.CurrentNearby is Hideout)
             {
-                Debug.Log("ÇöÀç »óÈ£ÀÛ¿ë ´ë»óÀÌ Ladder, Stair, HideoutÀÌ¹Ç·Î ZÅ° »óÈ£ÀÛ¿ë Â÷´Ü");
+                Debug.Log("í˜„ì¬ ìƒí˜¸ì‘ìš© ëŒ€ìƒì´ Ladder, Stair, Hideoutì´ë¯€ë¡œ Zí‚¤ ìƒí˜¸ì‘ìš© ì°¨ë‹¨");
                 return;
             }
 
             GameObject target = (Manager.Player.Stats.CurrentNearby as MonoBehaviour).gameObject;
 
-            Debug.Log("»óÈ£ÀÛ¿ë ½Ãµµ");
+            Debug.Log("ìƒí˜¸ì‘ìš© ì‹œë„");
             Manager.Player.Stats.isFarming = true;
             if (target.CompareTag("Door"))
             {
@@ -308,14 +308,14 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
 
-        //spaceÅ°¸¦ ´©¸£¸é °ø°İ ½Ãµµ
+        //spaceí‚¤ë¥¼ ëˆ„ë¥´ë©´ ê³µê²© ì‹œë„
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("°ø°İ ½Ãµµ");
+            Debug.Log("ê³µê²© ì‹œë„");
             _playerAttack.Attack();
         }
 
-        //ÀÌ¿Ü¿¡´Â ÁÂ¿ì ÀÌµ¿
+        //ì´ì™¸ì—ëŠ” ì¢Œìš° ì´ë™
         MoveSideways();
     }
 
@@ -375,7 +375,7 @@ public class PlayerInteraction : MonoBehaviour
             isAutoClimbing = false;
             rb.useGravity = true;
 
-            Debug.Log("»ç´Ù¸® ÀÚµ¿ ÀÌµ¿ ¿Ï·á");
+            Debug.Log("ì‚¬ë‹¤ë¦¬ ìë™ ì´ë™ ì™„ë£Œ");
 
             playerCollider.enabled = true;
             if (_isGrounded)
@@ -398,7 +398,7 @@ public class PlayerInteraction : MonoBehaviour
                 break;
             case State.Climb:
                 animator.Play(hashClimb);
-                Debug.Log("µî¹İ¤±¤¤¤·¤«¤¤¤·¤©");
+                Debug.Log("ë“±ë°˜ã…ã„´ã…‡ã„»ã„´ã…‡ã„¹");
                 break;
             case State.Stair:
                 animator.Play(hashStair);
@@ -409,7 +409,7 @@ public class PlayerInteraction : MonoBehaviour
             case State.Hide:
                 animator.CrossFade(hashHide, .1f);
                 animator.SetBool("IsHiding", true);
-                Debug.Log("¼û±â¤±¤©¤¤¤·¤«¤·¤¤");
+                Debug.Log("ìˆ¨ê¸°ã…ã„¹ã„´ã…‡ã„»ã…‡ã„´");
                 break;
             case State.Die:
                 animator.Play(hashDie);
@@ -437,7 +437,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         RotateToInteract();
 
-        // ½½¶óÀÌ´õ UI È°¼ºÈ­ ¹× ÃÊ±âÈ­
+        // ìŠ¬ë¼ì´ë” UI í™œì„±í™” ë° ì´ˆê¸°í™”
         slider.gameObject.SetActive(true);
         slider.value = 0f;
 
@@ -453,7 +453,7 @@ public class PlayerInteraction : MonoBehaviour
 
         Manager.Player.Stats.CurrentNearby.Interact();
 
-        // ÆÄ¹Ö Á¾·á
+        // íŒŒë° ì¢…ë£Œ
         slider.gameObject.SetActive(false);
         animator.SetBool("IsRunning", false);
 
@@ -480,7 +480,7 @@ public class PlayerInteraction : MonoBehaviour
         Manager.Player.Stats.isFarming = false;
     }
 
-    //»ç¿îµå
+    //ì‚¬ìš´ë“œ
     void PlayHideSound()
     {
         Manager.Sound.SfxStopLoop("Walking");
@@ -496,7 +496,7 @@ public class PlayerInteraction : MonoBehaviour
         Manager.Player.Stats.OnHideEnded -= StopHideSound;
     }
 
-    //³«ÇÏ
+    //ë‚™í•˜
 
     private void HandleFalling()
     {
@@ -510,7 +510,7 @@ public class PlayerInteraction : MonoBehaviour
     private void HandleLanding()
     {
         animator.Play(hashLand);
-        StartCoroutine(LandingMoveForward(3f, 0.5f)); // (ÀÌµ¿ °Å¸®, ½Ã°£)
+        StartCoroutine(LandingMoveForward(3f, 0.5f)); // (ì´ë™ ê±°ë¦¬, ì‹œê°„)
     }
 
     private IEnumerator LandingMoveForward(float distance, float duration)
