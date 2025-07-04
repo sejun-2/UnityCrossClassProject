@@ -43,7 +43,7 @@ public class Hideout : MonoBehaviour,IInteractable
                 box.transform.position = playerTransform.position + Vector3.up * 3;
 
                 // 박스를 아래로 내려놓는 DOTween
-                MoveWithDOTween(box.transform, playerTransform.position + Vector3.up * 1.4f, 1f);
+                MoveWithDOTween(box.transform, playerTransform.position + Vector3.up * 1.4f, .5f);
 
                 Manager.Player.Stats.IsHiding = true;
                 return true;
@@ -56,15 +56,7 @@ public class Hideout : MonoBehaviour,IInteractable
         }
         return false;
     }
-    public void DropBoxOnPlayer(Transform playerTransform)
-    {
-        box.SetActive(true);
-        // 박스를 플레이어 위 2m에 배치
-        box.transform.position = playerTransform.position + Vector3.up * 3;
 
-        // 박스를 플레이어 위치로 내려놓기
-        MoveWithDOTween(box.transform, playerTransform.position, .5f, false);
-    }
     public void LiftBoxOffPlayer(Transform playerTransform)
     {
         // 박스를 다시 위로 올리기
