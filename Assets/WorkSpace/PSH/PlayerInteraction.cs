@@ -159,9 +159,12 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
     void Update()
-    {       
+    {
         //Å×½ºÆ®¿ë
-        stateText.text = $"farming{Manager.Player.Stats.isFarming} climbing{Manager.Player.Stats.isClimbing} isGrounded{_isGrounded}";
+        if (stateText != null)
+        {
+            stateText.text = $"farming{Manager.Player.Stats.isFarming} climbing{Manager.Player.Stats.isClimbing} isGrounded{_isGrounded}";
+        }
 
         origin = transform.position + Vector3.up;
         //¶¥À» ¹â°í ÀÖ´Ï
