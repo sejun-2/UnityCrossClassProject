@@ -477,22 +477,31 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-   
     private void HandleLanding()
     {
-        animator.Play(hashIdle);
-        //animator.applyRootMotion = true;
-        //animator.CrossFade(hashLand, 0.1f);
-
-        //StartCoroutine(EndLandingRoutine());
+        animator.Play(hashLand);
+        StartCoroutine(LandingMoveForward(3f, 0.5f)); // (이동 거리, 시간)
     }
 
-    private IEnumerator EndLandingRoutine()
+    private IEnumerator LandingMoveForward(float distance, float duration)
     {
-        yield return new WaitForSeconds(.5f);
+        float elapsed = 0f;
+        Vector3 startPos = transform.position;
+        Vector3 targetPos = startPos + transform.right * transform.localScale.x * distance;
 
-        animator.applyRootMotion = false;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
 
+            transform.position = Vector3.Lerp(startPos, targetPos, t);
+
+            yield return null;
+        }
+
+        transform.position = targetPos;
+
+        // Landing 후 상태 변경 (예: Idle)
         StateChange(State.Idle);
     }
 }
