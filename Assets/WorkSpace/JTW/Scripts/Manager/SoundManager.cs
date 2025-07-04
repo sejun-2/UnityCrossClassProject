@@ -1,9 +1,9 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
-using DG.Tweening;
 
 public class SoundManager : Singleton<SoundManager>
 {
@@ -11,8 +11,8 @@ public class SoundManager : Singleton<SoundManager>
 
     public float MasterVolume = 1f;
     private float _bgmVolume = 1f;
-    public float BgmVolume 
-    { 
+    public float BgmVolume
+    {
         get => _bgmVolume;
         set
         {
@@ -24,6 +24,9 @@ public class SoundManager : Singleton<SoundManager>
     public float SfxVolume = 1f;
 
     private AudioSource _bgmSource;
+
+    //루프사운드 관리하는 딕셔너리
+    private Dictionary<string, SfxController> _loopingSfxDict = new Dictionary<string, SfxController>();
 
     private void Awake()
     {
@@ -79,8 +82,9 @@ public class SoundManager : Singleton<SoundManager>
     {
         Destroy(sfx.gameObject);
     }
-    private Dictionary<string, SfxController> _loopingSfxDict = new Dictionary<string, SfxController>();
 
+
+    //루프사운드 플레이
     public void SfxPlayLoop(string key, AudioClip clip, Transform parent, float volume = 1)
     {
         if (_loopingSfxDict.ContainsKey(key))
@@ -99,18 +103,32 @@ public class SoundManager : Singleton<SoundManager>
         _loopingSfxDict[key] = sfx;
     }
 
-    public void SfxStopLoop(string key)
+    //루프사운드 페이드아웃하면서 멈춤
+    public void SfxStopLoop(string key, float fadeDuration = 0.5f)
     {
-        if (_loopingSfxDict.TryGetValue(key, out SfxController sfx))
-        {
-            AudioSource source = sfx.GetComponent<AudioSource>();
-            source.Stop();
-            source.loop = false;
+        if (!_loopingSfxDict.TryGetValue(key, out SfxController sfx))
+            return; // 이미 Release된 상태
 
-            SfxPool.Release(sfx);
-            _loopingSfxDict.Remove(key);
-        }
+        AudioSource source = sfx.GetComponent<AudioSource>();
+        source.DOKill();
+
+        source.DOFade(0f, fadeDuration).SetEase(Ease.Linear);
+
+        StartCoroutine(StopAndReleaseAfterFade(key, sfx, source, fadeDuration));
     }
 
+    private IEnumerator StopAndReleaseAfterFade(string key, SfxController sfx, AudioSource source, float delay)
+    {
+        yield return new WaitForSeconds(delay);
 
+        // 중복 Release 방지
+        if (!_loopingSfxDict.ContainsKey(key))
+            yield break;
+
+        source.Stop();
+        source.loop = false;
+        source.volume = Mathf.Clamp01(MasterVolume * SfxVolume);
+        SfxPool.Release(sfx);
+        _loopingSfxDict.Remove(key);
+    }
 }

@@ -34,6 +34,7 @@ public partial class PlayerStats
 
 public class PlayerInteraction : MonoBehaviour
 {
+    public float testFloat;
     public enum State { Idle, Run, Climb, Hide, Farm, Stair, Attack, Die }
     private State _currentState = State.Idle;
     public State CurrentState
@@ -485,7 +486,7 @@ public class PlayerInteraction : MonoBehaviour
     }
     void StopHideSound()
     {
-        Manager.Sound.SfxStopLoop("Hiding");
+        Manager.Sound.SfxStopLoop("Hiding", 1.5f);
     }
     void OnDestroy()
     {
