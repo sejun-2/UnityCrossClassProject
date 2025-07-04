@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Ladder : MonoBehaviour, IInteractable
@@ -45,7 +46,22 @@ public class Ladder : MonoBehaviour, IInteractable
         Vector3 to = goUp ? topPoint.position : bottomPoint.position;
 
         interaction.StartClimb(from, to);
-        Manager.Sound.SfxPlay(audioClip, transform, 1);
+        PlayEffectNTimes(3);
         return true;
+    }
+
+    public void PlayEffectNTimes(int count)
+    {
+        StartCoroutine(PlayEffectRepeat(count));
+    }
+
+    private IEnumerator PlayEffectRepeat(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Manager.Sound.SfxPlay(audioClip, transform, 1);
+            yield return new WaitForSeconds(.4f);
+            //yield return new WaitForSeconds(audioClip.length);
+        }
     }
 }

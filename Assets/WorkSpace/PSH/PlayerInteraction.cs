@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -6,14 +7,34 @@ using UnityEngine.UI;
 
 public partial class PlayerStats
 {
-    public bool isFarming = false;//ÆÄ¹ÖÁßÀÎÁö ³ªÅ¸³»´Â ºÒ°ª
-    public bool isHiding = false;//¼û¾ú´ÂÁö
-    public bool isClimbing = false;//¶³¾îÁö´Â ÁßÀÎÁö
-    [JsonIgnore] public IInteractable CurrentNearby;//°¡±î¿î »óÈ£ÀÛ¿ë ´ë»ó
+    public bool isFarming = false;//íŒŒë°ì¤‘ì¸ì§€ ë‚˜íƒ€ë‚´ëŠ” ë¶ˆê°’
+    private bool isHiding = false;//ìˆ¨ì—ˆëŠ”ì§€
+    public bool IsHiding
+    {
+        get => isHiding;
+        set
+        {
+            if (isHiding != value)
+            {
+                isHiding = value;
+
+                if (isHiding)
+                    OnHideStarted?.Invoke();
+                else
+                    OnHideEnded?.Invoke();
+            }
+        }
+    }
+    public event Action OnHideStarted;
+    public event Action OnHideEnded;
+
+    public bool isClimbing = false;//ë–¨ì–´ì§€ëŠ” ì¤‘ì¸ì§€
+    [JsonIgnore] public IInteractable CurrentNearby;//ê°€ê¹Œìš´ ìƒí˜¸ì‘ìš© ëŒ€ìƒ
 }
 
 public class PlayerInteraction : MonoBehaviour
 {
+    public float testFloat;
     public enum State { Idle, Run, Climb, Hide, Farm, Stair, Attack, Die }
     private State _currentState = State.Idle;
     public State CurrentState
@@ -30,11 +51,29 @@ public class PlayerInteraction : MonoBehaviour
     private bool isAutoClimbing = false;
     private Vector3 climbTargetPos;
 
-    private bool isGrounded;
+    private bool _isGrounded;
+    public bool IsGrounded
+    {
+        get => _isGrounded;
+        set
+        {
+            if (_isGrounded != value)
+            {
+                _isGrounded = value;
+
+                if (_isGrounded)
+                    OnLanded?.Invoke();
+                else
+                    OnLeftGround?.Invoke();
+            }
+        }
+    }
+
+    public event Action OnLanded;
+    public event Action OnLeftGround;
     public LayerMask groundLayer;
 
     public Animator animator;
-
     private readonly int hashIdle = Animator.StringToHash("Idle");
     private readonly int hashClimb = Animator.StringToHash("Climb");
     private readonly int hashFarm = Animator.StringToHash("Farm");
@@ -42,30 +81,38 @@ public class PlayerInteraction : MonoBehaviour
     private readonly int hashDie = Animator.StringToHash("Die");
     private readonly int hashDoor = Animator.StringToHash("Door");
     private readonly int hashStair = Animator.StringToHash("Stair");
-
-
-    [SerializeField] float crossFadeTime = .1f;
+    private readonly int hashFall = Animator.StringToHash("Falling");
+    private readonly int hashLand = Animator.StringToHash("Landing");
 
     private PlayerAttack _playerAttack;
     private PlayerEquipment _playerEquipment;
     private InventoryCanvas _inventoryCanvas;
-    private bool _isInventoryOpen = false;
 
-    //Å×½ºÆ®¿ë ÅØ½ºÆ®
+    //í…ŒìŠ¤íŠ¸ìš© í…ìŠ¤íŠ¸
     [SerializeField] TextMeshProUGUI stateText;
 
-    //Áö¸é È®ÀÎ¿ë ½ºÇÇ¾îÄ³½ºÆ® º¯¼ö
+    //ì§€ë©´ í™•ì¸ìš© ìŠ¤í”¼ì–´ìºìŠ¤íŠ¸ ë³€ìˆ˜
     [SerializeField] Vector3 origin;
     [SerializeField] float checkRadius = 0.2f;
     [SerializeField] float checkDistance = 0.1f;
 
-    //»óÈ£ÀÛ¿ë ´ë±â ½Ã°£
+    //ìƒí˜¸ì‘ìš© ëŒ€ê¸° ì‹œê°„
     private WaitForSeconds wait1Sec;
 
-    //¹«±âÇÁ¸®ÆÕ
+    //ë¬´ê¸°í”„ë¦¬íŒ¹
     [SerializeField] GameObject playerWeaponPrefab;
 
     [SerializeField] Slider slider;
+
+    //ì‚¬ìš´ë“œ
+    [SerializeField] AudioClip audioClipHide;
+    [SerializeField] AudioClip audioClipHiding;
+    [SerializeField] AudioClip audioClipFalling;
+    [SerializeField] AudioClip audioClipLanding;
+    [SerializeField] AudioClip audioClipWalking;
+    [SerializeField] AudioClip audioClipFarming;
+    //ì•¡ì…˜
+
     private void Awake()
     {
         Manager.Player.Transform = transform;
@@ -87,23 +134,28 @@ public class PlayerInteraction : MonoBehaviour
         origin = transform.position + Vector3.up * 0.1f;
         slider.gameObject.SetActive(false);
         playerWeaponPrefab.SetActive(false);
+
+        Manager.Player.Stats.OnHideStarted += PlayHideSound;
+        Manager.Player.Stats.OnHideEnded += StopHideSound;
+        OnLeftGround += HandleFalling;
+        OnLanded += HandleLanding;
     }
     private void OnDrawGizmos()
     {
-        // ÇÃ·¹ÀÌ¾î°¡ È°¼ºÈ­µÇ¾î ÀÖÀ» ¶§¸¸ ±×¸®±â
+        // í”Œë ˆì´ì–´ê°€ í™œì„±í™”ë˜ì–´ ìˆì„ ë•Œë§Œ ê·¸ë¦¬ê¸°
         if (Application.isPlaying)
         {
             Gizmos.color = Color.red;
 
 
             Vector3 direction = Vector3.down;
-            // ½ÃÀÛ ±¸Ã¼
+            // ì‹œì‘ êµ¬ì²´
             Gizmos.DrawWireSphere(origin, checkRadius);
 
-            // ³¡ ±¸Ã¼
+            // ë êµ¬ì²´
             Gizmos.DrawWireSphere(origin + direction * checkDistance, checkRadius);
 
-            // »çÀÌ¸¦ CylinderÃ³·³ ¿¬°áÇÏ±â À§ÇØ DrawLine 4¹æÇâ ¿¹½Ã
+            // ì‚¬ì´ë¥¼ Cylinderì²˜ëŸ¼ ì—°ê²°í•˜ê¸° ìœ„í•´ DrawLine 4ë°©í–¥ ì˜ˆì‹œ
             Gizmos.DrawLine(origin + Vector3.forward * checkRadius, origin + direction * checkDistance + Vector3.forward * checkRadius);
             Gizmos.DrawLine(origin - Vector3.forward * checkRadius, origin + direction * checkDistance - Vector3.forward * checkRadius);
             Gizmos.DrawLine(origin + Vector3.right * checkRadius, origin + direction * checkDistance + Vector3.right * checkRadius);
@@ -112,14 +164,19 @@ public class PlayerInteraction : MonoBehaviour
     }
     void Update()
     {
-
+        //í…ŒìŠ¤íŠ¸ìš©
+        if (stateText != null)
+        {
+            stateText.text = $"farming{Manager.Player.Stats.isFarming} climbing{Manager.Player.Stats.isClimbing} isGrounded{_isGrounded}";
+        }
+        
         origin = transform.position + Vector3.up;
-        //¶¥À» ¹â°í ÀÖ´Ï
-        isGrounded = Physics.SphereCast(origin, checkRadius, Vector3.down, out RaycastHit hit, checkDistance, groundLayer);
+        //ë•…ì„ ë°Ÿê³  ìˆë‹ˆ
+        IsGrounded = Physics.SphereCast(origin, checkRadius, Vector3.down, out RaycastHit hit, checkDistance, groundLayer);
         //Debug.Log($"{hit.collider.gameObject.name}");
         //isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.5f, groundLayer);
 
-        //¹«±â¸¦ ÀåÂøÁßÀÌ´Ï
+        //ë¬´ê¸°ë¥¼ ì¥ì°©ì¤‘ì´ë‹ˆ
         if (Manager.Player.Stats.Weapon.Value != null)
         {
             playerWeaponPrefab.SetActive(true);
@@ -129,54 +186,68 @@ public class PlayerInteraction : MonoBehaviour
             playerWeaponPrefab.SetActive(false);
         }
 
-        //ÀÎº¥Åä¸® ´İÀ¸¸é º¯¼ö ¹Ù²ãÁà¾ßÇØ¼­
+        //ì¸ë²¤í† ë¦¬ ì—¬ëŠ”
         if (Input.GetKeyDown(KeyCode.X))
         {
-            _isInventoryOpen = false;
-            Manager.Player.Stats.isFarming = false;
-        }
-        if (_isInventoryOpen)
-        {
-            return;
+            if (!Manager.Player.Stats.isFarming)
+            {
+                _inventoryCanvas.ShowInven();
+                StateChange(State.Idle);
+                Manager.Player.Stats.isFarming = true;
+            }
+            else
+            {
+                Manager.Player.Stats.isFarming = false;
+            }
         }
 
-        //Àº½ÅÁß¿¡´Â uparrowÅ°·Î Àº½Å Ç®±â Àü±îÁö´Â ´Ù¸¥ Å° ÀÔ·Â ºÒ°¡
-        if (Manager.Player.Stats.isHiding)
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            if (!Manager.Player.Stats.isFarming)
+            {
+                Manager.UI.Inven.ShowSubStoryUI();
+                StateChange(State.Idle);
+                Manager.Player.Stats.isFarming = true;
+            }
+        }           
+
+        //ì€ì‹ ì¤‘ì—ëŠ” uparrowí‚¤ë¡œ ì€ì‹  í’€ê¸° ì „ê¹Œì§€ëŠ” ë‹¤ë¥¸ í‚¤ ì…ë ¥ ë¶ˆê°€
+        if (Manager.Player.Stats.IsHiding)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                Manager.Player.Stats.isHiding = false;
+                Manager.Player.Stats.IsHiding = false;
                 animator.SetBool("IsHiding", false);
                 playerCollider.enabled = true;
                 rb.useGravity = true;
                 StateChange(State.Idle);
-
-                Debug.Log("Àº½ÅÇØÁ¦");
+                Manager.Sound.SfxPlay(audioClipHide, transform, 1);
+                Debug.Log("ì€ì‹ í•´ì œ");
             }
             return;
         }
-        //µî¹İ »óÅÂ¶ó¸é µî¹İÇÔ
+
+        //ë“±ë°˜ ìƒíƒœë¼ë©´ ë“±ë°˜í•¨
         if (isAutoClimbing)
         {
             AutoClimb();
             return;
         }
-        //ÆÄ¹ÖÁß, ³«ÇÏÁß¿¡´Â ´Ù¸¥ Å° ÀÔ·Â ºÒ°¡ ´Ü µî¹İ½Ã´Â ¿¹¿Ü
-       
-            if (Manager.Player.Stats.isClimbing ||Manager.Player.Stats.isFarming || !isGrounded)
-            {
-                return;
-            }
-        
-  
-        //À§¾Æ·¡ Å°¸¦ ´©¸£¸é »ç´Ù¸® ÀÌµ¿ ½Ãµµ Àº½Å ½Ãµµ
+
+        //íŒŒë°ì¤‘, ë‚™í•˜ì¤‘, ë“±ë°˜ì¤‘ì—ëŠ” ë‹¤ë¥¸ í‚¤ ì…ë ¥ ë¶ˆê°€
+        if (Manager.Player.Stats.isClimbing || Manager.Player.Stats.isFarming || !_isGrounded)
+        {
+            return;
+        }
+
+        //ìœ„ì•„ë˜ í‚¤ë¥¼ ëˆ„ë¥´ë©´ ì‚¬ë‹¤ë¦¬ ì´ë™ ì‹œë„ ì€ì‹  ì‹œë„
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             bool goUp = Input.GetKeyDown(KeyCode.UpArrow);
 
             if (Manager.Player.Stats.CurrentNearby is Ladder ladder)
             {
-                Debug.Log("»ç´Ù¸® ÀÌµ¿ ½Ãµµ");
+                Debug.Log("ì‚¬ë‹¤ë¦¬ ì´ë™ ì‹œë„");
                 if (ladder.Climb(transform, goUp, climbSpeed, this))
                 {
                     StartCoroutine(RotateAndRestore());
@@ -186,19 +257,21 @@ public class PlayerInteraction : MonoBehaviour
 
             if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
             {
-                Debug.Log("Àº½Å ½Ãµµ");
+                Debug.Log("ì€ì‹  ì‹œë„");
                 if (hideout.Interact(1))
                 {
+
                     playerCollider.enabled = false;
                     rb.useGravity = false;
                     StateChange(State.Hide);
+                    Manager.Sound.SfxPlay(audioClipHide, transform, 1);
                 }
             }
 
-            //À§ ¾Æ·¡Å°¸¦ ´©¸£¸é °è´Ü ÀÌµ¿½Ãµµ
+            //ìœ„ ì•„ë˜í‚¤ë¥¼ ëˆ„ë¥´ë©´ ê³„ë‹¨ ì´ë™ì‹œë„
             if (Manager.Player.Stats.CurrentNearby is Stair stair)
             {
-                Debug.Log("°è´Ü ÀÌµ¿ ½Ãµµ");
+                Debug.Log("ê³„ë‹¨ ì´ë™ ì‹œë„");
                 if (stair.Interact(transform, goUp))
                 {
                     StateChange(State.Stair);
@@ -207,12 +280,20 @@ public class PlayerInteraction : MonoBehaviour
 
         }
 
-        //zÅ°¸¦ ´©¸£¸é »óÈ£ÀÛ¿ë ½Ãµµ
+        //zí‚¤ë¥¼ ëˆ„ë¥´ë©´ ìƒí˜¸ì‘ìš© ì‹œë„
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
+            if (Manager.Player.Stats.CurrentNearby is Ladder ||
+                Manager.Player.Stats.CurrentNearby is Stair ||
+                Manager.Player.Stats.CurrentNearby is Hideout)
+            {
+                Debug.Log("í˜„ì¬ ìƒí˜¸ì‘ìš© ëŒ€ìƒì´ Ladder, Stair, Hideoutì´ë¯€ë¡œ Zí‚¤ ìƒí˜¸ì‘ìš© ì°¨ë‹¨");
+                return;
+            }
+
             GameObject target = (Manager.Player.Stats.CurrentNearby as MonoBehaviour).gameObject;
 
-            Debug.Log("»óÈ£ÀÛ¿ë ½Ãµµ");
+            Debug.Log("ìƒí˜¸ì‘ìš© ì‹œë„");
             Manager.Player.Stats.isFarming = true;
             if (target.CompareTag("Door"))
             {
@@ -221,44 +302,44 @@ public class PlayerInteraction : MonoBehaviour
             }
             else
             {
+                Manager.Sound.SfxPlay(audioClipFarming, transform, 1);
                 StartCoroutine(RotateAndInteract());
                 animator.Play(hashFarm);
             }
-
         }
 
-        //ÀÎº¥Åä¸® ¿©´Â
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            if (!_isInventoryOpen)
-            {
-                _inventoryCanvas.ShowInven();
-                _isInventoryOpen = true;
-            }
-        }
-
-        //spaceÅ°¸¦ ´©¸£¸é °ø°İ ½Ãµµ
+        //spaceí‚¤ë¥¼ ëˆ„ë¥´ë©´ ê³µê²© ì‹œë„
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("°ø°İ ½Ãµµ");
+            Debug.Log("ê³µê²© ì‹œë„");
             _playerAttack.Attack();
         }
 
-        //ÀÌ¿Ü¿¡´Â ÁÂ¿ì ÀÌµ¿
+        //ì´ì™¸ì—ëŠ” ì¢Œìš° ì´ë™
         MoveSideways();
     }
 
     void MoveSideways()
     {
+        if (Manager.Player.Stats.IsHiding)
+        {
+            Manager.Sound.SfxStopLoop("Walking");
+            return;
+        }
+
         float h = Input.GetAxis("Horizontal");
 
-        if (Mathf.Abs(h) > 0.01f)
+        if (Mathf.Abs(h) > 0.1f)
         {
             StateChange(State.Run);
+
+            Manager.Sound.SfxPlayLoop("Walking",audioClipWalking, transform, 1);
         }
         else
         {
             StateChange(State.Idle);
+
+            Manager.Sound.SfxStopLoop("Walking");
         }
 
         if (h != 0f)
@@ -294,10 +375,10 @@ public class PlayerInteraction : MonoBehaviour
             isAutoClimbing = false;
             rb.useGravity = true;
 
-            Debug.Log("»ç´Ù¸® ÀÚµ¿ ÀÌµ¿ ¿Ï·á");
+            Debug.Log("ì‚¬ë‹¤ë¦¬ ìë™ ì´ë™ ì™„ë£Œ");
 
             playerCollider.enabled = true;
-            if (isGrounded)
+            if (_isGrounded)
             {
                 Manager.Player.Stats.isClimbing = false;
             }
@@ -317,18 +398,18 @@ public class PlayerInteraction : MonoBehaviour
                 break;
             case State.Climb:
                 animator.Play(hashClimb);
-                Debug.Log("µî¹İ¤±¤¤¤·¤«¤¤¤·¤©");
+                Debug.Log("ë“±ë°˜ã…ã„´ã…‡ã„»ã„´ã…‡ã„¹");
                 break;
             case State.Stair:
-                animator.Play(hashStair);               
+                animator.Play(hashStair);
                 break;
             case State.Farm:
                 animator.Play(hashFarm);
                 break;
             case State.Hide:
-                animator.CrossFade(hashHide, crossFadeTime);
+                animator.CrossFade(hashHide, .1f);
                 animator.SetBool("IsHiding", true);
-                Debug.Log("¼û±â¤±¤©¤¤¤·¤«¤·¤¤");
+                Debug.Log("ìˆ¨ê¸°ã…ã„¹ã„´ã…‡ã„»ã…‡ã„´");
                 break;
             case State.Die:
                 animator.Play(hashDie);
@@ -349,14 +430,14 @@ public class PlayerInteraction : MonoBehaviour
 
     public void RestoreRotation()
     {
-        transform.rotation = Quaternion.identity;        
+        transform.rotation = Quaternion.identity;
     }
 
     private IEnumerator RotateAndInteract()
     {
         RotateToInteract();
 
-        // ½½¶óÀÌ´õ UI È°¼ºÈ­ ¹× ÃÊ±âÈ­
+        // ìŠ¬ë¼ì´ë” UI í™œì„±í™” ë° ì´ˆê¸°í™”
         slider.gameObject.SetActive(true);
         slider.value = 0f;
 
@@ -372,7 +453,7 @@ public class PlayerInteraction : MonoBehaviour
 
         Manager.Player.Stats.CurrentNearby.Interact();
 
-        // ÆÄ¹Ö Á¾·á
+        // íŒŒë° ì¢…ë£Œ
         slider.gameObject.SetActive(false);
         animator.SetBool("IsRunning", false);
 
@@ -391,11 +472,63 @@ public class PlayerInteraction : MonoBehaviour
 
     private IEnumerator NotRotateAndInteract()
     {
-        
+
         yield return wait1Sec;
 
         Manager.Player.Stats.CurrentNearby.Interact();
 
         Manager.Player.Stats.isFarming = false;
+    }
+
+    //ì‚¬ìš´ë“œ
+    void PlayHideSound()
+    {
+        Manager.Sound.SfxStopLoop("Walking");
+        Manager.Sound.SfxPlayLoop("Hiding", audioClipHiding, transform, 0.3f);
+    }
+    void StopHideSound()
+    {
+        Manager.Sound.SfxStopLoop("Hiding", 1.5f);
+    }
+    void OnDestroy()
+    {
+        Manager.Player.Stats.OnHideStarted -= PlayHideSound;
+        Manager.Player.Stats.OnHideEnded -= StopHideSound;
+    }
+
+    //ë‚™í•˜
+
+    private void HandleFalling()
+    {
+        if (!Manager.Player.Stats.isClimbing)
+        {
+            animator.Play(hashFall);
+            Manager.Sound.SfxPlay(audioClipFalling, transform, .7f);
+        }
+    }
+
+    private void HandleLanding()
+    {
+        animator.Play(hashLand);
+        StartCoroutine(LandingMoveForward(3f, 0.5f)); // (ì´ë™ ê±°ë¦¬, ì‹œê°„)
+    }
+
+    private IEnumerator LandingMoveForward(float distance, float duration)
+    {
+        float elapsed = 0f;
+        Vector3 startPos = transform.position;
+        Vector3 targetPos = startPos + transform.right * transform.localScale.x * distance;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+
+            transform.position = Vector3.Lerp(startPos, targetPos, t);
+
+            yield return null;
+        }
+
+        transform.position = targetPos;
     }
 }

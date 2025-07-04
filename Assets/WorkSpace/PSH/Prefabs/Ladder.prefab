@@ -84,6 +84,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   topPoint: {fileID: 1219782155254339167}
   bottomPoint: {fileID: 2898692645241186514}
+  audioClip: {fileID: 8300000, guid: 07d55afe98acc5e4a9146501d92b1f34, type: 3}
 --- !u!114 &2923876723951923674
 MonoBehaviour:
   m_ObjectHideFlags: 0

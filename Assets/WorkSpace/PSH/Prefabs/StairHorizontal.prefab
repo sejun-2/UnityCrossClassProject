@@ -77,7 +77,7 @@ GameObject:
   - component: {fileID: 3585067365659313325}
   - component: {fileID: 8139320611048353393}
   m_Layer: 9
-  m_Name: Stair
+  m_Name: StairHorizontal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -176,10 +176,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2ce6e6d0958174980fb8f7096473a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointUp: {fileID: 3446238042422953937}
-  pointDown: {fileID: 3338804077986762179}
   fadeImage: {fileID: 0}
   fadeDuration: 0.5
+  audioClip: {fileID: 8300000, guid: 1d460ceb76f7e7140a4e3d61eb4447d4, type: 3}
 --- !u!114 &8139320611048353393
 MonoBehaviour:
   m_ObjectHideFlags: 0
