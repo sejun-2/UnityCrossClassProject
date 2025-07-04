@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,11 @@ using UnityEngine;
 public partial class PlayerStats
 {
     public Stat<bool> IsTakeDamage = new();
+
+    internal void ReduceFatigue(float v)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public class PlayerDamageHandler : MonoBehaviour, IDamageable
