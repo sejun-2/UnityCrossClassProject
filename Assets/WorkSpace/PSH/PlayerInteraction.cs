@@ -318,6 +318,12 @@ public class PlayerInteraction : MonoBehaviour
 
     void MoveSideways()
     {
+        if (Manager.Player.Stats.IsHiding)
+        {
+            Manager.Sound.SfxStopLoop("Walking");
+            return;
+        }
+
         float h = Input.GetAxis("Horizontal");
 
         if (Mathf.Abs(h) > 0.1f)
@@ -474,6 +480,7 @@ public class PlayerInteraction : MonoBehaviour
     //»ç¿îµå
     void PlayHideSound()
     {
+        Manager.Sound.SfxStopLoop("Walking");
         Manager.Sound.SfxPlayLoop("Hiding", audioClipHiding, transform, 0.3f);
     }
     void StopHideSound()
