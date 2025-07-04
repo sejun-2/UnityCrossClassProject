@@ -71,6 +71,17 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         Instantiate(prefab, transform);
     }
 
+    public GameObject ShowCraftResultUI(Item item)
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/CraftResultUI");
+
+        CraftResultUIPresenter pre = Instantiate(prefab, transform).GetComponent<CraftResultUIPresenter>();
+
+        pre.InitData(item);
+
+        return pre.gameObject;
+    }
+
     public void ShowCookingUI()
     {
         GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/CookingUI");
