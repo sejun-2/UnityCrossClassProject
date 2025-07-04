@@ -110,6 +110,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] AudioClip audioClipFalling;
     [SerializeField] AudioClip audioClipLanding;
     [SerializeField] AudioClip audioClipWalking;
+    [SerializeField] AudioClip audioClipFarming;
     //¾×¼Ç
 
     private void Awake()
@@ -301,6 +302,7 @@ public class PlayerInteraction : MonoBehaviour
             }
             else
             {
+                Manager.Sound.SfxPlay(audioClipFarming, transform, 1);
                 StartCoroutine(RotateAndInteract());
                 animator.Play(hashFarm);
             }
