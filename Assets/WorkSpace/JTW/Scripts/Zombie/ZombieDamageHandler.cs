@@ -33,6 +33,9 @@ public class ZombieDamageHandler : MonoBehaviour, IDamageable
     {
         yield return new WaitForSeconds(1f);
 
-        _zombie.StateChange(Zombie.State.Wait);
+        if (_zombie.CurrentState != Zombie.State.Dead)
+        {
+            _zombie.StateChange(Zombie.State.Wait);
+        }
     }
 }
