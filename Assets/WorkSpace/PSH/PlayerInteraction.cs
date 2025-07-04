@@ -263,6 +263,14 @@ public class PlayerInteraction : MonoBehaviour
         //z키를 누르면 상호작용 시도
         if (Input.GetKeyDown(KeyCode.Z) && Manager.Player.Stats.CurrentNearby != null)
         {
+            if (Manager.Player.Stats.CurrentNearby is Ladder ||
+                Manager.Player.Stats.CurrentNearby is Stair ||
+                Manager.Player.Stats.CurrentNearby is Hideout)
+            {
+                Debug.Log("현재 상호작용 대상이 Ladder, Stair, Hideout이므로 Z키 상호작용 차단");
+                return;
+            }
+
             GameObject target = (Manager.Player.Stats.CurrentNearby as MonoBehaviour).gameObject;
 
             Debug.Log("상호작용 시도");
