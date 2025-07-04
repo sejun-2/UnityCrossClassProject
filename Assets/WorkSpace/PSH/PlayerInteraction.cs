@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,26 @@ using UnityEngine.UI;
 public partial class PlayerStats
 {
     public bool isFarming = false;//파밍중인지 나타내는 불값
-    public bool isHiding = false;//숨었는지
+    private bool isHiding = false;//숨었는지
+    public bool IsHiding
+    {
+        get => isHiding;
+        set
+        {
+            if (isHiding != value)
+            {
+                isHiding = value;
+
+                if (isHiding)
+                    OnHideStarted?.Invoke();
+                else
+                    OnHideEnded?.Invoke();
+            }
+        }
+    }
+    public event Action OnHideStarted;
+    public event Action OnHideEnded;
+
     public bool isClimbing = false;//떨어지는 중인지
     [JsonIgnore] public IInteractable CurrentNearby;//가까운 상호작용 대상
 }
@@ -66,6 +86,10 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] GameObject playerWeaponPrefab;
 
     [SerializeField] Slider slider;
+
+    //사운드
+    [SerializeField] AudioClip audioClipHide;
+    [SerializeField] AudioClip audioClipHiding;
     private void Awake()
     {
         Manager.Player.Transform = transform;
@@ -87,6 +111,8 @@ public class PlayerInteraction : MonoBehaviour
         origin = transform.position + Vector3.up * 0.1f;
         slider.gameObject.SetActive(false);
         playerWeaponPrefab.SetActive(false);
+
+        Manager.Player.Stats.OnHideStarted += PlayHideSound;
     }
     private void OnDrawGizmos()
     {
@@ -143,16 +169,16 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         //은신중에는 uparrow키로 은신 풀기 전까지는 다른 키 입력 불가
-        if (Manager.Player.Stats.isHiding)
+        if (Manager.Player.Stats.IsHiding)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                Manager.Player.Stats.isHiding = false;
+                Manager.Player.Stats.IsHiding = false;
                 animator.SetBool("IsHiding", false);
                 playerCollider.enabled = true;
                 rb.useGravity = true;
                 StateChange(State.Idle);
-
+                Manager.Sound.SfxPlay(audioClipHide, transform, 1);
                 Debug.Log("은신해제");
             }
             return;
@@ -191,9 +217,11 @@ public class PlayerInteraction : MonoBehaviour
                 Debug.Log("은신 시도");
                 if (hideout.Interact(1))
                 {
+
                     playerCollider.enabled = false;
                     rb.useGravity = false;
                     StateChange(State.Hide);
+                    Manager.Sound.SfxPlay(audioClipHide, transform, 1);
                 }
             }
 
@@ -399,5 +427,15 @@ public class PlayerInteraction : MonoBehaviour
         Manager.Player.Stats.CurrentNearby.Interact();
 
         Manager.Player.Stats.isFarming = false;
+    }
+
+    //사운드
+    void PlayHideSound()
+    {
+        Manager.Sound.SfxPlay(audioClipHiding, transform, 0.5f);
+    }
+    void OnDestroy()
+    {
+        Manager.Player.Stats.OnHideStarted -= PlayHideSound;
     }
 }

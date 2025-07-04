@@ -34,7 +34,7 @@ public class Hideout : MonoBehaviour,IInteractable
             {
                 Debug.Log("은신 성공");
                 // 은신 로직 실행
-                Manager.Player.Stats.isHiding = true;
+                Manager.Player.Stats.IsHiding = true;
                 return true;
             }
             else

@@ -47,6 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedDarkness: {fileID: 0}
   _door: {fileID: 90780460451917403}
+  audioClip1: {fileID: 8300000, guid: 6a1a825e9d5fd69459316da64da0efe9, type: 3}
+  audioClip2: {fileID: 8300000, guid: 1f755e68e0919094b867a9a9720df02d, type: 3}
 --- !u!1001 &91776694374845677
 PrefabInstance:
   m_ObjectHideFlags: 0

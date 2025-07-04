@@ -125,7 +125,7 @@ public class Zombie : MonoBehaviour
             return;
         }
 
-        if (Manager.Player.Stats.isHiding)
+        if (Manager.Player.Stats.IsHiding)
         {
             StateChange(State.Patrol);
         }

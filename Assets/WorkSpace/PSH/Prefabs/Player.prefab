@@ -258,6 +258,8 @@ MonoBehaviour:
   checkDistance: 1.5
   playerWeaponPrefab: {fileID: 3767590334785181626}
   slider: {fileID: 717835401006491783}
+  audioClipHide: {fileID: 8300000, guid: 881c31736e22cfa48accbe971444151b, type: 3}
+  audioClipHiding: {fileID: 8300000, guid: 9ec31fdc3ad8c5a49a0a3e17ae9bd49c, type: 3}
 --- !u!136 &4948804280878035986
 CapsuleCollider:
   m_ObjectHideFlags: 0
