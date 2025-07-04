@@ -73,6 +73,7 @@ public class Stair : MonoBehaviour, IInteractable
 
     private IEnumerator FadeTeleport(Transform player, Vector3 targetPos)
     {
+        yield return new WaitForSeconds(1f);
         yield return StartCoroutine(Fade(1)); // 페이드 아웃
 
         player.position = targetPos;
