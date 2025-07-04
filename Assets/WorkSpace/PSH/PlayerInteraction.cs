@@ -339,7 +339,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             StateChange(State.Idle);
 
-            Manager.Sound.SfxStopLoop("Walking");
+            Manager.Sound.SfxStopLoop("Walking", 0f);
         }
 
         if (h != 0f)
