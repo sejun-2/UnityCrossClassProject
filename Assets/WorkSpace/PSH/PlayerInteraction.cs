@@ -185,6 +185,7 @@ public class PlayerInteraction : MonoBehaviour
             if (!Manager.Player.Stats.isFarming)
             {
                 _inventoryCanvas.ShowInven();
+                StateChange(State.Idle);
                 Manager.Player.Stats.isFarming = true;
             }
             else
@@ -198,6 +199,7 @@ public class PlayerInteraction : MonoBehaviour
             if (!Manager.Player.Stats.isFarming)
             {
                 Manager.UI.Inven.ShowSubStoryUI();
+                StateChange(State.Idle);
                 Manager.Player.Stats.isFarming = true;
             }
         }           
