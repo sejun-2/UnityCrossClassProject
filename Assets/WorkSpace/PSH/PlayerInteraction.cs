@@ -216,6 +216,10 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
+                if (Manager.Player.Stats.CurrentNearby is Hideout hideout)
+                {
+                    hideout.LiftBoxOffPlayer(transform);
+                }
                 Manager.Player.Stats.IsHiding = false;
                 animator.SetBool("IsHiding", false);
                 playerCollider.enabled = true;
@@ -258,9 +262,8 @@ public class PlayerInteraction : MonoBehaviour
             if (Manager.Player.Stats.CurrentNearby is Hideout hideout && goUp)
             {
                 Debug.Log("은신 시도");
-                if (hideout.Interact(1))
+                if (hideout.Interact(transform))
                 {
-
                     playerCollider.enabled = false;
                     rb.useGravity = false;
                     StateChange(State.Hide);
