@@ -46,7 +46,7 @@ public class Ladder : MonoBehaviour, IInteractable
         Vector3 to = goUp ? topPoint.position : bottomPoint.position;
 
         interaction.StartClimb(from, to);
-        PlayEffectNTimes(2);
+        PlayEffectNTimes(3);
         return true;
     }
 
@@ -60,8 +60,8 @@ public class Ladder : MonoBehaviour, IInteractable
         for (int i = 0; i < count; i++)
         {
             Manager.Sound.SfxPlay(audioClip, transform, 1);
-            //yield return new WaitForSeconds(.33f);
-            yield return new WaitForSeconds(audioClip.length);
+            yield return new WaitForSeconds(.4f);
+            //yield return new WaitForSeconds(audioClip.length);
         }
     }
 }
