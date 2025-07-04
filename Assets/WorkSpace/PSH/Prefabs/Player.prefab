@@ -245,13 +245,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6d90342130b57d48adb608762852e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testFloat: 0
   moveSpeed: 5
   climbSpeed: 3
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
   animator: {fileID: 6164146548321989212}
-  crossFadeTime: 0.3
   stateText: {fileID: 8205809843996988837}
   origin: {x: 0, y: 0, z: 0}
   checkRadius: 0.2
@@ -260,6 +260,10 @@ MonoBehaviour:
   slider: {fileID: 717835401006491783}
   audioClipHide: {fileID: 8300000, guid: 881c31736e22cfa48accbe971444151b, type: 3}
   audioClipHiding: {fileID: 8300000, guid: 9ec31fdc3ad8c5a49a0a3e17ae9bd49c, type: 3}
+  audioClipFalling: {fileID: 8300000, guid: f6e0c6b6ae014ef45aaaead358dceee6, type: 3}
+  audioClipLanding: {fileID: 8300000, guid: 8812853f658d3a14a97715a4ac6f8a77, type: 3}
+  audioClipWalking: {fileID: 8300000, guid: 741073df79ec2124cb5273c2a8ea22d2, type: 3}
+  audioClipFarming: {fileID: 8300000, guid: 0d2d5407ca7f23548a5efa3e6b3a906f, type: 3}
 --- !u!136 &4948804280878035986
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -308,7 +312,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!114 &3342905913165747034
 MonoBehaviour:
