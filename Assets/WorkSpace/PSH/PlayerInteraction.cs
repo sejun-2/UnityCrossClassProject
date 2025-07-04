@@ -138,7 +138,8 @@ public class PlayerInteraction : MonoBehaviour
         Manager.Player.Stats.OnHideStarted += PlayHideSound;
         Manager.Player.Stats.OnHideEnded += StopHideSound;
         OnLeftGround += HandleFalling;
-        OnLanded += HandleLanding;
+        IsGrounded = true;
+        OnLanded += HandleLanding; 
     }
     private void OnDrawGizmos()
     {
