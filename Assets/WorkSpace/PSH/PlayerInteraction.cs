@@ -82,6 +82,7 @@ public class PlayerInteraction : MonoBehaviour
     private readonly int hashDoor = Animator.StringToHash("Door");
     private readonly int hashStair = Animator.StringToHash("Stair");
     private readonly int hashFall = Animator.StringToHash("Falling");
+    private readonly int hashLand = Animator.StringToHash("Landing");
 
 
     [SerializeField] float crossFadeTime = .1f;
@@ -111,6 +112,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] AudioClip audioClipHide;
     [SerializeField] AudioClip audioClipHiding;
     [SerializeField] AudioClip audioClipFalling;
+    [SerializeField] AudioClip audioClipLanding;
     //¾×¼Ç
 
     private void Awake()
@@ -475,8 +477,22 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
+   
     private void HandleLanding()
     {
         animator.Play(hashIdle);
+        //animator.applyRootMotion = true;
+        //animator.CrossFade(hashLand, 0.1f);
+
+        //StartCoroutine(EndLandingRoutine());
+    }
+
+    private IEnumerator EndLandingRoutine()
+    {
+        yield return new WaitForSeconds(.5f);
+
+        animator.applyRootMotion = false;
+
+        StateChange(State.Idle);
     }
 }
