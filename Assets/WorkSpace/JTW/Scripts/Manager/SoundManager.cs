@@ -79,4 +79,38 @@ public class SoundManager : Singleton<SoundManager>
     {
         Destroy(sfx.gameObject);
     }
+    private Dictionary<string, SfxController> _loopingSfxDict = new Dictionary<string, SfxController>();
+
+    public void SfxPlayLoop(string key, AudioClip clip, Transform parent, float volume = 1)
+    {
+        if (_loopingSfxDict.ContainsKey(key))
+            return;
+
+        SfxController sfx = SfxPool.Get();
+        sfx.transform.parent = parent;
+        sfx.transform.localPosition = Vector3.zero;
+
+        AudioSource source = sfx.GetComponent<AudioSource>();
+        source.clip = clip;
+        source.volume = Mathf.Clamp01(MasterVolume * SfxVolume * volume);
+        source.loop = true;
+        source.Play();
+
+        _loopingSfxDict[key] = sfx;
+    }
+
+    public void SfxStopLoop(string key)
+    {
+        if (_loopingSfxDict.TryGetValue(key, out SfxController sfx))
+        {
+            AudioSource source = sfx.GetComponent<AudioSource>();
+            source.Stop();
+            source.loop = false;
+
+            SfxPool.Release(sfx);
+            _loopingSfxDict.Remove(key);
+        }
+    }
+
+
 }

@@ -108,6 +108,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] AudioClip audioClipHiding;
     [SerializeField] AudioClip audioClipFalling;
     [SerializeField] AudioClip audioClipLanding;
+    [SerializeField] AudioClip audioClipWalking;
     //액션
 
     private void Awake()
@@ -133,6 +134,7 @@ public class PlayerInteraction : MonoBehaviour
         playerWeaponPrefab.SetActive(false);
 
         Manager.Player.Stats.OnHideStarted += PlayHideSound;
+        Manager.Player.Stats.OnHideEnded += StopHideSound;
         OnLeftGround += HandleFalling;
         OnLanded += HandleLanding;
     }
@@ -301,11 +303,7 @@ public class PlayerInteraction : MonoBehaviour
                 StartCoroutine(RotateAndInteract());
                 animator.Play(hashFarm);
             }
-
         }
-
-       
-        
 
         //space키를 누르면 공격 시도
         if (Input.GetKeyDown(KeyCode.Space))
@@ -322,13 +320,17 @@ public class PlayerInteraction : MonoBehaviour
     {
         float h = Input.GetAxis("Horizontal");
 
-        if (Mathf.Abs(h) > 0.01f)
+        if (Mathf.Abs(h) > 0.1f)
         {
             StateChange(State.Run);
+
+            Manager.Sound.SfxPlayLoop("Walking",audioClipWalking, transform, 1);
         }
         else
         {
             StateChange(State.Idle);
+
+            Manager.Sound.SfxStopLoop("Walking");
         }
 
         if (h != 0f)
@@ -472,11 +474,16 @@ public class PlayerInteraction : MonoBehaviour
     //사운드
     void PlayHideSound()
     {
-        Manager.Sound.SfxPlay(audioClipHiding, transform, 0.5f);
+        Manager.Sound.SfxPlayLoop("Hiding", audioClipHiding, transform, 0.3f);
+    }
+    void StopHideSound()
+    {
+        Manager.Sound.SfxStopLoop("Hiding");
     }
     void OnDestroy()
     {
         Manager.Player.Stats.OnHideStarted -= PlayHideSound;
+        Manager.Player.Stats.OnHideEnded -= StopHideSound;
     }
 
     //낙하
