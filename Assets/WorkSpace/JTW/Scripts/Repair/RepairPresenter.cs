@@ -15,6 +15,7 @@ public class RepairPresenter : BaseUI
 
     private GameObject _barricadePanel;
     private Slider _barricadeSlider;
+    private TextMeshProUGUI _barrcadeText;
 
 
     private List<NeedItem> _needItemList = new List<NeedItem>();
@@ -73,6 +74,7 @@ public class RepairPresenter : BaseUI
         {
             _barricadePanel.SetActive(true);
             _barricadeSlider.value = Manager.Game.BarricadeHp / 100;
+            _barrcadeText.text = $"{Manager.Game.BarricadeHp} / 100";
         }
 
         UpdateNeedItemList();
@@ -84,6 +86,7 @@ public class RepairPresenter : BaseUI
         _descriptionText = GetUI<TextMeshProUGUI>("DescriptionText");
         _barricadePanel = GetUI("BarricadePanel");
         _barricadeSlider = GetUI<Slider>("BarricadeSlider");
+        _barrcadeText = GetUI<TextMeshProUGUI>("BarricadeText");
     }
 
     private void UpdateNeedItemList()
