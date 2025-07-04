@@ -86,7 +86,6 @@ public class PlayerInteraction : MonoBehaviour
     private PlayerAttack _playerAttack;
     private PlayerEquipment _playerEquipment;
     private InventoryCanvas _inventoryCanvas;
-    private bool _isInventoryOpen = false;
 
     //테스트용 텍스트
     [SerializeField] TextMeshProUGUI stateText;
@@ -160,7 +159,7 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
     void Update()
-    {
+    {       
         //테스트용
         stateText.text = $"farming{Manager.Player.Stats.isFarming} climbing{Manager.Player.Stats.isClimbing} isGrounded{_isGrounded}";
 
@@ -180,16 +179,28 @@ public class PlayerInteraction : MonoBehaviour
             playerWeaponPrefab.SetActive(false);
         }
 
-        //인벤토리 닫으면 변수 바꿔줘야해서
+        //인벤토리 여는
         if (Input.GetKeyDown(KeyCode.X))
         {
-            _isInventoryOpen = false;
-            Manager.Player.Stats.isFarming = false;
+            if (!Manager.Player.Stats.isFarming)
+            {
+                _inventoryCanvas.ShowInven();
+                Manager.Player.Stats.isFarming = true;
+            }
+            else
+            {
+                Manager.Player.Stats.isFarming = false;
+            }
         }
-        if (_isInventoryOpen)
+
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            return;
-        }
+            if (!Manager.Player.Stats.isFarming)
+            {
+                Manager.UI.Inven.ShowSubStoryUI();
+                Manager.Player.Stats.isFarming = true;
+            }
+        }           
 
         //은신중에는 uparrow키로 은신 풀기 전까지는 다른 키 입력 불가
         if (Manager.Player.Stats.IsHiding)
@@ -288,15 +299,8 @@ public class PlayerInteraction : MonoBehaviour
 
         }
 
-        //인벤토리 여는
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            if (!_isInventoryOpen)
-            {
-                _inventoryCanvas.ShowInven();
-                _isInventoryOpen = true;
-            }
-        }
+       
+        
 
         //space키를 누르면 공격 시도
         if (Input.GetKeyDown(KeyCode.Space))
