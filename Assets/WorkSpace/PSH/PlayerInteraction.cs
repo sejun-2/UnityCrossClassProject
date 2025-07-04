@@ -510,6 +510,7 @@ public class PlayerInteraction : MonoBehaviour
     private void HandleLanding()
     {
         animator.Play(hashLand);
+        Manager.Sound.SfxPlay(audioClipLanding, transform, .7f);
         StartCoroutine(LandingMoveForward(3f, 0.5f)); // (이동 거리, 시간)
     }
 
