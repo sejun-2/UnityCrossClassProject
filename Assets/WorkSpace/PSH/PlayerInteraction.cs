@@ -73,7 +73,6 @@ public class PlayerInteraction : MonoBehaviour
     public LayerMask groundLayer;
 
     public Animator animator;
-
     private readonly int hashIdle = Animator.StringToHash("Idle");
     private readonly int hashClimb = Animator.StringToHash("Climb");
     private readonly int hashFarm = Animator.StringToHash("Farm");
@@ -83,9 +82,6 @@ public class PlayerInteraction : MonoBehaviour
     private readonly int hashStair = Animator.StringToHash("Stair");
     private readonly int hashFall = Animator.StringToHash("Falling");
     private readonly int hashLand = Animator.StringToHash("Landing");
-
-
-    [SerializeField] float crossFadeTime = .1f;
 
     private PlayerAttack _playerAttack;
     private PlayerEquipment _playerEquipment;
@@ -210,20 +206,20 @@ public class PlayerInteraction : MonoBehaviour
             }
             return;
         }
+
         //등반 상태라면 등반함
         if (isAutoClimbing)
         {
             AutoClimb();
             return;
         }
-        //파밍중, 낙하중에는 다른 키 입력 불가 단 등반시는 예외
-       
-            if (Manager.Player.Stats.isClimbing ||Manager.Player.Stats.isFarming || !_isGrounded)
-            {
-                return;
-            }
-        
-  
+
+        //파밍중, 낙하중, 등반중에는 다른 키 입력 불가
+        if (Manager.Player.Stats.isClimbing || Manager.Player.Stats.isFarming || !_isGrounded)
+        {
+            return;
+        }
+
         //위아래 키를 누르면 사다리 이동 시도 은신 시도
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -377,13 +373,13 @@ public class PlayerInteraction : MonoBehaviour
                 Debug.Log("등반ㅁㄴㅇㄻㄴㅇㄹ");
                 break;
             case State.Stair:
-                animator.Play(hashStair);               
+                animator.Play(hashStair);
                 break;
             case State.Farm:
                 animator.Play(hashFarm);
                 break;
             case State.Hide:
-                animator.CrossFade(hashHide, crossFadeTime);
+                animator.CrossFade(hashHide, .1f);
                 animator.SetBool("IsHiding", true);
                 Debug.Log("숨기ㅁㄹㄴㅇㄻㅇㄴ");
                 break;
@@ -406,7 +402,7 @@ public class PlayerInteraction : MonoBehaviour
 
     public void RestoreRotation()
     {
-        transform.rotation = Quaternion.identity;        
+        transform.rotation = Quaternion.identity;
     }
 
     private IEnumerator RotateAndInteract()
@@ -448,7 +444,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private IEnumerator NotRotateAndInteract()
     {
-        
+
         yield return wait1Sec;
 
         Manager.Player.Stats.CurrentNearby.Interact();
@@ -500,8 +496,5 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         transform.position = targetPos;
-
-        // Landing 후 상태 변경 (예: Idle)
-        StateChange(State.Idle);
     }
 }
