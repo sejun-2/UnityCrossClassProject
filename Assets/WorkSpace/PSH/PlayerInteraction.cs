@@ -50,7 +50,26 @@ public class PlayerInteraction : MonoBehaviour
     private bool isAutoClimbing = false;
     private Vector3 climbTargetPos;
 
-    private bool isGrounded;
+    private bool _isGrounded;
+    public bool IsGrounded
+    {
+        get => _isGrounded;
+        set
+        {
+            if (_isGrounded != value)
+            {
+                _isGrounded = value;
+
+                if (_isGrounded)
+                    OnLanded?.Invoke();
+                else
+                    OnLeftGround?.Invoke();
+            }
+        }
+    }
+
+    public event Action OnLanded;
+    public event Action OnLeftGround;
     public LayerMask groundLayer;
 
     public Animator animator;
@@ -62,6 +81,7 @@ public class PlayerInteraction : MonoBehaviour
     private readonly int hashDie = Animator.StringToHash("Die");
     private readonly int hashDoor = Animator.StringToHash("Door");
     private readonly int hashStair = Animator.StringToHash("Stair");
+    private readonly int hashFall = Animator.StringToHash("Falling");
 
 
     [SerializeField] float crossFadeTime = .1f;
@@ -90,6 +110,9 @@ public class PlayerInteraction : MonoBehaviour
     //사운드
     [SerializeField] AudioClip audioClipHide;
     [SerializeField] AudioClip audioClipHiding;
+    [SerializeField] AudioClip audioClipFalling;
+    //액션
+
     private void Awake()
     {
         Manager.Player.Transform = transform;
@@ -113,6 +136,8 @@ public class PlayerInteraction : MonoBehaviour
         playerWeaponPrefab.SetActive(false);
 
         Manager.Player.Stats.OnHideStarted += PlayHideSound;
+        OnLeftGround += HandleFalling;
+        OnLanded += HandleLanding;
     }
     private void OnDrawGizmos()
     {
@@ -139,11 +164,11 @@ public class PlayerInteraction : MonoBehaviour
     void Update()
     {
         //테스트용
-        stateText.text = $"farming{Manager.Player.Stats.isFarming} climbing{Manager.Player.Stats.isClimbing} isGrounded{isGrounded}";
+        stateText.text = $"farming{Manager.Player.Stats.isFarming} climbing{Manager.Player.Stats.isClimbing} isGrounded{_isGrounded}";
 
         origin = transform.position + Vector3.up;
         //땅을 밟고 있니
-        isGrounded = Physics.SphereCast(origin, checkRadius, Vector3.down, out RaycastHit hit, checkDistance, groundLayer);
+        IsGrounded = Physics.SphereCast(origin, checkRadius, Vector3.down, out RaycastHit hit, checkDistance, groundLayer);
         //Debug.Log($"{hit.collider.gameObject.name}");
         //isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.5f, groundLayer);
 
@@ -191,7 +216,7 @@ public class PlayerInteraction : MonoBehaviour
         }
         //파밍중, 낙하중에는 다른 키 입력 불가 단 등반시는 예외
        
-            if (Manager.Player.Stats.isClimbing ||Manager.Player.Stats.isFarming || !isGrounded)
+            if (Manager.Player.Stats.isClimbing ||Manager.Player.Stats.isFarming || !_isGrounded)
             {
                 return;
             }
@@ -327,7 +352,7 @@ public class PlayerInteraction : MonoBehaviour
             Debug.Log("사다리 자동 이동 완료");
 
             playerCollider.enabled = true;
-            if (isGrounded)
+            if (_isGrounded)
             {
                 Manager.Player.Stats.isClimbing = false;
             }
@@ -437,5 +462,21 @@ public class PlayerInteraction : MonoBehaviour
     void OnDestroy()
     {
         Manager.Player.Stats.OnHideStarted -= PlayHideSound;
+    }
+
+    //낙하
+
+    private void HandleFalling()
+    {
+        if (!Manager.Player.Stats.isClimbing)
+        {
+            animator.Play(hashFall);
+            Manager.Sound.SfxPlay(audioClipFalling, transform, .7f);
+        }
+    }
+
+    private void HandleLanding()
+    {
+        animator.Play(hashIdle);
     }
 }
