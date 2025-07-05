@@ -215,7 +215,11 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/TutorialUI");
 
         GameObject obj = Instantiate(prefab, base.transform);
-        obj.GetComponent<Image>().sprite = sprite;
+
+        if(sprite != null)
+        {
+            obj.GetComponent<Image>().sprite = sprite;
+        }
 
         StartCoroutine(TutorialUICoroutine(obj, transform));
 
@@ -230,7 +234,16 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
         while(obj != null)
         {
-            Vector3 pos = transform.position + offset;
+            if (Manager.Player.Stats.isFarming)
+            {
+                obj.SetActive(false);
+            }
+            else
+            {
+                obj.SetActive(true);
+            }
+
+                Vector3 pos = transform.position + offset;
 
             Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
 
