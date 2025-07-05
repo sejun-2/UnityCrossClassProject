@@ -90,6 +90,10 @@ public class InventoryPresenter : BaseUI, IInventory
         foreach(Slot slot in _inven.SlotList)
         {
             _itemSlotUIs.AddSlotUI(slot);
+            if(slot.CurItem == null)
+            {
+                _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].ItemImage.gameObject.SetActive(false);
+            }
         }
 
         _itemSlotUIs.SelectSlotUI(0);

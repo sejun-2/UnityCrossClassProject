@@ -49,7 +49,7 @@ public class MapUIPresenter : BaseUI
         {
             _mapPoints[i].InitData();
             _mapSlotUIs.AddSlotUI();
-            _mapSlotUIs.SlotUIs[i].SetText(_mapPoints[i].SceneName);
+            _mapSlotUIs.SlotUIs[i].SetText(_mapPoints[i].MapName);
         }
 
         _mapSlotUIs.SelectSlotUI(0);

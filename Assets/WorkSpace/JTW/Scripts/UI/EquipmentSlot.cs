@@ -48,11 +48,12 @@ public class EquipmentSlot : MonoBehaviour
         {
             if (item != null)
             {
+                _itemImage.gameObject.SetActive(true);
                 _itemImage.sprite = item.icon;
             }
             else
             {
-                _itemImage.sprite = null;
+                _itemImage.gameObject.SetActive(false);
             }
         }
 

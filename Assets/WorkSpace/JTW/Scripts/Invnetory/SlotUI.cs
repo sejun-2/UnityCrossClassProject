@@ -28,23 +28,30 @@ public class SlotUI : MonoBehaviour
     {
         if(_slot.CurItem == null)
         {
-            if(_itemImage != null)
-                _itemImage.sprite = null;
+            if (_itemImage != null)
+                _itemImage.gameObject.SetActive(false);
         }
         else
         {
             if (_itemImage != null)
+            {
+                _itemImage.gameObject.SetActive(true);
                 _itemImage.sprite = _slot.CurItem.icon;
+            }
 
         }
 
-        if(_slot.ItemCount > 1)
+
+        if(_countText != null)
         {
-            _countText.text = _slot.ItemCount.ToString();
-        }
-        else
-        {
-            _countText.text = "";
+            if (_slot.ItemCount > 1)
+            {
+                _countText.text = _slot.ItemCount.ToString();
+            }
+            else
+            {
+                _countText.text = "";
+            }
         }
     }
 
@@ -97,7 +104,10 @@ public class SlotUI : MonoBehaviour
         {
             _itemImage.color = color;
         }
-        _countText.color = color;
+        if(_countText != null)
+        {
+            _countText.color = color;
+        }
     }
 
     public Vector2 GetSlotSize()
