@@ -825,6 +825,32 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2919535190549593506, guid: 1aba0c482d8ea9a48ac96e641b98b955,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 511ba8a108985ca40adea5fa86514ecc,
+        type: 3}
+    - target: {fileID: 2919535190549593506, guid: 1aba0c482d8ea9a48ac96e641b98b955,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2919535190549593506, guid: 1aba0c482d8ea9a48ac96e641b98b955,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2919535190549593506, guid: 1aba0c482d8ea9a48ac96e641b98b955,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2919535190549593506, guid: 1aba0c482d8ea9a48ac96e641b98b955,
+        type: 3}
+      propertyPath: m_FillMethod
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4389851583325793736, guid: 1aba0c482d8ea9a48ac96e641b98b955,
         type: 3}
       propertyPath: m_Name
@@ -2467,6 +2493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c6937873511d6479688c75cc2e4165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tutorialSprite: {fileID: 21300000, guid: 62fd570bb2a13784eb96c901894cd694, type: 3}
 --- !u!114 &3094216501144236206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2479,6 +2506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c6937873511d6479688c75cc2e4165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tutorialSprite: {fileID: 0}
 --- !u!114 &3173753745884969049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2838,6 +2866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c6937873511d6479688c75cc2e4165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tutorialSprite: {fileID: 0}
 --- !u!114 &6692209538519653406
 MonoBehaviour:
   m_ObjectHideFlags: 0

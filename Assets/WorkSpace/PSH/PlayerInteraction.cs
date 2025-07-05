@@ -192,7 +192,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (!Manager.Player.Stats.isFarming)
             {
-                _inventoryCanvas.ShowInven();
+                Manager.UI.Inven.ShowInven();
                 StateChange(State.Idle);
                 Manager.Player.Stats.isFarming = true;
             }

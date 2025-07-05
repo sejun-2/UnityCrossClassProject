@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryCanvas : UICanvas<InventoryCanvas>
 {
@@ -207,5 +208,35 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/DiaryUI");
 
         Instantiate(prefab, transform);
+    }
+
+    public GameObject ShowTutorialUI(Transform transform, Sprite sprite)
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/TutorialUI");
+
+        GameObject obj = Instantiate(prefab, base.transform);
+        obj.GetComponent<Image>().sprite = sprite;
+
+        StartCoroutine(TutorialUICoroutine(obj, transform));
+
+        return obj;
+    }
+
+    private IEnumerator TutorialUICoroutine(GameObject obj, Transform transform)
+    {
+        Vector3 offset = new Vector3(0, 2, 0);
+
+        RectTransform rt = obj.GetComponent<RectTransform>();
+
+        while(obj != null)
+        {
+            Vector3 pos = transform.position + offset;
+
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
+
+            rt.position = screenPos;
+
+            yield return null;
+        }
     }
 }
