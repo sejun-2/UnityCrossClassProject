@@ -24,11 +24,14 @@ public class DiaryPresenter : BaseUI
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            DiaryData data = Manager.Data.DiaryData.Values[_diaryId[_diarySlotUIs.SelectedSlotIndex]];
+            if(_diarySlotUIs.SlotUIs.Count > 0)
+            {
+                DiaryData data = Manager.Data.DiaryData.Values[_diaryId[_diarySlotUIs.SelectedSlotIndex]];
+                Manager.UI.Inven.ShowBubbleText(data.PlayerDialogueIndexList);
+            }
 
             Manager.Player.Stats.isFarming = false;
 
-            Manager.UI.Inven.ShowBubbleText(data.PlayerDialogueIndexList);
             Destroy(this.gameObject);
 
         }
@@ -65,7 +68,7 @@ public class DiaryPresenter : BaseUI
         }
         else
         {
-            GetUI<TextMeshProUGUI>("ItemDescriptionText").text = "";
+            _descriptionText.text = "";
         }
     }
 
