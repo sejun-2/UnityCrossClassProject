@@ -192,6 +192,7 @@ public class InventoryPresenter : BaseUI, IInventory
 
         if (item != null)
         {
+            _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].ItemImage.gameObject.SetActive(true);
             GetUI<TextMeshProUGUI>("ItemNameText").text = item.itemName;
             GetUI<TextMeshProUGUI>("ItemDescriptionText").text = item.description;
         }

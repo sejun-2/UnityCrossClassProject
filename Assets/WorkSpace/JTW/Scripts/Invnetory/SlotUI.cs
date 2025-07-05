@@ -19,7 +19,7 @@ public class SlotUI : MonoBehaviour
         _slot = slot;
         slot.OnItemChanged += UpdateSlotData;
         slot.OnItemChanged += UpdateDurabilityData;
-        UpdateSlotData();
+        UpdateSlotData(slot.CurItem);
         UpdateDurabilityData(slot.CurItem);
 
     }
