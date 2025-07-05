@@ -74,7 +74,6 @@ public class CraftingPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            Debug.Log("ddddddddd");
             Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }
