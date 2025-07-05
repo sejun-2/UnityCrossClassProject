@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -18,6 +19,12 @@ public class SettingPopUp : BaseUI
     [SerializeField] public Slider MasterVolume;
     [SerializeField] public Slider BgmVolume;
     [SerializeField] public Slider SfxVolume;
+
+    [SerializeField] private TextMeshProUGUI _masterText;
+    [SerializeField] private TextMeshProUGUI _bgmText;
+    [SerializeField] private TextMeshProUGUI _sfxText;
+
+
 
     [Header("사운드 패널 내 네비게이션")]
     [SerializeField] private Selectable[] SoundSelectables; // MasterVolume, BgmVolume, SfxVolume 등
@@ -39,6 +46,14 @@ public class SettingPopUp : BaseUI
     private void Start()
     {
         Debug.Log(GetEvent("SettingPopUp열림")); // SettingMenu UI가 시작될 때 로그를 출력합니다.
+
+        _masterText = GetUI<TextMeshProUGUI>("MasterText");
+        _bgmText = GetUI<TextMeshProUGUI>("BgmText");
+        _sfxText = GetUI<TextMeshProUGUI>("SfxText");
+
+        MasterVolume.value = Manager.Sound.MasterVolume * 100;
+        BgmVolume.value = Manager.Sound.BgmVolume * 100;
+        SfxVolume.value = Manager.Sound.SfxVolume * 100;
 
         // 탭 버튼 클릭 이벤트 연결 (마우스 클릭용, 키보드는 Z키로 처리)
         SoundButton.onClick.AddListener(() => SwitchTab(0));
@@ -111,16 +126,20 @@ public class SettingPopUp : BaseUI
         // x키로 팝업 닫기
         if (Input.GetKeyDown(KeyCode.X))
         {
-            OnCloseSetting();
+            Manager.UI.PopUp.ClosePopUp();
 
         }
 
         // 사운드 값 실시간 반영
         if (MasterVolume != null && BgmVolume != null && SfxVolume != null && Manager.Sound != null)
         {
-            Manager.Sound.MasterVolume = MasterVolume.value;
-            Manager.Sound.BgmVolume = BgmVolume.value;
-            Manager.Sound.SfxVolume = SfxVolume.value;
+            Manager.Sound.MasterVolume = MasterVolume.value / 100;
+            Manager.Sound.BgmVolume = BgmVolume.value / 100;
+            Manager.Sound.SfxVolume = SfxVolume.value / 100;
+
+            _masterText.text = (Mathf.Round(Manager.Sound.MasterVolume * 100)).ToString();
+            _bgmText.text = (Mathf.Round(Manager.Sound.BgmVolume * 100)).ToString();
+            _sfxText.text = (Mathf.Round(Manager.Sound.SfxVolume * 100)).ToString();
         }
     }
 
