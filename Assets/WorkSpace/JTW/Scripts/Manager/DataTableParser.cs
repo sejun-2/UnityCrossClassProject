@@ -29,12 +29,14 @@ public class DataTableParser<T> where T : IUsableID
             // 따옴표 제거 (선택)
             for (int j = 0; j < fields.Length; j++)
             {
-                fields[j] = fields[j].Trim().Trim('"');
+                fields[j] = fields[j].Trim().Trim('"').Trim('$');
             }
+
+            
 
             T value = Parse(fields);
 
-            if (string.IsNullOrEmpty(value.GetID())) continue;
+            if (value == null || string.IsNullOrEmpty(value.GetID())) continue;
 
             values.Add(value.GetID(), value);
         }

@@ -17,7 +17,7 @@ public class DataManager : Singleton<DataManager>
     private const string _repairDescriptionTableURL = "https://docs.google.com/spreadsheets/d/1rCK2XdGhGUgGEfJWPJVchXTQTnqh3adUDixuAyX0P1c/export?format=csv&gid=0";
     private const string _ItemDropTableURL = "https://docs.google.com/spreadsheets/d/12WitX8EnRC_vlkSdJI_P3oBDLzqgPZE_0CRtUczMlOM/export?format=csv&gid=0";
     private const string _ItemSearchTableURL = "https://docs.google.com/spreadsheets/d/1acWhQmMpqq8mlE_XdDYcHdSh0Os9_zTbLrw_5cfV_P0/export?format=csv&gid=0";
-    private const string _storyDescriptionTableURL = "https://docs.google.com/spreadsheets/d/1jRBAj27nZM4DmqJFzzZAhh8zO3jYZ3TV3wdA2bwf7Fk/export?format=csv&gid=0";
+    private const string _collectionTableURL = "https://docs.google.com/spreadsheets/d/1ENjiapwS04BGDNb0deCfDL-jgbC6V_5IBS-3GkPyatM/export?format=csv&gid=0";
     private const string _playerDialogueTableURL = "https://docs.google.com/spreadsheets/d/1aMfYaGA6_9bvLPwBczY-up_UYgHt4Lg4W-OtRcmY-fU/export?format=csv&gid=0";
     private const string _storyInteractionTableURL = "https://docs.google.com/spreadsheets/d/1xXIKjSYGImAvAOTsWEFn2g5vRKb1eiMiiPU-nt60pd4/export?format=csv&gid=0";
 
@@ -27,7 +27,7 @@ public class DataManager : Singleton<DataManager>
     public DataTableParser<RepairData> RefairData;
     public DataTableParser<ItemSearchData> ItemSearchData;
     public DataTableParser<ItemDropData> ItemDropData;
-    public DataTableParser<StoryDescriptionData> StoryDescriptionData;
+    public DataTableParser<CollectionData> CollectionData;
     public DataTableParser<PlayerDialogueData> PlayerDialogueData;
     public DataTableParser<StoryInteractionData> StoryInteractionData;
 
@@ -312,29 +312,31 @@ public class DataManager : Singleton<DataManager>
     #region DownloadStory
     IEnumerator DownloadStoryRoutine()
     {
-        UnityWebRequest request = UnityWebRequest.Get(_storyDescriptionTableURL);
+        UnityWebRequest request = UnityWebRequest.Get(_collectionTableURL);
         yield return request.SendWebRequest();
         string dataCsv = request.downloadHandler.text;
 
-        StoryDescriptionData = new DataTableParser<StoryDescriptionData>(words =>
+        CollectionData = new DataTableParser<CollectionData>(words =>
         {
-            StoryDescriptionData story = new StoryDescriptionData();
+            CollectionData story = new CollectionData();
+
+            if (string.IsNullOrEmpty(words[0])) return null;
+
+            Debug.Log(words[0]);
 
             story.ID = words[0];
             Manager.Game.IsGetSubStory[words[0]] = false;
-
             string iconName = words[1].Trim();
             string iconPath = $"Icons/{iconName}";
             Sprite icon = Resources.Load<Sprite>(iconPath);
             story.Icon = icon;
             story.Name = words[2];
             story.Description = words[3];
-            story.PlayerDialogueID = words[4];
 
             return story;
         });
 
-        StoryDescriptionData.Load(dataCsv);
+        CollectionData.Load(dataCsv);
     }
     #endregion
 

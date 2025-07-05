@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CraftingPresenter : BaseUI
 {
-    [field: SerializeField] private List<Sprite> _categorySprites;
+    [SerializeField] private ItemSlotUIs _categorySlotUIsPrefab;
+    [SerializeField] private ItemSlotUIs _needItemSlotUIsPrefab;
     [SerializeField] private ItemSlotUIs _itemSlotUIsPrefab;
+
     private ItemSlotUIs _categorySlots;
     private List<ItemSlotUIs> _resultItemSlotsList = new();
     private ItemSlotUIs _needItemSlots;
@@ -16,6 +19,7 @@ public class CraftingPresenter : BaseUI
     private GameObject _resultItemPanel;
     private GameObject _needItemPanel;
 
+    private Image _resultItemIcon;
     private TextMeshProUGUI _nameText;
     private TextMeshProUGUI _descriptionText;
 
@@ -26,6 +30,8 @@ public class CraftingPresenter : BaseUI
 
     private ItemSlotUIs _selectedResultItemSlots;
 
+    private GameObject _resultUI;
+
     private Dictionary<string, CraftingData> CraftDict => Manager.Data.CraftingData.Values;
 
     private void Start()
@@ -35,12 +41,15 @@ public class CraftingPresenter : BaseUI
         _needItemPanel = GetUI("NeedItemPanel");
         _nameText = GetUI<TextMeshProUGUI>("NameText");
         _descriptionText = GetUI<TextMeshProUGUI>("DescriptionText");
+        _resultItemIcon = GetUI<Image>("ResultItemIcon");
 
         InitCrafting();
     }
 
     private void Update()
     {
+        if (_resultUI != null) return;
+
         MoveInventory();
 
         if (Input.GetKeyDown(KeyCode.Z) && _canCraft && _isInResultItems)
@@ -59,10 +68,13 @@ public class CraftingPresenter : BaseUI
             }
 
             UpdateNeedItemList(_selectedResultItemSlots.SelectedSlotIndex);
+
+            _resultUI = Manager.UI.Inven.ShowCraftResultUI(item);
         }
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Debug.Log("ddddddddd");
             Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }
@@ -70,17 +82,18 @@ public class CraftingPresenter : BaseUI
 
     public void InitCrafting()
     {
-        _categorySlots = Instantiate(_itemSlotUIsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
-        _categorySlots.SetPanelSize(new Vector2(5, 1));
+        _categorySlots = Instantiate(_categorySlotUIsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
+        _categorySlots.SetPanelSize(new Vector2(3, 1));
 
-        for (int i = 0; i < _categorySprites.Count; i++)
+        for (int i = 0; i < 3; i++)
         {
             _categorySlots.AddSlotUI(maxItemCount: 0);
-            _categorySlots.SlotUIs[i].ItemImage.sprite = _categorySprites[i];
+            _categorySlots.SlotUIs[i].SetText($"{i + 1}Æ¼¾î");
         }
         _categorySlots.SelectSlotUI(0);
+        _categorySlots.SlotUIs[_categorySlots.SelectedSlotIndex].SetColor(Color.black);
 
-        for(int i = 0; i < _categorySprites.Count; i++)
+        for (int i = 0; i < 3; i++)
         {
             _resultItemSlotsList.Add(Instantiate(_itemSlotUIsPrefab, _resultItemPanel.transform)
                 .GetComponent<ItemSlotUIs>());
@@ -144,7 +157,9 @@ public class CraftingPresenter : BaseUI
         }
         else
         {
+            _categorySlots.SlotUIs[_categorySlots.SelectedSlotIndex].SetColor(Color.white);
             _categorySlots.MoveSelectSlot(direction);
+            _categorySlots.SlotUIs[_categorySlots.SelectedSlotIndex].SetColor(Color.black);
             _selectedResultItemSlots.gameObject.SetActive(false);
             _selectedResultItemSlots = _resultItemSlotsList[_categorySlots.SelectedSlotIndex];
             _selectedResultItemSlots.gameObject.SetActive(true);
@@ -180,8 +195,6 @@ public class CraftingPresenter : BaseUI
 
     private void GoItemSlots()
     {
-        _categorySlots.Deactivate();
-
         _isInResultItems = true;
         _selectedResultItemSlots.gameObject.SetActive(false);
         _selectedResultItemSlots = _resultItemSlotsList[_categorySlots.SelectedSlotIndex];
@@ -211,6 +224,7 @@ public class CraftingPresenter : BaseUI
             {
                 Destroy(_needItemSlots.gameObject);
             }
+            _resultItemIcon.gameObject.SetActive(false);
             _nameText.text = "";
             _descriptionText.text = "";
             return;
@@ -221,7 +235,9 @@ public class CraftingPresenter : BaseUI
             Destroy(_needItemSlots.gameObject);
         }
 
-        _needItemSlots = Instantiate(_itemSlotUIsPrefab, _needItemPanel.transform)
+        _resultItemIcon.gameObject.SetActive(true);
+        _resultItemIcon.sprite = _selectedResultItemSlots.SlotUIs[_selectedResultItemSlots.SelectedSlotIndex].ItemImage.sprite;
+        _needItemSlots = Instantiate(_needItemSlotUIsPrefab, _needItemPanel.transform)
             .GetComponent<ItemSlotUIs>();
         _needItemSlots.SetPanelSize(new Vector2(5, 1));
         _needItemSlots.Deactivate();

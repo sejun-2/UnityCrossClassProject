@@ -9,6 +9,7 @@ public class MapPoint : BaseUI
     [SerializeField] private string _sceneName;
     public string SceneName => _sceneName;
     [SerializeField] private string _mapName;
+    public string MapName => _mapName;
     [SerializeField] private string _mapDescription;
 
     private TextMeshProUGUI _nameText;

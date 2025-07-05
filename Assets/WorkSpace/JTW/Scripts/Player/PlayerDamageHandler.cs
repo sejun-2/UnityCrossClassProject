@@ -5,6 +5,10 @@ using UnityEngine;
 public partial class PlayerStats
 {
     public Stat<bool> IsTakeDamage = new();
+
+    internal void ReduceFatigue(float v)
+    {
+    }
 }
 
 public class PlayerDamageHandler : MonoBehaviour, IDamageable

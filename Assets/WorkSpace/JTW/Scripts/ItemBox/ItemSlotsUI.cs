@@ -6,11 +6,12 @@ public class ItemSlotUIs : MonoBehaviour
 {
     [SerializeField] private GameObject _slotUIPrefab;
     [SerializeField] private RectTransform _itemSlotUIsPanel;
+    [SerializeField] private float _interval = 20;
+    [SerializeField] private float _padding = 30;
 
     private List<SlotUI> _slotUIs = new List<SlotUI>();
     public List<SlotUI> SlotUIs => _slotUIs;
     private Vector2 _slotUIPosition = new Vector2(30, -30);
-    private float _interval = 20;
 
     private int _lineCount = 5;
     public int LineCount => _lineCount;
@@ -21,12 +22,17 @@ public class ItemSlotUIs : MonoBehaviour
 
     public List<ItemType> AcceptTypeList = new List<ItemType>();
 
+    private void Awake()
+    {
+        _slotUIPosition = new Vector2(_padding, -_padding);
+    }
+
     public void SetPanelSize(Vector2 sizeRate)
     {
         Vector2 size = _slotUIPrefab.GetComponent <SlotUI>().GetSlotSize();
 
-        float width = sizeRate.x * size.x + (sizeRate.x - 1) * _interval + 60;
-        float height = sizeRate.y * size.y + (sizeRate.y - 1) * _interval + 60;
+        float width = sizeRate.x * size.x + (sizeRate.x - 1) * _interval + _padding * 2;
+        float height = sizeRate.y * size.y + (sizeRate.y - 1) * _interval + _padding * 2;
 
         _itemSlotUIsPanel.sizeDelta = new Vector2(width, height);
     }
@@ -56,7 +62,7 @@ public class ItemSlotUIs : MonoBehaviour
         if(_slotUIs.Count % _lineCount == 0)
         {
             _slotUIPosition.y -= slotUI.GetSlotSize().y + _interval;
-            _slotUIPosition.x = 30;
+            _slotUIPosition.x = _padding;
         }
         else
         {

@@ -42,6 +42,7 @@ public class GameManager : Singleton<GameManager>
         if (data == null)
         {
             InitGameData();
+            IsGetSubStory["6001"] = true;
             Manager.Player.Stats.InitStats();
             ChangeScene("Tutorial");
         }
@@ -130,7 +131,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         IsGetSubStory = new Dictionary<string, bool>();
-        foreach (string str in Manager.Data.StoryDescriptionData.Values.Keys.ToArray())
+        foreach (string str in Manager.Data.CollectionData.Values.Keys.ToArray())
         {
             IsGetSubStory[str] = false;
         }

@@ -88,7 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00497594adf3cbc4bbb83555ddcc0202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotUIPrefab: {fileID: 4287079269926146491, guid: d6f7031cc0987df4ca624947a839cda4,
+  _slotUIPrefab: {fileID: 825692464500562713, guid: 56323851f5afa4f4d9a8370ec2b74a52,
     type: 3}
   _itemSlotUIsPanel: {fileID: 5629065961620485264}
+  _interval: 15
+  _padding: 20
   AcceptTypeList: 

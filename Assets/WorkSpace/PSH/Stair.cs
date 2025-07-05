@@ -10,6 +10,8 @@ public class Stair : MonoBehaviour, IInteractable
     [SerializeField] private Image fadeImage; // 검정 패널 이미지
     [SerializeField] private float fadeDuration = 0.5f;
 
+    [SerializeField] AudioClip audioClip;
+
     private void Start()
     {
         // 자식 중 이름으로 pointUp, pointDown 찾기
@@ -62,14 +64,16 @@ public class Stair : MonoBehaviour, IInteractable
             Debug.Log("이미 계단 아래에 있음. 아래로 이동 불가.");
             return false;
         }
-
+        Manager.Player.Stats.isFarming = true;
         Transform target = goUp ? pointUp : pointDown;
         StartCoroutine(FadeTeleport(player, target.position));
+        Manager.Sound.SfxPlay(audioClip,transform,1);
         return true;
     }
 
     private IEnumerator FadeTeleport(Transform player, Vector3 targetPos)
     {
+        yield return new WaitForSeconds(1f);
         yield return StartCoroutine(Fade(1)); // 페이드 아웃
 
         player.position = targetPos;
@@ -93,6 +97,8 @@ public class Stair : MonoBehaviour, IInteractable
 
         c.a = targetAlpha;
         fadeImage.color = c;
+        Manager.Player.Stats.isFarming = false;
+
     }
 
     // IInteractable 기본 구현

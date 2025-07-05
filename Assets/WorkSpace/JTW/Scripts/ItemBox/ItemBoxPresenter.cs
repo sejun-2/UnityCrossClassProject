@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemBoxPresenter : BaseUI, IInventory
 {
+    [SerializeField] private GameObject _categorySlotsPrefab;
     [SerializeField] private GameObject _itemSlotsPrefab;
-    [SerializeField] private GameObject _slotPrefab;
-    [field: SerializeField] private List<Sprite> _categorySprites;
 
     private ItemBoxData _itemBox;
 
+    private readonly string[] _categoryNames = new string[4] { "무기", "소비", "소재", "기타" };
     private GameObject _categoryPanel;
     private GameObject _itemSlotsPanel;
     private TextMeshProUGUI _itemNameText;
     private TextMeshProUGUI _itemDescriptionText;
+    private Image _tradeBackGround;
 
     private List<ItemSlotUIs> _itemSlotsList = new List<ItemSlotUIs>();
     private List<List<ItemType>> _acceptTypeLists = new List<List<ItemType>>();
@@ -112,8 +114,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private void InitData()
     {
         // 각 카테고리에 들어갈 아이템 타입 선정
-        _acceptTypeLists.Add(new List<ItemType>() { ItemType.Consumable});
         _acceptTypeLists.Add(new List<ItemType>() { ItemType.Weapon, ItemType.Armor });
+        _acceptTypeLists.Add(new List<ItemType>() { ItemType.Consumable});
         _acceptTypeLists.Add(new List<ItemType>() { ItemType.Material });
         _acceptTypeLists.Add(new List<ItemType>() { ItemType.Tool });
 
@@ -121,23 +123,29 @@ public class ItemBoxPresenter : BaseUI, IInventory
         _categoryPanel = GetUI("CategoryPanel");
         _itemNameText = GetUI<TextMeshProUGUI>("ItemNameText");
         _itemDescriptionText = GetUI<TextMeshProUGUI>("ItemDescriptionText");
+        _tradeBackGround = GetUI<Image>("TradeBackground");
     }
 
     private void InitItemBox()
     {
-        _categorySlots = Instantiate(_itemSlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
-        _categorySlots.SetPanelSize(new Vector2(5, 1));
-        for(int i = 0; i < _categorySprites.Count; i++)
+        if (IsTrade)
+        {
+            _tradeBackGround.gameObject.SetActive(true);
+        }
+
+        _categorySlots = Instantiate(_categorySlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
+        _categorySlots.SetPanelSize(new Vector2(4, 1));
+        for(int i = 0; i < 4; i++)
         {
             _categorySlots.AddSlotUI(maxItemCount:0);
-            _categorySlots.SlotUIs[i].ItemImage.sprite = _categorySprites[i];
+            _categorySlots.SlotUIs[i].SetText(_categoryNames[i]);
         }
         _categorySlots.SelectSlotUI(0);
 
-        for(int i = 0; i < _categorySprites.Count; i++)
+        for(int i = 0; i < 4; i++)
         {
             _itemSlotsList.Add(Instantiate(_itemSlotsPrefab, _itemSlotsPanel.transform).GetComponent<ItemSlotUIs>());
-            _itemSlotsList[i].SetPanelSize(new Vector2(5, 4));
+            _itemSlotsList[i].SetPanelSize(new Vector2(4, 4));
             _itemSlotsList[i].AcceptTypeList = _acceptTypeLists[i];
             _itemSlotsList[i].gameObject.SetActive(false);
         }
@@ -220,7 +228,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
     {
         ItemSlotUIs itemSlotUIs = Instantiate(_itemSlotsPrefab, _itemSlotsPanel.transform)
                 .GetComponent<ItemSlotUIs>();
-        itemSlotUIs.SetPanelSize(new Vector2(5, 4));
+        itemSlotUIs.SetPanelSize(new Vector2(4, 4));
         itemSlotUIs.AcceptTypeList = _selectedItemSlots.AcceptTypeList;
         Destroy(_selectedItemSlots.gameObject);
 
