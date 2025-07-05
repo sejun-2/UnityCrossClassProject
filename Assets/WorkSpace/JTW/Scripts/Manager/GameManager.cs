@@ -22,6 +22,7 @@ public class GameManager : Singleton<GameManager>
     public float BarricadeHp = 100;
 
     private SaveController _saveContoroller = new SaveController();
+    public GameData SavedData;
 
     private PlayerStats Stats => Manager.Player.Stats;
 
@@ -39,6 +40,8 @@ public class GameManager : Singleton<GameManager>
     public void GameStart()
     {
         GameData data = _saveContoroller.LoadGameData();
+        SavedData = data;
+
 
         if (data == null)
         {
@@ -52,6 +55,16 @@ public class GameManager : Singleton<GameManager>
         {
             LoadSaveData(data);
         }
+    }
+
+    public bool IsSaved()
+    {
+        if(SavedData == null)
+        {
+            SavedData = _saveContoroller.LoadGameData();
+        }
+
+        return SavedData != null;
     }
 
     public void ChangeScene(string sceneName)
@@ -188,6 +201,7 @@ public class GameManager : Singleton<GameManager>
         IsUsedObject = data.IsUsedObject;
         IsGetSubStory = data.IsGetSubStory;
         IsTalkDialogue = data.IsTalkDialogue;
+        IsGetDiary = data.IsGetDiary;
 
         IsInBaseCamp = data.IsInBaseCamp;
         SelectedMapName = data.SelectedMapName;

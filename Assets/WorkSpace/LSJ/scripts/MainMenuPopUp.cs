@@ -96,6 +96,11 @@ public class MainMenuPopUp : BaseUI
                 // 그 버튼의 onClick 이벤트(즉, 클릭 효과)를 실행한다
                 menuButtons[selectedIndex].onClick.Invoke();
         }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Manager.UI.PopUp.ClosePopUp();
+        }
     }
 
     public void showSerttingPopUp() // Z키를 눌렀을 때 호출되는 메서드
