@@ -632,6 +632,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mainSlotUIsPrefab: {fileID: 1778441505217503213, guid: 0b4a3368ec26a6e489cc71a03377745a,
     type: 3}
+  _bgmClip: {fileID: 8300000, guid: 5258b59544afce448935c696fd9b1a6f, type: 3}
 --- !u!1 &1150980755
 GameObject:
   m_ObjectHideFlags: 0
