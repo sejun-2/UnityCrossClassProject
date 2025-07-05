@@ -13,14 +13,6 @@ public class StoryPopUpPresenter : BaseUI
         {
             Manager.Player.Stats.isFarming = false;
             Destroy(this.gameObject);
-
-            string dialogueId = Manager.Data.StoryDescriptionData.Values[_storyId].PlayerDialogueID;
-
-            if (!string.IsNullOrEmpty(dialogueId))
-            {
-                Manager.UI.Inven.ShowBubbleText(dialogueId);
-            }
-            
         }
     }
 
@@ -33,7 +25,7 @@ public class StoryPopUpPresenter : BaseUI
 
     private void UpdateItemInfo()
     {
-        StoryDescriptionData data = Manager.Data.StoryDescriptionData.Values[_storyId];
+        CollectionData data = Manager.Data.CollectionData.Values[_storyId];
 
         GetUI<TextMeshProUGUI>("ItemNameText").text = data.Name;
         GetUI<TextMeshProUGUI>("ItemDescriptionText").text = data.Description;

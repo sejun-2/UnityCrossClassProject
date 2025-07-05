@@ -43,7 +43,7 @@ public class SubStoryPresenter : BaseUI
             {
                 _itemSlotUIs.AddSlotUI();
                 _subStroyId.Add(key);
-                _itemSlotUIs.SlotUIs[index].SetText(Manager.Data.StoryDescriptionData.Values[key].Name);
+                _itemSlotUIs.SlotUIs[index].SetText(Manager.Data.CollectionData.Values[key].Name);
                 index++;
             }
         }
@@ -99,7 +99,7 @@ public class SubStoryPresenter : BaseUI
 
     private void UpdateItemInfo()
     {
-        StoryDescriptionData data = Manager.Data.StoryDescriptionData.Values[_subStroyId[_itemSlotUIs.SelectedSlotIndex]];
+        CollectionData data = Manager.Data.CollectionData.Values[_subStroyId[_itemSlotUIs.SelectedSlotIndex]];
 
         if (data != null)
         {
