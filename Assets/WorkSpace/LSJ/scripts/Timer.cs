@@ -21,8 +21,16 @@ public class Timer : MonoBehaviour
             int hours = (totalSeconds % 86400) / 3600;
             int minutes = (totalSeconds % 3600) / 60;
             int seconds = totalSeconds % 60;
-            string map = "house";
-
+            string map;
+            if (Manager.Game.IsInBaseCamp)
+            {
+                map = "베이스 캠프";
+            }
+            else
+            {
+                map = Manager.Game.SelectedMapName;
+            }
+            
             timerText.text = string.Format(" 생존일 : {0}일 {1:00} 시간 {2:00} 분 {3:00} 초,  {4}", days, hours, minutes, seconds, map);
         }
     }
