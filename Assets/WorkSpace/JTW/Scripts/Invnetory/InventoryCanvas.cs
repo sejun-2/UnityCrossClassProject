@@ -201,4 +201,11 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
         return Instantiate(prefab, transform);
     }
+    
+    public void ShowDiaryUI()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/DiaryUI");
+
+        Instantiate(prefab, transform);
+    }
 }
