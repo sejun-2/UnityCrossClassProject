@@ -196,10 +196,6 @@ public class PlayerInteraction : MonoBehaviour
                 StateChange(State.Idle);
                 Manager.Player.Stats.isFarming = true;
             }
-            else
-            {
-                Manager.Player.Stats.isFarming = false;
-            }
         }
 
         if (Input.GetKeyDown(KeyCode.V))
