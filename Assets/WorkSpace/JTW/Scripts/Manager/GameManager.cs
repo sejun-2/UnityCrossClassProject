@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, bool> IsUsedObject = new Dictionary<string, bool>();
     public Dictionary<string, bool> IsGetSubStory = new Dictionary<string, bool>();
     public Dictionary<string, bool> IsTalkDialogue = new Dictionary<string, bool>();
+    public Dictionary<string, bool> IsGetDiary = new Dictionary<string, bool>();
 
     public bool IsInBaseCamp = true;
     public string SelectedMapName = "";
@@ -43,6 +44,7 @@ public class GameManager : Singleton<GameManager>
         {
             InitGameData();
             IsGetSubStory["6001"] = true;
+            IsGetDiary["7001"] = true;
             Manager.Player.Stats.InitStats();
             ChangeScene("Tutorial");
         }

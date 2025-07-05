@@ -325,8 +325,6 @@ public class DataManager : Singleton<DataManager>
 
             if (string.IsNullOrEmpty(words[0])) return null;
 
-            Debug.Log(words[0]);
-
             story.ID = words[0];
             Manager.Game.IsGetSubStory[words[0]] = false;
             string iconName = words[1].Trim();
@@ -417,6 +415,7 @@ public class DataManager : Singleton<DataManager>
             DiaryData diary = new();
 
             diary.Id = words[0];
+            Manager.Game.IsGetDiary[words[0]] = false;
 
             diary.Name = words[1];
             diary.Description = words[3];
