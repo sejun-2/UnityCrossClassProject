@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemBoxPresenter : BaseUI, IInventory
 {
@@ -16,6 +17,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private GameObject _itemSlotsPanel;
     private TextMeshProUGUI _itemNameText;
     private TextMeshProUGUI _itemDescriptionText;
+    private Image _tradeBackGround;
 
     private List<ItemSlotUIs> _itemSlotsList = new List<ItemSlotUIs>();
     private List<List<ItemType>> _acceptTypeLists = new List<List<ItemType>>();
@@ -121,10 +123,16 @@ public class ItemBoxPresenter : BaseUI, IInventory
         _categoryPanel = GetUI("CategoryPanel");
         _itemNameText = GetUI<TextMeshProUGUI>("ItemNameText");
         _itemDescriptionText = GetUI<TextMeshProUGUI>("ItemDescriptionText");
+        _tradeBackGround = GetUI<Image>("TradeBackground");
     }
 
     private void InitItemBox()
     {
+        if (IsTrade)
+        {
+            _tradeBackGround.gameObject.SetActive(true);
+        }
+
         _categorySlots = Instantiate(_categorySlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
         _categorySlots.SetPanelSize(new Vector2(4, 1));
         for(int i = 0; i < 4; i++)

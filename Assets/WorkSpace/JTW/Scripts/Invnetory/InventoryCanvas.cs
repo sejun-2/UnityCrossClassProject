@@ -23,20 +23,21 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
     public void ShowTradeItemBox()
     {
-        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/Inventory");
-        InventoryPresenter inven = Instantiate(prefab, transform).GetComponent<InventoryPresenter>();
-
-        prefab = Resources.Load<GameObject>($"UI/Inventory/ItemBox");
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/ItemBox");
         ItemBoxPresenter itemBox = Instantiate(prefab, transform).GetComponent<ItemBoxPresenter>();
 
-        inven.SetInventory(Manager.Game.Inven, itemBox, Vector2.right);
-        itemBox.SetItemBoxData(Manager.Game.ItemBox, inven, Vector2.left);
+        prefab = Resources.Load<GameObject>($"UI/Inventory/Inventory");
+        InventoryPresenter inven = Instantiate(prefab, transform).GetComponent<InventoryPresenter>();
+
+
+        inven.SetInventory(Manager.Game.Inven, itemBox, Vector2.left);
+        itemBox.SetItemBoxData(Manager.Game.ItemBox, inven, Vector2.right);
 
         RectTransform invenRt = inven.GetComponent<RectTransform>();
         RectTransform itemBoxRt = itemBox.GetComponent<RectTransform>();
 
-        invenRt.anchoredPosition = new Vector2(-400, 0);
-        itemBoxRt.anchoredPosition = new Vector2(400, 0);
+        invenRt.anchoredPosition = new Vector2(400, 75);
+        itemBoxRt.anchoredPosition = new Vector2(-340, -90);
 
         inven.Deactivate();
     }
