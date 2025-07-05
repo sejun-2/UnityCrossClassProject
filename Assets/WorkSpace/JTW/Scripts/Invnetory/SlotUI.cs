@@ -28,13 +28,16 @@ public class SlotUI : MonoBehaviour
     {
         if(_slot.CurItem == null)
         {
-            if(_itemImage != null)
-                _itemImage.sprite = null;
+            if (_itemImage != null)
+                _itemImage.gameObject.SetActive(false);
         }
         else
         {
             if (_itemImage != null)
+            {
+                _itemImage.gameObject.SetActive(true);
                 _itemImage.sprite = _slot.CurItem.icon;
+            }
 
         }
 
