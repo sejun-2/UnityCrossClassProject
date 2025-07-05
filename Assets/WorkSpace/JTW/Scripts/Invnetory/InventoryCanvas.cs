@@ -124,7 +124,7 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
     public void ShowBubbleText(List<string> dialogueIdList)
     {
         if (dialogueIdList.Count <= 0) return;
-        if (Manager.Game.IsTalkDialogue[dialogueIdList[0]]) return;
+        if (Manager.Game.IsTalkDialogue[dialogueIdList[0]] && dialogueIdList[0] != "20013") return;
 
         if (_bubbleCoroutine != null)
         {
