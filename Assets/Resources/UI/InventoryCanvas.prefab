@@ -114,3 +114,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025065272562157448f01287f450b276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bubbleTextSound: {fileID: 8300000, guid: 8d372b9d1a738c54fbe91b285bfc2236, type: 3}

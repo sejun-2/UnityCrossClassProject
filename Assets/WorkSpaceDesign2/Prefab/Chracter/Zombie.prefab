@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9.916658, y: 0.29, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1293603, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8094276283008605678}
@@ -87,7 +87,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!114 &1583025015915484948
 MonoBehaviour:
@@ -101,13 +101,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c56e455fd95761f48aaf399319680551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _zombieDetectSound: {fileID: 8300000, guid: 7770ee7127f1b4b44bb5a73d141bb3eb, type: 3}
+  _zombieStepSound: {fileID: 8300000, guid: 53335d32828050a4a93b0e280debc640, type: 3}
   _moveSpeed: 2
   _patrolRange: 4
   _chaseSpeedMultiplier: 1.1
   _waitTime: 3
   _detectionDistance: 5
   _attackRange: 1
-  _health: 100
+  _health: 30
   _damage: 10
   _attackCooldown: 3
   _playerTransform: {fileID: 0}
@@ -171,6 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcd593efcaecd8344a1e44298af17dee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _zombieAttackSound: {fileID: 8300000, guid: e9c393831166f9c4e91452a1d03b67cc, type: 3}
   _damage: 10
   _attackCooldown: 3.9
   _attackRange: 1
@@ -186,6 +189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6980198cdbfbc4ea6c8b3be2fd1582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _zombieHitSound: {fileID: 8300000, guid: 462aef860eaf2234f8c70c98dfdfd129, type: 3}
+  _zombieDeathSound: {fileID: 8300000, guid: 32f0f343ccfd2d340a3c980dd23742a2, type: 3}
+  _zombieThudSound: {fileID: 8300000, guid: 3746c8f29ab20e34eaeab6c860bba761, type: 3}
 --- !u!1001 &8089773454012650658
 PrefabInstance:
   m_ObjectHideFlags: 0

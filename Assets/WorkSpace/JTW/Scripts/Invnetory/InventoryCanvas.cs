@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class InventoryCanvas : UICanvas<InventoryCanvas>
 {
+    [SerializeField] private AudioClip _bubbleTextSound;
+
     #region Inven,ItemBox,Farming
     public void ShowInven()
     {
@@ -119,12 +121,12 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
     private GameObject _bubble;
     private Coroutine _bubbleCoroutine;
 
-    public void ShowBubbleText(string dialogueId) => ShowBubbleText(new List<string>() { dialogueId });
+    public void ShowBubbleText(string dialogueId, bool isLoop = false) => ShowBubbleText(new List<string>() { dialogueId }, isLoop);
 
-    public void ShowBubbleText(List<string> dialogueIdList)
+    public void ShowBubbleText(List<string> dialogueIdList, bool isLoop = false)
     {
         if (dialogueIdList.Count <= 0) return;
-        if (Manager.Game.IsTalkDialogue[dialogueIdList[0]]) return;
+        if (!isLoop && Manager.Game.IsTalkDialogue[dialogueIdList[0]] && dialogueIdList[0] != "20013") return;
 
         if (_bubbleCoroutine != null)
         {
@@ -137,6 +139,8 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
     private IEnumerator BubbleTextCoroutine(List<string> dialogueIdList)
     {
+        Manager.Sound.SfxPlay(_bubbleTextSound, Manager.Player.Transform);
+
         foreach(string dialogueId in dialogueIdList)
         {
             Manager.Game.IsTalkDialogue[dialogueId] = true;
@@ -215,7 +219,11 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/TutorialUI");
 
         GameObject obj = Instantiate(prefab, base.transform);
-        obj.GetComponent<Image>().sprite = sprite;
+
+        if(sprite != null)
+        {
+            obj.GetComponent<Image>().sprite = sprite;
+        }
 
         StartCoroutine(TutorialUICoroutine(obj, transform));
 
@@ -230,7 +238,16 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
         while(obj != null)
         {
-            Vector3 pos = transform.position + offset;
+            if (Manager.Player.Stats.isFarming)
+            {
+                obj.SetActive(false);
+            }
+            else
+            {
+                obj.SetActive(true);
+            }
+
+                Vector3 pos = transform.position + offset;
 
             Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
 

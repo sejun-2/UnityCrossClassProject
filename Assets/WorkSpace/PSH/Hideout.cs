@@ -65,6 +65,8 @@ public class Hideout : MonoBehaviour,IInteractable
 
     void MoveWithDOTween(Transform target, Vector3 endPos, float duration, bool deactivateOnComplete = false)
     {
+        target.DOKill();
+
         var tween = target.DOMove(endPos, duration)
                           .SetEase(Ease.InOutSine);
 

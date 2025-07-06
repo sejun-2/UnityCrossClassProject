@@ -42,12 +42,15 @@ public class GameManager : Singleton<GameManager>
         GameData data = _saveContoroller.LoadGameData();
         SavedData = data;
 
+        Manager.Sound.BgmPlay(null);
 
         if (data == null)
         {
             InitGameData();
             IsGetSubStory["6001"] = true;
             IsGetDiary["7001"] = true;
+            IsInBaseCamp = false;
+            SelectedMapName = "버려진 폐건물";
             Manager.Player.Stats.InitStats();
             ChangeScene("Tutorial");
         }

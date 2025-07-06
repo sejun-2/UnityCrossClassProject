@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class Sofa : MonoBehaviour, IInteractable
 {
-    [SerializeField] string ObjectId = "1001";
     public void Interact()
     {
-        if (!Manager.Game.IsUsedObject[ObjectId])
+        if (!Manager.Game.IsUsedObject["4003"])
         {
-            Manager.Player.Stats.ChangeHp(10);
-            Manager.Game.IsUsedObject[ObjectId] = true;
+            Manager.Player.Stats.ChangeHp(20);
+            Manager.Game.IsUsedObject["4003"] = true;
         }
         else
         {
-            Debug.Log("오늘은 충분히 쉬었어.");
+            Manager.UI.Inven.ShowBubbleText("20022", true);
         }
+
+        Manager.Player.Stats.isFarming = false;
     }
 }

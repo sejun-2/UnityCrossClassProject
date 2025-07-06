@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ZombieDamageHandler : MonoBehaviour, IDamageable
 {
+    [SerializeField] private AudioClip _zombieHitSound;
+    [SerializeField] private AudioClip _zombieDeathSound;
+    [SerializeField] private AudioClip _zombieThudSound;
+
     private Zombie _zombie;
     private Animator _animator;
 
@@ -26,6 +30,11 @@ public class ZombieDamageHandler : MonoBehaviour, IDamageable
         if (_zombie.Health <= 0)
         {
             _zombie.StateChange(Zombie.State.Dead);
+            Manager.Sound.SfxPlay(_zombieDeathSound, transform, 0.5f);
+        }
+        else
+        {
+            Manager.Sound.SfxPlay(_zombieHitSound, transform, 0.5f);
         }
     }
 
@@ -37,5 +46,10 @@ public class ZombieDamageHandler : MonoBehaviour, IDamageable
         {
             _zombie.StateChange(Zombie.State.Wait);
         }
+    }
+
+    public void PlaySound()
+    {
+        Manager.Sound.SfxPlay(_zombieThudSound, transform);
     }
 }

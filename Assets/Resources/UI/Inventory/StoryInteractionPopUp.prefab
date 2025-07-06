@@ -65,8 +65,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 27aa9f09712ca7c48b0a91e1d11c08fb, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: e91d928f59954584d8ba49513887d01f, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -84,6 +84,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1432308932454428109}
+  - component: {fileID: 4574518200842604822}
   m_Layer: 0
   m_Name: StoryInteractionPopUp
   m_TagString: Untagged
@@ -113,6 +114,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4574518200842604822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3576109272759158595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b63fd618f8146e43ab9970accc06445, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4126095277822668238
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,8 +269,8 @@ MonoBehaviour:
   m_text: "\u201C\uB9C8\uCE58 \uB204\uAD70\uAC00\uC758 \uD53C\uB85C \uADF8\uB824\uC9C4
     \uADF8\uB9BC \uAC19\uB2E4.\u201D"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d7900608389a9374eb41f7ee23ac63ae, type: 2}
-  m_sharedMaterial: {fileID: 562673082407860172, guid: d7900608389a9374eb41f7ee23ac63ae,
+  m_fontAsset: {fileID: 11400000, guid: e151e604ba45fc444b23f0905f9d94ab, type: 2}
+  m_sharedMaterial: {fileID: 562673082407860172, guid: e151e604ba45fc444b23f0905f9d94ab,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

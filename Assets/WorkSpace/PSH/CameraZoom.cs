@@ -14,6 +14,7 @@ public class CameraZoom : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             zoomOutCam.Priority = 20;
+
         }
     }
 

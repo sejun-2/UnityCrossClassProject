@@ -72,6 +72,17 @@ public class Item : ScriptableObject, IUsableID
                 Manager.Player.Stats.ChangeHunger(hungerRecover);
                 Manager.Player.Stats.ChangeThirst(thirstRecover);
                 Manager.Player.Stats.ChangeMentality(mentalRecover);
+                if(hpRecover > 0)
+                {
+                    AudioClip clip = Resources.Load<AudioClip>("Sound/Player_Bandage");
+                    Manager.Sound.SfxPlay(clip, Manager.Player.Transform);
+                }
+                else if(hungerRecover > 0)
+                {
+                    AudioClip clip = Resources.Load<AudioClip>("Sound/Player_Eat");
+                    Manager.Sound.SfxPlay(clip, Manager.Player.Transform);
+                }
+
                 return true;
             case ItemType.Tool:
                 return true;
@@ -100,5 +111,8 @@ public class Item : ScriptableObject, IUsableID
         {
             Manager.Player.Stats.Armor.Value = null;
         }
+
+        AudioClip clip = Resources.Load<AudioClip>("Sound/Player_Breakitem");
+        Manager.Sound.SfxPlay(clip, Manager.Player.Transform);
     }
 }

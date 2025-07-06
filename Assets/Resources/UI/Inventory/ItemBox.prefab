@@ -223,7 +223,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c857ec238b7d071479c533c8ec7bf50b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c744ddfd89dc9b44a95db78943189cc5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -655,8 +655,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC62E\uAE30\uAE30"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4d30f77be120df14e834424934fc7d2d, type: 2}
-  m_sharedMaterial: {fileID: -7730935903235614194, guid: 4d30f77be120df14e834424934fc7d2d,
+  m_fontAsset: {fileID: 11400000, guid: 04ca1ddd2e0a7d3499dac5976c8b7052, type: 2}
+  m_sharedMaterial: {fileID: -7730935903235614194, guid: 04ca1ddd2e0a7d3499dac5976c8b7052,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1286,8 +1286,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uD0D0\uD5D8 \uC2DC\uC791"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4d30f77be120df14e834424934fc7d2d, type: 2}
-  m_sharedMaterial: {fileID: -7730935903235614194, guid: 4d30f77be120df14e834424934fc7d2d,
+  m_fontAsset: {fileID: 11400000, guid: 04ca1ddd2e0a7d3499dac5976c8b7052, type: 2}
+  m_sharedMaterial: {fileID: -7730935903235614194, guid: 04ca1ddd2e0a7d3499dac5976c8b7052,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1421,8 +1421,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uCDE8\uC18C"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4d30f77be120df14e834424934fc7d2d, type: 2}
-  m_sharedMaterial: {fileID: -7730935903235614194, guid: 4d30f77be120df14e834424934fc7d2d,
+  m_fontAsset: {fileID: 11400000, guid: 04ca1ddd2e0a7d3499dac5976c8b7052, type: 2}
+  m_sharedMaterial: {fileID: -7730935903235614194, guid: 04ca1ddd2e0a7d3499dac5976c8b7052,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1556,7 +1556,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c857ec238b7d071479c533c8ec7bf50b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c744ddfd89dc9b44a95db78943189cc5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1768,8 +1768,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Z
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4d30f77be120df14e834424934fc7d2d, type: 2}
-  m_sharedMaterial: {fileID: -7730935903235614194, guid: 4d30f77be120df14e834424934fc7d2d,
+  m_fontAsset: {fileID: 11400000, guid: 04ca1ddd2e0a7d3499dac5976c8b7052, type: 2}
+  m_sharedMaterial: {fileID: -7730935903235614194, guid: 04ca1ddd2e0a7d3499dac5976c8b7052,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1903,8 +1903,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: X
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4d30f77be120df14e834424934fc7d2d, type: 2}
-  m_sharedMaterial: {fileID: -7730935903235614194, guid: 4d30f77be120df14e834424934fc7d2d,
+  m_fontAsset: {fileID: 11400000, guid: 04ca1ddd2e0a7d3499dac5976c8b7052, type: 2}
+  m_sharedMaterial: {fileID: -7730935903235614194, guid: 04ca1ddd2e0a7d3499dac5976c8b7052,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2114,8 +2114,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: C
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4d30f77be120df14e834424934fc7d2d, type: 2}
-  m_sharedMaterial: {fileID: -7730935903235614194, guid: 4d30f77be120df14e834424934fc7d2d,
+  m_fontAsset: {fileID: 11400000, guid: 04ca1ddd2e0a7d3499dac5976c8b7052, type: 2}
+  m_sharedMaterial: {fileID: -7730935903235614194, guid: 04ca1ddd2e0a7d3499dac5976c8b7052,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2475,7 +2475,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c857ec238b7d071479c533c8ec7bf50b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c744ddfd89dc9b44a95db78943189cc5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
