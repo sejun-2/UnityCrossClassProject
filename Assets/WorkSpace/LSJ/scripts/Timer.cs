@@ -31,7 +31,7 @@ public class Timer : MonoBehaviour
                 map = Manager.Game.SelectedMapName;
             }
             
-            timerText.text = string.Format(" 생존일 : {0}일 {1:00} 시간 {2:00} 분 {3:00} 초,  {4}", days, hours, minutes, seconds, map);
+            timerText.text = string.Format(" 생존일 : {0}일 {1:00} 시간 {2:00} 분 {3:00} 초 \n{4}", days, hours, minutes, seconds, map);
         }
     }
 

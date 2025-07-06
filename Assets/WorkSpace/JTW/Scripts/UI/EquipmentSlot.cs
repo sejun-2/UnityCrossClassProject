@@ -42,8 +42,10 @@ public class EquipmentSlot : MonoBehaviour
         }
     }
 
-    public void UpdateSlotData(Item item = null)
+    public void UpdateSlotData(Item item)
     {
+        Debug.Log("ddd");
+
         if (_itemImage != null)
         {
             if (item != null)

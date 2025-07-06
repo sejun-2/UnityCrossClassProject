@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class DiaryPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _openSound;
+    [SerializeField] private AudioClip _closeSound;
+
     [SerializeField] private ItemSlotUIs _diarySlotsPrefab;
 
     private TextMeshProUGUI _descriptionText;
@@ -32,6 +35,7 @@ public class DiaryPresenter : BaseUI
 
             Manager.Player.Stats.isFarming = false;
 
+            Manager.Sound.SfxPlay(_closeSound, Manager.Player.Transform);
             Destroy(this.gameObject);
 
         }
@@ -41,6 +45,8 @@ public class DiaryPresenter : BaseUI
 
     public void InitSubStoryUI()
     {
+        Manager.Sound.SfxPlay(_openSound, Manager.Player.Transform);
+
         _descriptionText = GetUI<TextMeshProUGUI>("DescriptionText");
         _slotPanel = GetUI("SlotPanel");
 

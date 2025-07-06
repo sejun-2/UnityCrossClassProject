@@ -305,6 +305,8 @@ MonoBehaviour:
     type: 3}
   _slotUIPrefab: {fileID: 4287079269926146491, guid: 0ce077ccadfab2d418771f2b42572be6,
     type: 3}
+  _invenOpenSound: {fileID: 8300000, guid: 1b78db68b2c836e408078acc8e42c510, type: 3}
+  _invenCloseSound: {fileID: 8300000, guid: ed50e0370b6b2914e90643528b0556a3, type: 3}
 --- !u!114 &6303493596504027766
 MonoBehaviour:
   m_ObjectHideFlags: 0

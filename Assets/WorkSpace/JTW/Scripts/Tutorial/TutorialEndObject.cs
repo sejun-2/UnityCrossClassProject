@@ -21,6 +21,7 @@ public class TutorialEndObject : MonoBehaviour, IInteractable
         else
         {
             Manager.UI.Inven.ShowBubbleText("20013");
+            Manager.Player.Stats.isFarming = false;
         }
     }
 

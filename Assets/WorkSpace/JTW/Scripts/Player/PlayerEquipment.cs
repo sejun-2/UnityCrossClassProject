@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
+    [SerializeField] private AudioClip _equipSound;
+
     public void EquipmentWeapon(Item item)
     {
         if (Manager.Player.Stats.Weapon.Value != null)
@@ -11,6 +13,7 @@ public class PlayerEquipment : MonoBehaviour
         }
 
         Manager.Player.Stats.Weapon.Value = item;
+        Manager.Sound.SfxPlay(_equipSound, transform);
     }
 
     public void UnEquipmentWeapon()
@@ -35,6 +38,7 @@ public class PlayerEquipment : MonoBehaviour
         }
 
         Manager.Player.Stats.Armor.Value = item;
+        Manager.Sound.SfxPlay(_equipSound, transform);
     }
 
     public void UnEquipmentArmor()

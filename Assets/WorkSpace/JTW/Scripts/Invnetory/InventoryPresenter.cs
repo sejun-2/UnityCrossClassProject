@@ -9,6 +9,9 @@ public class InventoryPresenter : BaseUI, IInventory
     [SerializeField] private GameObject _itemSlotsPrefab;
     [SerializeField] private GameObject _slotUIPrefab;
 
+    [SerializeField] private AudioClip _invenOpenSound;
+    [SerializeField] private AudioClip _invenCloseSound;
+
     private Inventory _inven = new();
     private ItemSlotUIs _itemSlotUIs;
 
@@ -28,6 +31,10 @@ public class InventoryPresenter : BaseUI, IInventory
             if (!IsTrade || (_tradeInvenDirection == Vector2.up || _tradeInvenDirection == Vector2.down))
             {
                 Manager.Player.Stats.isFarming = false;
+                if(!IsTrade || _tradeInvenDirection == Vector2.up)
+                {
+                    Manager.Sound.SfxPlay(_invenCloseSound, Manager.Player.Transform);
+                }
             }
             Destroy(this.gameObject);
         }
@@ -67,6 +74,10 @@ public class InventoryPresenter : BaseUI, IInventory
         {
             _inventoryForTrade = tradeInven;
             _tradeInvenDirection = tradeInvenDirection;
+        }
+        else
+        {
+            Manager.Sound.SfxPlay(_invenOpenSound, Manager.Player.Transform);
         }
         _panelSize = new Vector2(5, 2);
         InitInventory();

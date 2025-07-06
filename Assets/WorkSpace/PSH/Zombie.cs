@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Zombie : MonoBehaviour
@@ -10,6 +11,12 @@ public class Zombie : MonoBehaviour
     {
         get { return _currentState; }
     }
+
+    [SerializeField] AudioClip _zombieDetectSound;
+    private bool _isDetected;
+
+    [SerializeField] AudioClip _zombieStepSound;
+    private bool _isStep;
 
     [SerializeField] private float _moveSpeed = 2;
     [SerializeField] private float _patrolRange = 4;
@@ -223,27 +230,39 @@ public class Zombie : MonoBehaviour
         {
             case State.Patrol:
                 _currentState = State.Patrol;
+                _isStep = true;
+                StartCoroutine(StepSoundCoroutine());
                 Flip();
                 animator.SetInteger("MovingPattren", 0);
                 break;
             case State.Wait:
+                _isStep = false;
                 _currentState = State.Wait;
                 animator.SetInteger("MovingPattren", 1);
                 break;
             case State.Chase:
+                _isStep = false;
+                if (!_isDetected)
+                {
+                    _isDetected = true;
+                    Manager.Sound.SfxPlay(_zombieDetectSound, transform);
+                }
                 _currentState = State.Chase;
                 animator.SetInteger("MovingPattren", 2);
                 break;
             case State.Attack:
+                _isStep = false;
                 _currentState = State.Attack;
                 _attack.Attack();
                 break;
             case State.Dead:
+                _isStep = false;
                 _currentState = State.Dead;
                 StartCoroutine(DieAfterDelay());
                 animator.SetBool("IsDead", true);
                 break;
             case State.TakeDamage:
+                _isStep = false;
                 _currentState = State.TakeDamage;
                 break;
             default:
@@ -255,5 +274,14 @@ public class Zombie : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+    }
+
+    private IEnumerator StepSoundCoroutine()
+    {
+        while (_isStep)
+        {
+            Manager.Sound.SfxPlay(_zombieStepSound, transform);
+            yield return new WaitForSeconds(1f);
+        }
     }
 }

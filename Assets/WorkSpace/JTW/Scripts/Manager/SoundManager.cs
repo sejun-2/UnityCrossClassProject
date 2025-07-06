@@ -38,6 +38,11 @@ public class SoundManager : Singleton<SoundManager>
 
     public void BgmPlay(AudioClip clip, float volume = 1f, float fadeDuration = 0)
     {
+        if(clip == null)
+        {
+            _bgmSource.Stop();
+        }
+
         _bgmLocalVolume = volume;
         _bgmSource.DOKill();
         _bgmSource.DOFade(0f, fadeDuration).OnComplete(() =>
@@ -62,7 +67,12 @@ public class SoundManager : Singleton<SoundManager>
     {
         GameObject obj = new GameObject("SfxController");
         obj.transform.parent = transform;
-        obj.AddComponent<AudioSource>();
+        AudioSource audioSource = obj.AddComponent<AudioSource>();
+
+        audioSource.spatialBlend = 1.0f;       
+        audioSource.minDistance = 5f;        
+        audioSource.maxDistance = 30f;      
+        audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
 
         return obj.AddComponent<SfxController>();
     }

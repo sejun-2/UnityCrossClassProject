@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class InventoryCanvas : UICanvas<InventoryCanvas>
 {
+    [SerializeField] private AudioClip _bubbleTextSound;
+
     #region Inven,ItemBox,Farming
     public void ShowInven()
     {
@@ -137,6 +139,8 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
     private IEnumerator BubbleTextCoroutine(List<string> dialogueIdList)
     {
+        Manager.Sound.SfxPlay(_bubbleTextSound, Manager.Player.Transform);
+
         foreach(string dialogueId in dialogueIdList)
         {
             Manager.Game.IsTalkDialogue[dialogueId] = true;

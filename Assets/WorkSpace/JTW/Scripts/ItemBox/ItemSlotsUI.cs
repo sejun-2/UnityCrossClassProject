@@ -96,6 +96,12 @@ public class ItemSlotUIs : MonoBehaviour
 
         if (moveIndex < 0 || moveIndex >= _slotUIs.Count) return false;
 
+        if(moveIndex != _selectedSlotIndex)
+        {
+            AudioClip clip = Resources.Load<AudioClip>("Sound/UI_Slotmove");
+            Manager.Sound.SfxPlay(clip, Manager.Player.Transform);
+        }
+
         SelectSlotUI(moveIndex);
 
         return true;

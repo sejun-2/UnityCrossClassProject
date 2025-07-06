@@ -412,6 +412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0295a925d810a6a4c92e4a57b9257840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _openSound: {fileID: 8300000, guid: 2e06c5bcdd16d004a9c4920e1c2358ae, type: 3}
+  _closeSound: {fileID: 8300000, guid: d3dc2614a5c4dff488d68dd4a75b66ce, type: 3}
   _diarySlotsPrefab: {fileID: 1778441505217503213, guid: eb66cdc999d6ea941bedafb27f6bf0e1,
     type: 3}
 --- !u!1 &8788076956202205136
