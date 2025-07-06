@@ -16,7 +16,7 @@ EditorBuildSettings:
     guid: 416142d520c2d3443a4e39c497c936b8
   - enabled: 1
     path: Assets/WorkSpace/JTW/Demo3/Scene/BaseCamp.unity
-    guid: 8a0045050bc872442b6a4688f4bb2e9c
+    guid: 90fe94f7aa5522f4b853308b5339b4fc
   - enabled: 1
     path: Assets/WorkSpace/JTW/Demo3/Scene/Hospital.unity
     guid: 4c18ef22e3024304eb24a0c07ea078d3
