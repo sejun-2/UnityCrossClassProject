@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class SubStoryPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _openSound;
+
     [SerializeField] private GameObject _itemSlotsPrefab;
     [SerializeField] private GameObject _slotUIPrefab;
 
@@ -22,6 +24,7 @@ public class SubStoryPresenter : BaseUI
         if (Input.GetKeyDown(KeyCode.X))
         {
             Manager.Player.Stats.isFarming = false;
+            Manager.Sound.SfxPlay(_openSound, Manager.Player.Transform);
             Destroy(this.gameObject);
         }
 
@@ -30,6 +33,8 @@ public class SubStoryPresenter : BaseUI
 
     public void InitSubStoryUI()
     {
+        Manager.Sound.SfxPlay(_openSound, Manager.Player.Transform);
+
         _itemIconImage = GetUI<Image>("ItemIconImage");
         Transform itemSlotsPanel = GetUI("Content").transform;
 

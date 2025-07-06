@@ -112,6 +112,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] AudioClip audioClipWalking;
     [SerializeField] AudioClip audioClipFarming;
     //액션
+    [SerializeField] private Transform _renderObject;
 
     private void Awake()
     {
@@ -165,6 +166,11 @@ public class PlayerInteraction : MonoBehaviour
     }
     void Update()
     {
+        if (Manager.Player.Stats.isFarming)
+        {
+            Manager.Sound.SfxStopLoop("Walking", 0);
+        }
+
         //테스트용
         if (stateText != null)
         {
@@ -198,6 +204,11 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Manager.UI.PopUp.ShowPopUp<MainMenuPopUp>();
+        }
+
         if (Input.GetKeyDown(KeyCode.V))
         {
             if (!Manager.Player.Stats.isFarming)
@@ -211,7 +222,7 @@ public class PlayerInteraction : MonoBehaviour
         //은신중에는 uparrow키로 은신 풀기 전까지는 다른 키 입력 불가
         if (Manager.Player.Stats.IsHiding)
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 if (Manager.Player.Stats.CurrentNearby is Hideout hideout)
                 {
@@ -323,7 +334,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Manager.Player.Stats.IsHiding)
         {
-            Manager.Sound.SfxStopLoop("Walking");
+            Manager.Sound.SfxStopLoop("Walking", 0f);
             return;
         }
 
@@ -422,15 +433,15 @@ public class PlayerInteraction : MonoBehaviour
     public void RotateToInteract()
     {
         Vector3 scale = transform.localScale;
-        Vector3 rotation = transform.eulerAngles;
+        Vector3 rotation = _renderObject.eulerAngles;
 
-        rotation.y = 90f * scale.x * -1;
-        transform.eulerAngles = rotation;
+        rotation.y += 90f * scale.x * -1;
+        _renderObject.eulerAngles = rotation;
     }
 
     public void RestoreRotation()
     {
-        transform.rotation = Quaternion.identity;
+        _renderObject.localRotation = Quaternion.Euler(new Vector3(0, 90, 0));
     }
 
     private IEnumerator RotateAndInteract()

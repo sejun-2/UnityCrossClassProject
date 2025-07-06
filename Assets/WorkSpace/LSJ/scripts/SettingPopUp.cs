@@ -9,11 +9,9 @@ public class SettingPopUp : BaseUI
 {
     [Header("탭 버튼")]
     [SerializeField] private Button SoundButton;
-    [SerializeField] private Button LanguageButton;
 
     [Header("패널")]
     [SerializeField] private GameObject SoundPanel;
-    [SerializeField] private GameObject LanguagePanel;
 
     [Header("슬라이더")]
     [SerializeField] public Slider MasterVolume;
@@ -28,8 +26,6 @@ public class SettingPopUp : BaseUI
 
     [Header("사운드 패널 내 네비게이션")]
     [SerializeField] private Selectable[] SoundSelectables; // MasterVolume, BgmVolume, SfxVolume 등
-    [Header("언어 패널 내 네비게이션")]
-    [SerializeField] private Selectable[] LanguageSelectables; // 언어 관련 버튼 등
 
     [Header("메인 메뉴 참조")]
     [SerializeField] private MainMenuPopUp mainMenuPopUp; // Inspector에서 MainMenuPopUp 연결
@@ -57,7 +53,6 @@ public class SettingPopUp : BaseUI
 
         // 탭 버튼 클릭 이벤트 연결 (마우스 클릭용, 키보드는 Z키로 처리)
         SoundButton.onClick.AddListener(() => SwitchTab(0));
-        LanguageButton.onClick.AddListener(() => SwitchTab(1));
 
         // 최초 사운드 탭 활성화
         SwitchTab(0);
@@ -67,14 +62,10 @@ public class SettingPopUp : BaseUI
     {
         bool isSound = tabIndex == 0;
         SoundPanel.SetActive(isSound);
-        LanguagePanel.SetActive(!isSound);
 
-        // 탭 버튼 하이라이트(선택) 효과
-        SoundButton.interactable = !isSound;
-        LanguageButton.interactable = isSound;
 
         // 현재 선택 가능한 UI 배열 교체
-        currentSelectables = isSound ? SoundSelectables : LanguageSelectables;
+        currentSelectables = SoundSelectables;
         selectedIndex = 0;
         if (currentSelectables != null && currentSelectables.Length > 0 && currentSelectables[0] != null)
         {
@@ -112,10 +103,6 @@ public class SettingPopUp : BaseUI
                 {
                     SwitchTab(0);
                 }
-                else if (btn == LanguageButton)
-                {
-                    SwitchTab(1);
-                }
                 else
                 {
                     btn.onClick.Invoke();
@@ -146,7 +133,9 @@ public class SettingPopUp : BaseUI
     private void SelectCurrent()
     {
         if (currentSelectables[selectedIndex] != null)
+        {
             EventSystem.current.SetSelectedGameObject(currentSelectables[selectedIndex].gameObject);
+        }
     }
 
     // X버튼, ESC 등에서 호출

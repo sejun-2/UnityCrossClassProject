@@ -34,6 +34,7 @@ public class TutorialEndObject : MonoBehaviour, IInteractable
 
         yield return new WaitForSeconds(4f);
 
+        Manager.Game.DayComplete();
         Manager.Game.ChangeScene("BaseCamp");
     }
 }

@@ -71,6 +71,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
             {
                 Manager.Player.BuffStats.ApplyBuff();
                 Manager.Game.IsInBaseCamp = false;
+                Manager.Game.SaveGameData();
                 Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
             }
         }
@@ -135,6 +136,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
         _categorySlots = Instantiate(_categorySlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
         _categorySlots.SetPanelSize(new Vector2(4, 1));
+        _categorySlots.SetLineCount(4);
         for(int i = 0; i < 4; i++)
         {
             _categorySlots.AddSlotUI(maxItemCount:0);
@@ -146,6 +148,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
         {
             _itemSlotsList.Add(Instantiate(_itemSlotsPrefab, _itemSlotsPanel.transform).GetComponent<ItemSlotUIs>());
             _itemSlotsList[i].SetPanelSize(new Vector2(4, 4));
+            _itemSlotsList[i].SetLineCount(4);
             _itemSlotsList[i].AcceptTypeList = _acceptTypeLists[i];
             _itemSlotsList[i].gameObject.SetActive(false);
         }

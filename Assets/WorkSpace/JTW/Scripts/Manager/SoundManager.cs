@@ -43,6 +43,8 @@ public class SoundManager : Singleton<SoundManager>
             _bgmSource.Stop();
         }
 
+        if (_bgmSource.clip == clip) return;
+
         _bgmLocalVolume = volume;
         _bgmSource.DOKill();
         _bgmSource.DOFade(0f, fadeDuration).OnComplete(() =>

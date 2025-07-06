@@ -15,7 +15,11 @@ public class PopUpCanvas : UICanvas<PopUpCanvas>
             BaseUI top = stack.Peek();  // 스택의 맨 위 UI를 가져옵니다
             top.gameObject.SetActive(false);    // 가져온 UI를 비활성화합니다
         }
-        stack.Push(ui); // 새로운 UI를 스택에 추가합니다
+        else
+        {
+            Manager.Player.Stats.isFarming = true;
+        }
+            stack.Push(ui); // 새로운 UI를 스택에 추가합니다
 
         blocker.SetActive(true);    // 블로커를 활성화하여 다른 UI를 클릭할 수 없도록 합니다
     }
@@ -35,6 +39,7 @@ public class PopUpCanvas : UICanvas<PopUpCanvas>
         }
         else
         {
+            Manager.Player.Stats.isFarming = false;
             blocker.SetActive(false);   // 스택이 비어있으면 블로커를 비활성화합니다
         }
     }

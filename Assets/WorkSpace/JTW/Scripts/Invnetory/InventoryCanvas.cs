@@ -121,12 +121,12 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
     private GameObject _bubble;
     private Coroutine _bubbleCoroutine;
 
-    public void ShowBubbleText(string dialogueId) => ShowBubbleText(new List<string>() { dialogueId });
+    public void ShowBubbleText(string dialogueId, bool isLoop = false) => ShowBubbleText(new List<string>() { dialogueId }, isLoop);
 
-    public void ShowBubbleText(List<string> dialogueIdList)
+    public void ShowBubbleText(List<string> dialogueIdList, bool isLoop = false)
     {
         if (dialogueIdList.Count <= 0) return;
-        if (Manager.Game.IsTalkDialogue[dialogueIdList[0]] && dialogueIdList[0] != "20013") return;
+        if (!isLoop && Manager.Game.IsTalkDialogue[dialogueIdList[0]] && dialogueIdList[0] != "20013") return;
 
         if (_bubbleCoroutine != null)
         {

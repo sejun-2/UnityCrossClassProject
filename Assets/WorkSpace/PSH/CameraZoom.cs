@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
 {
-    [SerializeField] private AudioClip _windSound;
-
     public CinemachineVirtualCamera zoomOutCam;
 
     private void Start()
@@ -16,7 +14,6 @@ public class CameraZoom : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             zoomOutCam.Priority = 20;
-            Manager.Sound.SfxPlayLoop("wind", _windSound, transform);
 
         }
     }
@@ -26,7 +23,6 @@ public class CameraZoom : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             zoomOutCam.Priority = 0;
-            Manager.Sound.SfxStopLoop("key", 0);
         }
     }
 }
