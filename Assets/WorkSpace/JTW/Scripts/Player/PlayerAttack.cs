@@ -51,7 +51,7 @@ public class PlayerAttack : MonoBehaviour
 
                 zombie.TakeDamage(weapon.attackValue);
 
-                weapon.durabilityValue--;
+                Manager.Player.Stats.Weapon.Value.durabilityValue--;
 
                 Debug.Log($"{hit.collider.gameObject.name}에게 {weapon.attackValue} 만큼의 데미지");
             }

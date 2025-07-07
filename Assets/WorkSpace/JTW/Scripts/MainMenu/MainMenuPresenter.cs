@@ -1,6 +1,8 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenuPresenter : BaseUI
 {
@@ -16,6 +18,8 @@ public class MainMenuPresenter : BaseUI
     private GameObject _popUp;
 
     private readonly string[] _mainText = new string[] { "게임 시작", "환경 설정", "게임 종료" };
+
+    private Coroutine _startCoroutine;
 
     private void Start()
     {
@@ -46,6 +50,7 @@ public class MainMenuPresenter : BaseUI
     private void Update()
     {
         if (_popUp != null) return;
+        if (_startCoroutine != null) return;
 
         MoveSlot();
 
@@ -53,7 +58,7 @@ public class MainMenuPresenter : BaseUI
         {
             if(_slotUIs.SelectedSlotIndex == 0)
             {
-                Manager.Game.GameStart();
+                _startCoroutine = StartCoroutine(StartCor());
             }
             else if(_slotUIs.SelectedSlotIndex == 1)
             {
@@ -72,6 +77,16 @@ public class MainMenuPresenter : BaseUI
         }
 
     }
+
+    private IEnumerator StartCor()
+    {
+        GetUI<Image>("FadeImage").DOFade(1f, 1f);
+        yield return new WaitForSeconds(2f);
+
+        Manager.Game.GameStart();
+    }
+
+
     private void MoveSlot()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))

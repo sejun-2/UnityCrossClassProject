@@ -44,8 +44,6 @@ public class EquipmentSlot : MonoBehaviour
 
     public void UpdateSlotData(Item item)
     {
-        Debug.Log("ddd");
-
         if (_itemImage != null)
         {
             if (item != null)
@@ -67,24 +65,29 @@ public class EquipmentSlot : MonoBehaviour
 
     }
 
-    public void UpdateDurabilityData(Item item = null)
+    public void UpdateDurabilityData(Item item)
     {
+        Debug.Log("ddd");
+
         if (_durabilitySlider == null) return;
 
         if (item != null)
         {
+            Debug.Log("dddwwwww");
             _durabilitySlider.gameObject.SetActive(true);
             UpdateDurabilitySlider(item.durabilityValue);
             item.OnDurabilityChanged += UpdateDurabilitySlider;
         }
         else
         {
+            Debug.Log("dddwwwwaaaa");
             _durabilitySlider.gameObject.SetActive(false);
         }
     }
 
     private void UpdateDurabilitySlider(int value)
     {
+        Debug.Log("dddasdassdasdasdd");
         _durabilitySlider.value = (float)_slot.CurItem.durabilityValue / _slot.CurItem.maxDrabilityValue;
     }
 }
