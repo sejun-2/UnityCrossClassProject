@@ -32,4 +32,14 @@ public class Timer : MonoBehaviour
         isRunning = false;
     }
 
+    public void AddDay()    // 하루를 추가하는 메서드
+    {
+        elapsedTime += 86400f; // 하루는 86400초
+    }
+
+    public void AddSeconds(float seconds)   // 특정 초(시간)를 추가하는 메서드
+    {
+        elapsedTime += seconds;
+    }
+
 }
