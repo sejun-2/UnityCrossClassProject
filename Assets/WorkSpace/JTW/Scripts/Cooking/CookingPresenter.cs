@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class CookingPresenter : BaseUI
 {
     [SerializeField] private AudioClip _cookSound;
+    [SerializeField] private AudioClip _closeSound;
 
     [SerializeField] private ItemSlotUIs _categorySlotUIsPrefab;
     [SerializeField] private ItemSlotUIs _needItemSlotUIsPrefab;
@@ -78,6 +79,7 @@ public class CookingPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
             Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }

@@ -23,7 +23,8 @@ public class SettingPopUp : BaseUI
     [SerializeField] private TextMeshProUGUI _bgmText;
     [SerializeField] private TextMeshProUGUI _sfxText;
 
-
+    [SerializeField] private AudioClip _moveSound;
+    [SerializeField] private AudioClip _clickSound;
 
     [Header("사운드 패널 내 네비게이션")]
     [SerializeField] private Selectable[] SoundSelectables; // MasterVolume, BgmVolume, SfxVolume 등
@@ -95,11 +96,13 @@ public class SettingPopUp : BaseUI
         // 위/아래 방향키로 선택 이동
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
+            Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
             selectedIndex = (selectedIndex - 1 + currentSelectables.Length) % currentSelectables.Length;
             SelectCurrent();
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
             selectedIndex = (selectedIndex + 1) % currentSelectables.Length;
             SelectCurrent();
         }
@@ -127,8 +130,8 @@ public class SettingPopUp : BaseUI
         // x키로 팝업 닫기
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_clickSound, Camera.main.transform);
             Manager.UI.PopUp.ClosePopUp();
-
         }
 
         // 사운드 값 실시간 반영
@@ -138,9 +141,19 @@ public class SettingPopUp : BaseUI
             Manager.Sound.BgmVolume = BgmVolume.value / 100;
             Manager.Sound.SfxVolume = SfxVolume.value / 100;
 
-            _masterText.text = (Mathf.Round(Manager.Sound.MasterVolume * 100)).ToString();
-            _bgmText.text = (Mathf.Round(Manager.Sound.BgmVolume * 100)).ToString();
-            _sfxText.text = (Mathf.Round(Manager.Sound.SfxVolume * 100)).ToString();
+            string masterText = (Mathf.Round(Manager.Sound.MasterVolume * 100)).ToString();
+            string bgmText = (Mathf.Round(Manager.Sound.BgmVolume * 100)).ToString();
+            string sfxText = (Mathf.Round(Manager.Sound.SfxVolume * 100)).ToString();
+
+            if(masterText != _masterText.text || bgmText != _bgmText.text || sfxText != _sfxText.text)
+            {
+                Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
+            }
+
+
+            _masterText.text = masterText;
+            _bgmText.text = bgmText;
+            _sfxText.text = sfxText;
         }
     }
 

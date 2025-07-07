@@ -255,4 +255,11 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
             yield return null;
         }
     }
+
+    public void ShowExitPopUp()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/ExitPopUp");
+
+        Instantiate(prefab, transform);
+    }
 }

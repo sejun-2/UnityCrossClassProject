@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MapUIPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _closeSound;
+
     [SerializeField] private GameObject _itemSlotUIsPrefab;
 
     private GameObject _mapSlotsPanel;
@@ -30,6 +32,7 @@ public class MapUIPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
             Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }

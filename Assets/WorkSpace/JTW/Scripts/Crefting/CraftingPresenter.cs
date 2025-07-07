@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class CraftingPresenter : BaseUI
 {
     [SerializeField] private AudioClip _completeSound;
+    [SerializeField] private AudioClip _closeSound;
 
     [SerializeField] private ItemSlotUIs _categorySlotUIsPrefab;
     [SerializeField] private ItemSlotUIs _needItemSlotUIsPrefab;
@@ -79,6 +80,7 @@ public class CraftingPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
             Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }

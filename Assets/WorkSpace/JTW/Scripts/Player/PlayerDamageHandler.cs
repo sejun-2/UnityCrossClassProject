@@ -6,6 +6,8 @@ public partial class PlayerStats
 {
     public Stat<bool> IsTakeDamage = new();
 
+    public Stat<bool> IsDied = new();
+
     internal void ReduceFatigue(float v)
     {
     }
@@ -53,7 +55,10 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
 
     public void Die()
     {
-        Manager.Game.GameStart();
+        Manager.Player.Stats.IsDied.Value = true;
+        _animator.Play("Die");
+
+        StartCoroutine(DieCoroutine());
     }
 
     public IEnumerator TakeDamageCoroutine()
@@ -61,5 +66,13 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(1f);
 
         Manager.Player.Stats.IsTakeDamage.Value = false;
+    }
+
+    public IEnumerator DieCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
+
+
+        Manager.Game.ChangeScene("GameOverScene");
     }
 }

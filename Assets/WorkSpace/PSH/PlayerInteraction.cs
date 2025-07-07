@@ -171,6 +171,12 @@ public class PlayerInteraction : MonoBehaviour
     }
     void Update()
     {
+        if (Manager.Player.Stats.IsDied.Value)
+        {
+            Manager.Sound.SfxStopLoop("Walking", 0);
+            return;
+        }
+
         if (Manager.Player.Stats.isFarming
             || Manager.Player.Stats.IsAttack.Value
             || Manager.Player.Stats.IsTakeDamage.Value
@@ -338,7 +344,8 @@ public class PlayerInteraction : MonoBehaviour
                 if (Manager.Player.Stats.CurrentNearby is StoryInteractionObject
                     || Manager.Player.Stats.CurrentNearby is Sofa
                     || Manager.Player.Stats.CurrentNearby is TutorialEndObject
-                    || Manager.Player.Stats.CurrentNearby is Bed)
+                    || Manager.Player.Stats.CurrentNearby is Bed
+                    || Manager.Player.Stats.CurrentNearby is QuitObject)
                 {
                 }
                 else if (Manager.Player.Stats.CurrentNearby is CrafingObject

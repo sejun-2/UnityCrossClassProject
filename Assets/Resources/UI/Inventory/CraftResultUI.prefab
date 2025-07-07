@@ -1200,3 +1200,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbcb86120c750044c9ba9ad8bb7b2a36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _closeSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}

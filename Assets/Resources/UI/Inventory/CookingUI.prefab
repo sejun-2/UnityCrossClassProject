@@ -1923,6 +1923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cookSound: {fileID: 8300000, guid: 44f134690ca36d54f8e98914fef45ece, type: 3}
+  _closeSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}
   _categorySlotUIsPrefab: {fileID: 1778441505217503213, guid: 9d3bea9f6d8e1684c894b42b38160f54,
     type: 3}
   _needItemSlotUIsPrefab: {fileID: 1778441505217503213, guid: 038b25aad5ec9304394634a4c3cc6cf9,

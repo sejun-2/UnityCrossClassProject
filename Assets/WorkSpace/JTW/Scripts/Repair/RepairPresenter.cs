@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class RepairPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _closeSound;
     [SerializeField] private AudioClip _completeSound; 
 
     [SerializeField] private ItemSlotUIs _itemSlotUIsPrefab;
@@ -60,6 +61,7 @@ public class RepairPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
             Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }

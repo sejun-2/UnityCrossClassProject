@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0b818bd58ad454cb3e18e765149de3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _closeSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}
 --- !u!1 &275319100948111828
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +256,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c857ec238b7d071479c533c8ec7bf50b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c744ddfd89dc9b44a95db78943189cc5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1041,7 +1042,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c857ec238b7d071479c533c8ec7bf50b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c744ddfd89dc9b44a95db78943189cc5, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1254,7 +1255,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 30fcb2f7f8eeda64aa331ef287902a49, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b672644310609e841ba3af3607f45f52, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1528,7 +1529,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 27aa9f09712ca7c48b0a91e1d11c08fb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e91d928f59954584d8ba49513887d01f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

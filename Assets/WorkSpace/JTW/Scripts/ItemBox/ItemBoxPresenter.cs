@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class ItemBoxPresenter : BaseUI, IInventory
 {
+    [SerializeField] private AudioClip _moveSound;
+    [SerializeField] private AudioClip _closeSound;
+
     [SerializeField] private GameObject _categorySlotsPrefab;
     [SerializeField] private GameObject _itemSlotsPrefab;
 
@@ -48,6 +51,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
+
             if (IsTrade)
             {
                 Manager.UI.Inven.ShowMapUI();
@@ -372,6 +377,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     public void Activate(int index)
     {
+        Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
+
         if (_isInItemSlots)
         {
             index = SetSelectIndex(_selectedItemSlots, index);

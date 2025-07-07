@@ -74,6 +74,6 @@ public class StartSene : MonoBehaviour
         _vp.Play();
         _renderImage.DOKill();
         _renderImage.DOFade(1f, 1f);
-        Manager.Sound.BgmPlay(_audioClip);
+        Manager.Sound.BgmPlay(_audioClip, 0.4f);
     }
 }

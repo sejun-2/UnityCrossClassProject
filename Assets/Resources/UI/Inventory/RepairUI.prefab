@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7838636d01be989429be597a9495dab3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _closeSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}
   _completeSound: {fileID: 8300000, guid: 02754a59185f1d147a6856f3e4b41996, type: 3}
   _itemSlotUIsPrefab: {fileID: 1778441505217503213, guid: a05394b9f080ba245bfad4ff19ac222d,
     type: 3}

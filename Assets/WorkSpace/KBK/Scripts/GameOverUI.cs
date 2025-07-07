@@ -31,7 +31,7 @@ public class GameOverUI : MonoBehaviour
         GameOver();
     }
 
-    void GameOver()
+    public void GameOver()
     {
         if (isGameOver)
             return;

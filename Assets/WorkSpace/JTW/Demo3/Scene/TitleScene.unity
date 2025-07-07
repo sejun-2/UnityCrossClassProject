@@ -633,6 +633,8 @@ MonoBehaviour:
   _mainSlotUIsPrefab: {fileID: 1778441505217503213, guid: 0b4a3368ec26a6e489cc71a03377745a,
     type: 3}
   _bgmClip: {fileID: 8300000, guid: 5258b59544afce448935c696fd9b1a6f, type: 3}
+  _clickSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}
+  _moveSound: {fileID: 8300000, guid: 12f7440c11b658347ac68afac95e70c9, type: 3}
 --- !u!1 &1150980755
 GameObject:
   m_ObjectHideFlags: 0
