@@ -92,6 +92,8 @@ public class ItemSlotUIs : MonoBehaviour
 
     public bool MoveSelectSlot(Vector2 direction)
     {
+        if (Manager.Player.Stats.IsControl.Value) return false;
+
         int moveIndex = _selectedSlotIndex + (int)(direction.x - direction.y * _lineCount);
 
         if (moveIndex < 0 || moveIndex >= _slotUIs.Count) return false;

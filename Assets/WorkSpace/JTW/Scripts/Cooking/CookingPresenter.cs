@@ -49,6 +49,8 @@ public class CookingPresenter : BaseUI
     {
         if (_resultUI != null) return;
 
+        if (Manager.Player.Stats.IsControl.Value) return;
+
         MoveInventory();
 
         if (Input.GetKeyDown(KeyCode.Z) && _canCraft && _isInResultItems)

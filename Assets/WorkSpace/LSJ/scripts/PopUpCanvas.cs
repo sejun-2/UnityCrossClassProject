@@ -17,7 +17,7 @@ public class PopUpCanvas : UICanvas<PopUpCanvas>
         }
         else
         {
-            Manager.Player.Stats.isFarming = true;
+            Manager.Player.Stats.IsControl.Value = true;
         }
             stack.Push(ui); // 새로운 UI를 스택에 추가합니다
 
@@ -39,7 +39,7 @@ public class PopUpCanvas : UICanvas<PopUpCanvas>
         }
         else
         {
-            Manager.Player.Stats.isFarming = false;
+            Manager.Player.Stats.IsControl.Value = false;
             blocker.SetActive(false);   // 스택이 비어있으면 블로커를 비활성화합니다
         }
     }

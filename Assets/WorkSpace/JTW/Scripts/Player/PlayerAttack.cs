@@ -29,7 +29,6 @@ public class PlayerAttack : MonoBehaviour
         Manager.Sound.SfxPlay(_attackSound, transform);
 
         Manager.Player.Stats.IsAttack.Value = true;
-        Manager.Player.Stats.isFarming = true;
         StartCoroutine(AttackCoroutine(weapon.attackSpeed));
     }
 
@@ -66,6 +65,5 @@ public class PlayerAttack : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         Manager.Player.Stats.IsAttack.Value = false;
-        Manager.Player.Stats.isFarming = false;
     }
 }

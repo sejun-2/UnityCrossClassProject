@@ -44,6 +44,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private void Update()
     {
         if (_dangerPopUp != null) return;
+        if (Manager.Player.Stats.IsControl.Value) return;
 
         if (Input.GetKeyDown(KeyCode.X))
         {

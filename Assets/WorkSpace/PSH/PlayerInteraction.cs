@@ -30,6 +30,8 @@ public partial class PlayerStats
 
     public bool isClimbing = false;//떨어지는 중인지
     [JsonIgnore] public IInteractable CurrentNearby;//가까운 상호작용 대상
+
+    public Stat<bool> IsControl = new();
 }
 
 public class PlayerInteraction : MonoBehaviour
@@ -140,7 +142,7 @@ public class PlayerInteraction : MonoBehaviour
         Manager.Player.Stats.OnHideEnded += StopHideSound;
         OnLeftGround += HandleFalling;
         IsGrounded = true;
-        OnLanded += HandleLanding; 
+        OnLanded += HandleLanding;
     }
     private void OnDrawGizmos()
     {
@@ -166,9 +168,17 @@ public class PlayerInteraction : MonoBehaviour
     }
     void Update()
     {
-        if (Manager.Player.Stats.isFarming)
+        if (Manager.Player.Stats.isFarming
+            || Manager.Player.Stats.IsAttack.Value
+            || Manager.Player.Stats.IsTakeDamage.Value
+            || Manager.Player.Stats.IsControl.Value)
         {
             Manager.Sound.SfxStopLoop("Walking", 0);
+
+            if(CurrentState == State.Run)
+            {
+                StateChange(State.Idle);
+            }
         }
 
         //테스트용
@@ -193,20 +203,29 @@ public class PlayerInteraction : MonoBehaviour
             playerWeaponPrefab.SetActive(false);
         }
 
+        if (Manager.Player.Stats.IsControl.Value) return;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Manager.UI.PopUp.ShowPopUp<MainMenuPopUp>();
+        }
+
+        if (Manager.Player.Stats.isFarming
+            || Manager.Player.Stats.IsAttack.Value
+            || Manager.Player.Stats.IsTakeDamage.Value)
+        {
+            return;
+        }
+
         //인벤토리 여는
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if (!Manager.Player.Stats.isFarming)
+            if (!Manager.Player.Stats.isFarming && !Manager.Game.IsInBaseCamp)
             {
                 Manager.UI.Inven.ShowInven();
                 StateChange(State.Idle);
                 Manager.Player.Stats.isFarming = true;
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Manager.UI.PopUp.ShowPopUp<MainMenuPopUp>();
         }
 
         if (Input.GetKeyDown(KeyCode.V))
@@ -494,12 +513,12 @@ public class PlayerInteraction : MonoBehaviour
     //사운드
     void PlayHideSound()
     {
-        Manager.Sound.SfxStopLoop("Walking");
+        Manager.Sound.SfxStopLoop("Walking", 0f);
         Manager.Sound.SfxPlayLoop("Hiding", audioClipHiding, transform, 0.3f);
     }
     void StopHideSound()
     {
-        Manager.Sound.SfxStopLoop("Hiding", 1.5f);
+        Manager.Sound.SfxStopLoop("Hiding", 0f);
     }
     void OnDestroy()
     {

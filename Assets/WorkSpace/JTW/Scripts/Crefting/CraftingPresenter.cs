@@ -50,6 +50,8 @@ public class CraftingPresenter : BaseUI
     {
         if (_resultUI != null) return;
 
+        if (Manager.Player.Stats.IsControl.Value) return;
+
         MoveInventory();
 
         if (Input.GetKeyDown(KeyCode.Z) && _canCraft && _isInResultItems)
@@ -124,6 +126,7 @@ public class CraftingPresenter : BaseUI
 
     private void MoveInventory()
     {
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             ChangeSelectSlot(Vector2.right);

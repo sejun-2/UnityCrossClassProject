@@ -52,6 +52,7 @@ public class MainMenuPopUp : BaseUI
             selectedIndex = 0;
             menuButtons[0].Select();
         }
+
     }
 
     private void OnDisable()
