@@ -55,7 +55,7 @@ public class MainMenuPresenter : BaseUI
             }
             else if(_slotUIs.SelectedSlotIndex == 1)
             {
-                _popUp = Manager.UI.PopUp.ShowPopUp<MainMenuPopUp>().gameObject;
+                _popUp = Manager.UI.PopUp.ShowPopUp<SettingPopUp>().gameObject;
             }
             else
             {

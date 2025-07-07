@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingPopUp : BaseUI
@@ -33,10 +34,23 @@ public class SettingPopUp : BaseUI
     int selectedIndex = 0;  // 현재 선택된 버튼의 인덱스
     private Selectable[] currentSelectables;
 
+    private GameObject _inGamePanel;
+
     private void OnEnable()
     {
         // Setting 창이 열릴 때 첫 탭 활성화 및 첫 요소 포커스
         SwitchTab(0);
+
+        _inGamePanel = GetUI("InGamePanel");
+
+        if (SceneManager.GetActiveScene().name == "TitleScene")
+        {
+            _inGamePanel.SetActive(false);
+        }
+        else
+        {
+            _inGamePanel.SetActive(true);
+        }
     }
 
     private void Start()
