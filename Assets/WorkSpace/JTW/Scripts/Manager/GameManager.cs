@@ -37,6 +37,9 @@ public class GameManager : Singleton<GameManager>
         ItemBox = new ItemBoxData();
 
         _saveContoroller.InitPath();
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void GameStart()
