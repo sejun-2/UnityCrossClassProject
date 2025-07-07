@@ -24,4 +24,6 @@ public class GameData
 
     public bool IsInBaseCamp;
     public string SelectedMapName;
+
+    public int Day;
 }

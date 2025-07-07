@@ -21,6 +21,8 @@ public class GameManager : Singleton<GameManager>
 
     public float BarricadeHp = 100;
 
+    public int Day = 1;
+
     private SaveController _saveContoroller = new SaveController();
     public GameData SavedData;
 
@@ -92,6 +94,8 @@ public class GameManager : Singleton<GameManager>
         Stats.ChangeMentality(-15);
 
         BarricadeHp -= 20;
+
+        Day++;
 
         MoveInvenItemToItemBox();
 
@@ -208,6 +212,8 @@ public class GameManager : Singleton<GameManager>
 
         IsInBaseCamp = data.IsInBaseCamp;
         SelectedMapName = data.SelectedMapName;
+
+        Day = data.Day;
 
         if (IsInBaseCamp)
         {
