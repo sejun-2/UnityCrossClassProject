@@ -8,14 +8,15 @@ TagManager:
   - Interactable
   - Zombie
   - Door
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Zombie
   - 
   - Interactable
   - Obstacle

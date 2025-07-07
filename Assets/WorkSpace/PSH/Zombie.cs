@@ -169,6 +169,15 @@ public class Zombie : MonoBehaviour
         Vector3 forwardDir = transform.forward * Mathf.Sign(_direction.z);
         RaycastHit hit;
 
+        if (Physics.Raycast(rayOrigin, forwardDir, out hit, 1f, ~0))
+        {
+            if (!hit.collider.CompareTag("Player"))
+            {
+                _waitTimer = _waitTime;
+                StateChange(State.Wait);
+            }
+        }
+
         if (Physics.Raycast(rayOrigin, forwardDir, out hit, _detectionDistance, ~0))
         {
             if (hit.collider.CompareTag("Player"))

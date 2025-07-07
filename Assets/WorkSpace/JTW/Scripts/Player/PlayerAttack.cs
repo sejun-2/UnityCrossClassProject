@@ -41,9 +41,9 @@ public class PlayerAttack : MonoBehaviour
         Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
 
         Debug.DrawRay(transform.position + Vector3.up, direction * weapon.attackRange, Color.red, 1f);
-        RaycastHit[] hits = Physics.RaycastAll(transform.position + Vector3.up, direction, weapon.attackRange, ~0, QueryTriggerInteraction.Collide);
+        RaycastHit hit;
 
-        foreach (RaycastHit hit in hits)
+        if(Physics.Raycast(transform.position + Vector3.up, direction, out hit, weapon.attackRange))
         {
             if (hit.collider.gameObject.CompareTag("Zombie"))
             {
@@ -54,8 +54,6 @@ public class PlayerAttack : MonoBehaviour
                 weapon.durabilityValue--;
 
                 Debug.Log($"{hit.collider.gameObject.name}에게 {weapon.attackValue} 만큼의 데미지");
-
-                break;
             }
         }
     }

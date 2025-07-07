@@ -85,6 +85,7 @@ public class PlayerInteraction : MonoBehaviour
     private readonly int hashStair = Animator.StringToHash("Stair");
     private readonly int hashFall = Animator.StringToHash("Falling");
     private readonly int hashLand = Animator.StringToHash("Landing");
+    private readonly int hashStand = Animator.StringToHash("Stand");
 
     private PlayerAttack _playerAttack;
     private PlayerEquipment _playerEquipment;
@@ -332,9 +333,26 @@ public class PlayerInteraction : MonoBehaviour
             }
             else
             {
-                Manager.Sound.SfxPlay(audioClipFarming, transform, 1);
+                if (Manager.Player.Stats.CurrentNearby is StoryInteractionObject
+                    || Manager.Player.Stats.CurrentNearby is Sofa)
+                {
+                }
+                else
+                {
+                    Manager.Sound.SfxPlay(audioClipFarming, transform, 1);
+                }
                 StartCoroutine(RotateAndInteract());
-                animator.Play(hashFarm);
+
+                if(Manager.Player.Stats.CurrentNearby is Sofa
+                    || Manager.Player.Stats.CurrentNearby is TutorialEndObject)
+                {
+                    animator.Play(hashStand);
+                }
+                else
+                {
+                    animator.Play(hashFarm);
+                }
+                    
             }
         }
 
@@ -482,6 +500,7 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         Manager.Player.Stats.CurrentNearby.Interact();
+        animator.Play(hashIdle);
 
         // 파밍 종료
         slider.gameObject.SetActive(false);
