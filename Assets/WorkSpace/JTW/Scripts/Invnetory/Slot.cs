@@ -58,7 +58,6 @@ public class Slot
 
     public void DeleteItem()
     {
-        _curItem.ClearEvent();
         _curItem = null;
         _itemCount = 0;
         OnItemChanged?.Invoke(_curItem);

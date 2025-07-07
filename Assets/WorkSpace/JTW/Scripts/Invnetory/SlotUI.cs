@@ -18,9 +18,7 @@ public class SlotUI : MonoBehaviour
     {
         _slot = slot;
         slot.OnItemChanged += UpdateSlotData;
-        slot.OnItemChanged += UpdateDurabilityData;
         UpdateSlotData(slot.CurItem);
-        UpdateDurabilityData(slot.CurItem);
 
     }
 
@@ -53,27 +51,6 @@ public class SlotUI : MonoBehaviour
                 _countText.text = "";
             }
         }
-    }
-
-    public void UpdateDurabilityData(Item item)
-    {
-        if (_durabilitySlider == null) return;
-
-        if (item != null && (item.itemType == ItemType.Weapon || item.itemType == ItemType.Armor))
-        {
-            _durabilitySlider.gameObject.SetActive(true);
-            UpdateDurabilitySlider(item.durabilityValue);
-            item.OnDurabilityChanged += UpdateDurabilitySlider;
-        }
-        else
-        {
-            _durabilitySlider.gameObject.SetActive(false);
-        }
-    }
-
-    private void UpdateDurabilitySlider(int value)
-    {
-        _durabilitySlider.value = (float)_slot.CurItem.durabilityValue / _slot.CurItem.maxDrabilityValue;
     }
 
     public void UseItem()

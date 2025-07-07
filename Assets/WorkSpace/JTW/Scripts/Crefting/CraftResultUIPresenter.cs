@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class CraftResultUIPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _closeSound;
+
     private Image _itemIcon;
     private TextMeshProUGUI _nameText;
 
@@ -13,6 +15,7 @@ public class CraftResultUIPresenter : BaseUI
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
             Destroy(gameObject);
         }
     }

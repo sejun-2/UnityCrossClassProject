@@ -232,8 +232,6 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
     private IEnumerator TutorialUICoroutine(GameObject obj, Transform transform)
     {
-        Vector3 offset = new Vector3(0, 2, 0);
-
         RectTransform rt = obj.GetComponent<RectTransform>();
 
         while(obj != null)
@@ -247,7 +245,8 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
                 obj.SetActive(true);
             }
 
-                Vector3 pos = transform.position + offset;
+            Vector3 pos = transform.position;
+            pos.y = Manager.Player.Transform.position.y + 2;
 
             Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
 
@@ -255,5 +254,12 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
             yield return null;
         }
+    }
+
+    public void ShowExitPopUp()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/ExitPopUp");
+
+        Instantiate(prefab, transform);
     }
 }

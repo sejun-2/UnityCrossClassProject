@@ -1,11 +1,15 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenuPresenter : BaseUI
 {
     [SerializeField] private ItemSlotUIs _mainSlotUIsPrefab;
     [SerializeField] private AudioClip _bgmClip;
+    [SerializeField] private AudioClip _clickSound;
+    [SerializeField] private AudioClip _moveSound;
 
     private GameObject _slotPanel;
 
@@ -14,6 +18,8 @@ public class MainMenuPresenter : BaseUI
     private GameObject _popUp;
 
     private readonly string[] _mainText = new string[] { "게임 시작", "환경 설정", "게임 종료" };
+
+    private Coroutine _startCoroutine;
 
     private void Start()
     {
@@ -33,7 +39,7 @@ public class MainMenuPresenter : BaseUI
         _slotUIs.SelectSlotUI(0);
         _slotUIs.SlotUIs[_slotUIs.SelectedSlotIndex].SetColor(Color.yellow);
 
-        Manager.Sound.BgmPlay(_bgmClip);
+        Manager.Sound.BgmPlay(_bgmClip, 0.4f);
 
         if (Manager.Game.IsSaved())
         {
@@ -44,6 +50,7 @@ public class MainMenuPresenter : BaseUI
     private void Update()
     {
         if (_popUp != null) return;
+        if (_startCoroutine != null) return;
 
         MoveSlot();
 
@@ -51,7 +58,7 @@ public class MainMenuPresenter : BaseUI
         {
             if(_slotUIs.SelectedSlotIndex == 0)
             {
-                Manager.Game.GameStart();
+                _startCoroutine = StartCoroutine(StartCor());
             }
             else if(_slotUIs.SelectedSlotIndex == 1)
             {
@@ -65,34 +72,41 @@ public class MainMenuPresenter : BaseUI
                 Application.Quit();
 #endif
             }
+
+            Manager.Sound.SfxPlay(_clickSound, Camera.main.transform);
         }
 
     }
+
+    private IEnumerator StartCor()
+    {
+        GetUI<Image>("FadeImage").DOFade(1f, 1f);
+        yield return new WaitForSeconds(2f);
+
+        Manager.Game.GameStart();
+    }
+
+
     private void MoveSlot()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            ChangeSelectSlot(Vector2.right);
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            ChangeSelectSlot(Vector2.left);
-        }
-
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
+            if (_slotUIs.SelectedSlotIndex <= 0) return;
+
             ChangeSelectSlot(Vector2.up);
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            if (_slotUIs.SelectedSlotIndex >= _slotUIs.SlotUIs.Count - 1) return;
+
             ChangeSelectSlot(Vector2.down);
         }
     }
 
     private void ChangeSelectSlot(Vector2 direction)
     {
+        Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
         _slotUIs.SlotUIs[_slotUIs.SelectedSlotIndex].SetColor(Color.white);
         _slotUIs.MoveSelectSlot(direction);
         _slotUIs.SlotUIs[_slotUIs.SelectedSlotIndex].SetColor(Color.yellow);

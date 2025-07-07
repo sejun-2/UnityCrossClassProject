@@ -228,6 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce94ecbf5ada99844b3e200952909e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interactionSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}
   _storyInteractionId: 5003
 --- !u!114 &7033818615035052351
 MonoBehaviour:

@@ -30,6 +30,8 @@ public partial class PlayerStats
 
     public bool isClimbing = false;//떨어지는 중인지
     [JsonIgnore] public IInteractable CurrentNearby;//가까운 상호작용 대상
+
+    public Stat<bool> IsControl = new();
 }
 
 public class PlayerInteraction : MonoBehaviour
@@ -83,6 +85,7 @@ public class PlayerInteraction : MonoBehaviour
     private readonly int hashStair = Animator.StringToHash("Stair");
     private readonly int hashFall = Animator.StringToHash("Falling");
     private readonly int hashLand = Animator.StringToHash("Landing");
+    private readonly int hashStand = Animator.StringToHash("Stand");
 
     private PlayerAttack _playerAttack;
     private PlayerEquipment _playerEquipment;
@@ -111,6 +114,8 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] AudioClip audioClipLanding;
     [SerializeField] AudioClip audioClipWalking;
     [SerializeField] AudioClip audioClipFarming;
+    [SerializeField] AudioClip _repairSound;
+    [SerializeField] AudioClip _cookSound;
     //액션
     [SerializeField] private Transform _renderObject;
 
@@ -140,7 +145,7 @@ public class PlayerInteraction : MonoBehaviour
         Manager.Player.Stats.OnHideEnded += StopHideSound;
         OnLeftGround += HandleFalling;
         IsGrounded = true;
-        OnLanded += HandleLanding; 
+        OnLanded += HandleLanding;
     }
     private void OnDrawGizmos()
     {
@@ -166,9 +171,23 @@ public class PlayerInteraction : MonoBehaviour
     }
     void Update()
     {
-        if (Manager.Player.Stats.isFarming)
+        if (Manager.Player.Stats.IsDied.Value)
         {
             Manager.Sound.SfxStopLoop("Walking", 0);
+            return;
+        }
+
+        if (Manager.Player.Stats.isFarming
+            || Manager.Player.Stats.IsAttack.Value
+            || Manager.Player.Stats.IsTakeDamage.Value
+            || Manager.Player.Stats.IsControl.Value)
+        {
+            Manager.Sound.SfxStopLoop("Walking", 0);
+
+            if(CurrentState == State.Run)
+            {
+                StateChange(State.Idle);
+            }
         }
 
         //테스트용
@@ -193,20 +212,29 @@ public class PlayerInteraction : MonoBehaviour
             playerWeaponPrefab.SetActive(false);
         }
 
+        if (Manager.Player.Stats.IsControl.Value) return;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Manager.UI.PopUp.ShowPopUp<MainMenuPopUp>();
+        }
+
+        if (Manager.Player.Stats.isFarming
+            || Manager.Player.Stats.IsAttack.Value
+            || Manager.Player.Stats.IsTakeDamage.Value)
+        {
+            return;
+        }
+
         //인벤토리 여는
         if (Input.GetKeyDown(KeyCode.X))
         {
-            if (!Manager.Player.Stats.isFarming)
+            if (!Manager.Player.Stats.isFarming && !Manager.Game.IsInBaseCamp)
             {
                 Manager.UI.Inven.ShowInven();
                 StateChange(State.Idle);
                 Manager.Player.Stats.isFarming = true;
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Manager.UI.PopUp.ShowPopUp<MainMenuPopUp>();
         }
 
         if (Input.GetKeyDown(KeyCode.V))
@@ -313,9 +341,29 @@ public class PlayerInteraction : MonoBehaviour
             }
             else
             {
-                Manager.Sound.SfxPlay(audioClipFarming, transform, 1);
+                if (Manager.Player.Stats.CurrentNearby is StoryInteractionObject
+                    || Manager.Player.Stats.CurrentNearby is Sofa
+                    || Manager.Player.Stats.CurrentNearby is TutorialEndObject
+                    || Manager.Player.Stats.CurrentNearby is Bed
+                    || Manager.Player.Stats.CurrentNearby is QuitObject)
+                {
+                }
+                else if (Manager.Player.Stats.CurrentNearby is CrafingObject
+                    || Manager.Player.Stats.CurrentNearby is RepairObject)
+                {
+                    Manager.Sound.SfxPlay(_repairSound, transform, 1);
+                }
+                else if(Manager.Player.Stats.CurrentNearby is CookingObject)
+                {
+                    Manager.Sound.SfxPlay(_cookSound, transform, 1);
+                }
+                else
+                {
+                    Manager.Sound.SfxPlay(audioClipFarming, transform, 1);
+                }
                 StartCoroutine(RotateAndInteract());
                 animator.Play(hashFarm);
+
             }
         }
 
@@ -463,6 +511,7 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         Manager.Player.Stats.CurrentNearby.Interact();
+        animator.Play(hashIdle);
 
         // 파밍 종료
         slider.gameObject.SetActive(false);
@@ -494,12 +543,12 @@ public class PlayerInteraction : MonoBehaviour
     //사운드
     void PlayHideSound()
     {
-        Manager.Sound.SfxStopLoop("Walking");
+        Manager.Sound.SfxStopLoop("Walking", 0f);
         Manager.Sound.SfxPlayLoop("Hiding", audioClipHiding, transform, 0.3f);
     }
     void StopHideSound()
     {
-        Manager.Sound.SfxStopLoop("Hiding", 1.5f);
+        Manager.Sound.SfxStopLoop("Hiding", 0f);
     }
     void OnDestroy()
     {

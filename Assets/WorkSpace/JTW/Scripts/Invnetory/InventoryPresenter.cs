@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class InventoryPresenter : BaseUI, IInventory
 {
+    [SerializeField] private AudioClip _moveSound;
+
     [SerializeField] private GameObject _itemSlotsPrefab;
     [SerializeField] private GameObject _slotUIPrefab;
 
@@ -26,6 +28,8 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private void Update()
     {
+        if (Manager.Player.Stats.IsControl.Value) return;
+
         if (Input.GetKeyDown(KeyCode.X))
         {
             if (!IsTrade || (_tradeInvenDirection == Vector2.up || _tradeInvenDirection == Vector2.down))
@@ -216,6 +220,8 @@ public class InventoryPresenter : BaseUI, IInventory
 
     public void Activate(int index)
     {
+        Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
+
         _isSwitchActivate = true;
 
         index = SetSelectIndex(index);

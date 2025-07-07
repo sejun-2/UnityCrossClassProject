@@ -6,7 +6,6 @@ public class QuitObject : MonoBehaviour, IInteractable
 {
     public void Interact()
     {
-        Manager.Game.DayComplete();
-        Manager.Game.ChangeScene("BaseCamp");
+        Manager.UI.Inven.ShowExitPopUp();
     }
 }

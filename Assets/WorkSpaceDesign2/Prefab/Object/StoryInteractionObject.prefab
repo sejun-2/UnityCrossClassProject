@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c6937873511d6479688c75cc2e4165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tutorialSprite: {fileID: 0}
 --- !u!114 &4808693687870610514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,7 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce94ecbf5ada99844b3e200952909e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _storyInteractionId: 5002
+  _interactionSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}
+  _storyInteractionId: 5001
 --- !u!114 &1127456964117574620
 MonoBehaviour:
   m_ObjectHideFlags: 0

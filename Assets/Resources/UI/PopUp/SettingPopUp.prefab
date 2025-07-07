@@ -3289,6 +3289,8 @@ MonoBehaviour:
   _masterText: {fileID: 1670478485185258461}
   _bgmText: {fileID: 3561538053565447211}
   _sfxText: {fileID: 7968199559601349083}
+  _moveSound: {fileID: 8300000, guid: 12f7440c11b658347ac68afac95e70c9, type: 3}
+  _clickSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}
   SoundSelectables:
   - {fileID: 683921829116346075}
   - {fileID: 8290702742590483220}

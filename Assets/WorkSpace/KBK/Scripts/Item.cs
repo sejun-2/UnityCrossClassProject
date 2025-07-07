@@ -32,7 +32,7 @@ public class Item : ScriptableObject, IUsableID
         { 
             _durubilityValue = value;
             OnDurabilityChanged?.Invoke(value); 
-            if(_durubilityValue <= 0)
+            if(_durubilityValue <= 0 && (itemType == ItemType.Weapon || itemType == ItemType.Armor))
             {
                 DestroyItem();
             }

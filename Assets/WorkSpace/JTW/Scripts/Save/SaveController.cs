@@ -85,6 +85,8 @@ public class SaveController
         data.IsInBaseCamp = Manager.Game.IsInBaseCamp;
         data.SelectedMapName = Manager.Game.SelectedMapName;
 
+        data.Day = Manager.Game.Day;
+
         Manager.Game.SavedData = data;
 
         string json = JsonConvert.SerializeObject(data, Formatting.Indented);

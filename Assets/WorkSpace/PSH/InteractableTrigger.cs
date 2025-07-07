@@ -5,6 +5,8 @@ using System.Linq;
 public class InteractableTrigger : MonoBehaviour
 {
     [SerializeField] private Sprite _tutorialSprite;
+    [SerializeField] private bool _isIgnoreTutorial = false;
+
     private List<GameObject> _tutorialUIs = new List<GameObject>();
 
     private IInteractable interactable;
@@ -18,7 +20,10 @@ public class InteractableTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            _tutorialUIs.Add(Manager.UI.Inven.ShowTutorialUI(transform, _tutorialSprite));
+            if (!_isIgnoreTutorial)
+            {
+                _tutorialUIs.Add(Manager.UI.Inven.ShowTutorialUI(transform, _tutorialSprite));
+            }
             Manager.Player.Stats.CurrentNearby = interactable;
             Debug.Log($"상호작용물체 {interactable}의 트리거 영역 진입");
         }
