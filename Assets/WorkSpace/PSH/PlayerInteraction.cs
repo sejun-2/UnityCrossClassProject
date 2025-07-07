@@ -114,6 +114,8 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] AudioClip audioClipLanding;
     [SerializeField] AudioClip audioClipWalking;
     [SerializeField] AudioClip audioClipFarming;
+    [SerializeField] AudioClip _repairSound;
+    [SerializeField] AudioClip _cookSound;
     //액션
     [SerializeField] private Transform _renderObject;
 
@@ -334,25 +336,27 @@ public class PlayerInteraction : MonoBehaviour
             else
             {
                 if (Manager.Player.Stats.CurrentNearby is StoryInteractionObject
-                    || Manager.Player.Stats.CurrentNearby is Sofa)
+                    || Manager.Player.Stats.CurrentNearby is Sofa
+                    || Manager.Player.Stats.CurrentNearby is TutorialEndObject
+                    || Manager.Player.Stats.CurrentNearby is Bed)
                 {
+                }
+                else if (Manager.Player.Stats.CurrentNearby is CrafingObject
+                    || Manager.Player.Stats.CurrentNearby is RepairObject)
+                {
+                    Manager.Sound.SfxPlay(_repairSound, transform, 1);
+                }
+                else if(Manager.Player.Stats.CurrentNearby is CookingObject)
+                {
+                    Manager.Sound.SfxPlay(_cookSound, transform, 1);
                 }
                 else
                 {
                     Manager.Sound.SfxPlay(audioClipFarming, transform, 1);
                 }
                 StartCoroutine(RotateAndInteract());
+                animator.Play(hashFarm);
 
-                if(Manager.Player.Stats.CurrentNearby is Sofa
-                    || Manager.Player.Stats.CurrentNearby is TutorialEndObject)
-                {
-                    animator.Play(hashStand);
-                }
-                else
-                {
-                    animator.Play(hashFarm);
-                }
-                    
             }
         }
 

@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class TutorialEndObject : MonoBehaviour, IInteractable
 {
     [SerializeField] private Image _fadeImage;
-    [SerializeField] private AudioClip _interactionSound;
 
     public void Interact()
     {

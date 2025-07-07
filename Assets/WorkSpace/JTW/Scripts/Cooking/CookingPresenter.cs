@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class CookingPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _cookSound;
+
     [SerializeField] private ItemSlotUIs _categorySlotUIsPrefab;
     [SerializeField] private ItemSlotUIs _needItemSlotUIsPrefab;
     [SerializeField] private ItemSlotUIs _itemSlotUIsPrefab;
@@ -59,6 +61,7 @@ public class CookingPresenter : BaseUI
             Debug.Log($"{item.name} 아이템 제작");
 
             Manager.Game.ItemBox.AddItem(item);
+            Manager.Sound.SfxPlay(_cookSound, Manager.Player.Transform);
 
             foreach (NeedItem need in _needItemList[_categorySlots.SelectedSlotIndex][_selectedResultItemSlots.SelectedSlotIndex])
             {

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class CraftingPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _completeSound;
+
     [SerializeField] private ItemSlotUIs _categorySlotUIsPrefab;
     [SerializeField] private ItemSlotUIs _needItemSlotUIsPrefab;
     [SerializeField] private ItemSlotUIs _itemSlotUIsPrefab;
@@ -60,6 +62,7 @@ public class CraftingPresenter : BaseUI
             Debug.Log($"{item.name} 아이템 제작");
 
             Manager.Game.ItemBox.AddItem(item);
+            Manager.Sound.SfxPlay(_completeSound, Manager.Player.Transform);
 
             foreach(NeedItem need in _needItemList[_categorySlots.SelectedSlotIndex][_selectedResultItemSlots.SelectedSlotIndex])
             {
