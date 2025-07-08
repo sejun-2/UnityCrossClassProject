@@ -25,7 +25,8 @@ public class MapUIPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            Manager.Game.SelectedMapName = _mapPoints[_selectedMapIndex].SceneName;
+            Manager.Game.SelectedMapName = _mapPoints[_selectedMapIndex].MapName;
+            Manager.Game.SelectedSceneName = _mapPoints[_selectedMapIndex].SceneName;
             Manager.UI.Inven.ShowTradeItemBox();
             Destroy(gameObject);
         }

@@ -31,7 +31,7 @@ public class Timer : MonoBehaviour
                 map = Manager.Game.SelectedMapName;
             }
             
-            timerText.text = string.Format(" Day{0}\n{1}", Manager.Game.Day, map);
+            timerText.text = string.Format(" Day{0}\n {1}", Manager.Game.Day, map);
         }
     }
 
