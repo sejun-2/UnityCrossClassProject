@@ -71,7 +71,7 @@ public class DangerPopUpPresenter : BaseUI
             {
                 Manager.Player.BuffStats.ApplyBuff();
                 Manager.Game.IsInBaseCamp = false;
-                Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
+                Manager.Game.ChangeScene(Manager.Game.SelectedSceneName);
             }
 
         }

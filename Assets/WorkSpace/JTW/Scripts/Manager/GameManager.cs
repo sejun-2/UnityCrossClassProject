@@ -20,7 +20,9 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, bool> IsGetDiary = new Dictionary<string, bool>();
 
     public bool IsInBaseCamp = true;
+    public string SelectedSceneName = "";
     public string SelectedMapName = "";
+
 
     public float BarricadeHp = 100;
 
@@ -58,6 +60,7 @@ public class GameManager : Singleton<GameManager>
             IsGetSubStory["6001"] = true;
             IsGetDiary["7001"] = true;
             IsInBaseCamp = false;
+            SelectedSceneName = "Tutorial";
             SelectedMapName = "버려진 폐건물";
             Manager.Player.Stats.InitStats();
             ChangeScene("Tutorial");
@@ -171,7 +174,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         IsInBaseCamp = false;
-        SelectedMapName = "Tutorial";
+        SelectedSceneName = "Tutorial";
     }
 
     public void LoadSaveData(GameData data)
@@ -217,7 +220,7 @@ public class GameManager : Singleton<GameManager>
         IsGetDiary = data.IsGetDiary;
 
         IsInBaseCamp = data.IsInBaseCamp;
-        SelectedMapName = data.SelectedMapName;
+        SelectedSceneName = data.SelectedMapName;
 
         Day = data.Day;
 
@@ -227,7 +230,7 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            ChangeScene(SelectedMapName);
+            ChangeScene(SelectedSceneName);
         }
     }
 

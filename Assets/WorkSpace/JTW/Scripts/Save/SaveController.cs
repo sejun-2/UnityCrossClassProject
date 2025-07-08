@@ -83,7 +83,7 @@ public class SaveController
         data.IsGetDiary = Manager.Game.IsGetDiary;
 
         data.IsInBaseCamp = Manager.Game.IsInBaseCamp;
-        data.SelectedMapName = Manager.Game.SelectedMapName;
+        data.SelectedMapName = Manager.Game.SelectedSceneName;
 
         data.Day = Manager.Game.Day;
 

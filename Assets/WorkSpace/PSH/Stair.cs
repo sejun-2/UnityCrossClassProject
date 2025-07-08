@@ -97,7 +97,10 @@ public class Stair : MonoBehaviour, IInteractable
 
         c.a = targetAlpha;
         fadeImage.color = c;
-        Manager.Player.Stats.isFarming = false;
+        if(targetAlpha != 0)
+        {
+            Manager.Player.Stats.isFarming = false;
+        }
 
     }
 
