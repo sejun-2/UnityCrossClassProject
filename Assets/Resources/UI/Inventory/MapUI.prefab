@@ -1745,6 +1745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d8245288fa6963419bcce2d7e22c375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _closeSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}
   _itemSlotUIsPrefab: {fileID: 2179500103477867439, guid: 21fa707e050535a4d8efd2e8b7f1320d,
     type: 3}
 --- !u!1 &7893396372611647698

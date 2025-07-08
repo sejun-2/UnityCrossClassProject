@@ -39,8 +39,8 @@ public class InventoryPresenter : BaseUI, IInventory
                 {
                     Manager.Sound.SfxPlay(_invenCloseSound, Manager.Player.Transform);
                 }
+                Destroy(this.gameObject);
             }
-            Destroy(this.gameObject);
         }
 
         if (!_isActivate) return;
@@ -285,5 +285,10 @@ public class InventoryPresenter : BaseUI, IInventory
         }
 
         return 0;
+    }
+
+    public void DestroyInven()
+    {
+        Destroy(gameObject);
     }
 }

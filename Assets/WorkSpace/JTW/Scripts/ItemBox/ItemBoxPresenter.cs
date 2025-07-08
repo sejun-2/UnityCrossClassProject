@@ -55,6 +55,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
             if (IsTrade)
             {
+                _inventoryForTrade.DestroyInven();
                 Manager.UI.Inven.ShowMapUI();
             }
             else
@@ -446,5 +447,10 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
 
         return 0;
+    }
+
+    public void DestroyInven()
+    {
+        throw new System.NotImplementedException();
     }
 }
