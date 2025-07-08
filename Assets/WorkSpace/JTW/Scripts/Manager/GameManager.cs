@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
+    [SerializeField] private TextMeshProUGUI _text;
+
     public Inventory Inven;
     public ItemBoxData ItemBox;
 
@@ -226,5 +229,10 @@ public class GameManager : Singleton<GameManager>
         {
             ChangeScene(SelectedMapName);
         }
+    }
+
+    public void SetText(string text)
+    {
+        _text.text = text;
     }
 }

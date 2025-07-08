@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/WorkSpace/JTW/Demo3/Scene/GameOverScene.unity
     guid: 81debc066434d0c43b27707e67def6d4
+  - enabled: 1
+    path: Assets/WorkSpace/JTW/Demo3/Scene/SchoolObject.unity
+    guid: c49fa6c4bd8c95a4ca23f37441ab4d4a
   m_configObjects: {}

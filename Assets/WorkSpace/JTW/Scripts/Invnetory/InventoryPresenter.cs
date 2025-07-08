@@ -39,8 +39,8 @@ public class InventoryPresenter : BaseUI, IInventory
                 {
                     Manager.Sound.SfxPlay(_invenCloseSound, Manager.Player.Transform);
                 }
+                Destroy(this.gameObject);
             }
-            Destroy(this.gameObject);
         }
 
         if (!_isActivate) return;
@@ -163,27 +163,36 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private void MoveInventory()
     {
-        if (!_isActivate) return;
-
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        try
         {
-            ChangeSelectSlot(Vector2.right);
+            if (!_isActivate) return;
+
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                ChangeSelectSlot(Vector2.right);
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                ChangeSelectSlot(Vector2.left);
+            }
+
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                ChangeSelectSlot(Vector2.up);
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                ChangeSelectSlot(Vector2.down);
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Manager.Game.SetText(ex.Message);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            ChangeSelectSlot(Vector2.left);
-        }
-
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            ChangeSelectSlot(Vector2.up);
-        }
-
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            ChangeSelectSlot(Vector2.down);
-        }
+        
     }
 
     private void ChangeSelectSlot(Vector2 movePos)
@@ -276,5 +285,10 @@ public class InventoryPresenter : BaseUI, IInventory
         }
 
         return 0;
+    }
+
+    public void DestroyInven()
+    {
+        Destroy(gameObject);
     }
 }
