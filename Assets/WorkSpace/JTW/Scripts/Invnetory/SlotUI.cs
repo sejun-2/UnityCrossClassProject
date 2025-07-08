@@ -39,6 +39,18 @@ public class SlotUI : MonoBehaviour
 
         }
 
+        if(_durabilitySlider != null)
+        {
+            if(_slot.CurItem != null && _slot.CurItem.durabilityValue != 0)
+            {
+                _durabilitySlider.gameObject.SetActive(true);
+                _durabilitySlider.value = (float)_slot.CurItem.durabilityValue / _slot.CurItem.maxDrabilityValue;
+            }
+            else
+            {
+                _durabilitySlider.gameObject.SetActive(false);
+            }
+        }
 
         if(_countText != null)
         {

@@ -29,7 +29,17 @@ public class Slot
     {
         if (_curItem.Use())
         {
+            Item item = _curItem;
             RemoveItem();
+
+            if(item.itemType == ItemType.Weapon)
+            {
+                Manager.Player.Transform.GetComponent<PlayerEquipment>().EquipmentWeapon(item);
+            }
+            else if (item.itemType == ItemType.Armor)
+            {
+                Manager.Player.Transform.GetComponent<PlayerEquipment>().EquipmentArmor(item);
+            }
         }
     }
 

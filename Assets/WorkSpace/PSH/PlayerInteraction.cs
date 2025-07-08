@@ -494,6 +494,8 @@ public class PlayerInteraction : MonoBehaviour
 
     private IEnumerator RotateAndInteract()
     {
+        IInteractable Interactable = Manager.Player.Stats.CurrentNearby;
+
         RotateToInteract();
 
         // 슬라이더 UI 활성화 및 초기화
@@ -510,7 +512,7 @@ public class PlayerInteraction : MonoBehaviour
             yield return null;
         }
 
-        Manager.Player.Stats.CurrentNearby.Interact();
+        Interactable.Interact();
         animator.Play(hashIdle);
 
         // 파밍 종료

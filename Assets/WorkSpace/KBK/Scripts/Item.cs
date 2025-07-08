@@ -62,10 +62,8 @@ public class Item : ScriptableObject, IUsableID
         switch (itemType)
         {
             case ItemType.Weapon:
-                Manager.Player.Transform.GetComponent<PlayerEquipment>().EquipmentWeapon(this);
                 return true;
             case ItemType.Armor:
-                Manager.Player.Transform.GetComponent<PlayerEquipment>().EquipmentArmor(this);
                 return true;
             case ItemType.Consumable:
                 Manager.Player.Stats.ChangeHp(hpRecover);
@@ -85,7 +83,7 @@ public class Item : ScriptableObject, IUsableID
 
                 return true;
             case ItemType.Tool:
-                return true;
+                return false;
             default:
                 return false;
         }

@@ -795,7 +795,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneName: School
   _mapName: "\uD559\uAD50"
-  _mapDescription: "\uC790\uC81C\uB97C \uAD6C\uD560 \uC218 \uC788\uC744 \uAC83 \uAC19\uB2E4."
+  _mapDescription: "\uC790\uC7AC\uB97C \uAD6C\uD560 \uC218 \uC788\uC744 \uAC83 \uAC19\uB2E4."
 --- !u!1 &4462415379671303348
 GameObject:
   m_ObjectHideFlags: 0

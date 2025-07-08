@@ -37,7 +37,10 @@ public class InventoryPresenter : BaseUI, IInventory
                 Manager.Player.Stats.isFarming = false;
                 if(!IsTrade || _tradeInvenDirection == Vector2.up)
                 {
-                    Manager.Sound.SfxPlay(_invenCloseSound, Manager.Player.Transform);
+                    if(_invenCloseSound != null)
+                    {
+                        Manager.Sound.SfxPlay(_invenCloseSound, Manager.Player.Transform);
+                    }
                 }
                 Destroy(this.gameObject);
             }
@@ -229,7 +232,10 @@ public class InventoryPresenter : BaseUI, IInventory
 
     public void Activate(int index)
     {
-        Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
+        if(_moveSound != null)
+        {
+            Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
+        }
 
         _isSwitchActivate = true;
 
