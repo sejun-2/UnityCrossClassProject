@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3ad3d10e6b0eb469b5f87f445128d9, type: 3}
+  m_Name: 10043
+  m_EditorClassIdentifier: 
+  index: 10043
+  itemName: "\uC18C\uB3C5 \uC138\uD2B8"
+  description: "2\uCC28 \uAC10\uC5FC\uC744 \uB9C9\uAE30 \uC704\uD574 \uC18C\uB3C5
+    \uD6C4 \uAE68\uB057\uD55C \uCC9C\uC73C\uB85C \uC0C1\uCC98 \uBD80\uC704\uB97C
+    \uB9C9\uC744 \uC218 \uC788\uB3C4\uB85D \uB9CC\uB4E0 \uC18C\uB3C5\uC6A9 \uC138\uD2B8."
+  icon: {fileID: 21300000, guid: 9fc43bfeb27e71844b716ba66870a24e, type: 3}
+  itemTier: 3
+  itemType: 1
+  attackValue: 0
+  defValue: 0
+  durabilityValue: 0
+  attackSpeed: 0
+  hpRecover: 6
+  hungerRecover: 0
+  thirstRecover: 0
+  mentalRecover: 0
+  canStack: 1
+  maxStackCount: 3

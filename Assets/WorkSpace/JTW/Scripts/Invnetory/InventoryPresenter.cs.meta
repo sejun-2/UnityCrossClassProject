@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e248416a04302dd4b8791dfa863de4a2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _itemSlotsPrefab: {instanceID: 0}
+  - _slotUIPrefab: {instanceID: 0}
+  - _invenOpenSound: {fileID: 8300000, guid: 1b78db68b2c836e408078acc8e42c510, type: 3}
+  - _invenCloseSound: {fileID: 8300000, guid: ed50e0370b6b2914e90643528b0556a3, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

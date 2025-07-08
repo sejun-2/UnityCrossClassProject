@@ -1,0 +1,241 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GameManager : Singleton<GameManager>
+{
+    [SerializeField] private TextMeshProUGUI _text;
+
+    public Inventory Inven;
+    public ItemBoxData ItemBox;
+
+    public Dictionary<string, bool> IsRepairObject = new Dictionary<string, bool>();
+    public Dictionary<string, bool> IsUsedObject = new Dictionary<string, bool>();
+    public Dictionary<string, bool> IsGetSubStory = new Dictionary<string, bool>();
+    public Dictionary<string, bool> IsTalkDialogue = new Dictionary<string, bool>();
+    public Dictionary<string, bool> IsGetDiary = new Dictionary<string, bool>();
+
+    public bool IsInBaseCamp = true;
+    public string SelectedSceneName = "";
+    public string SelectedMapName = "";
+
+
+    public float BarricadeHp = 100;
+
+    public int Day = 1;
+
+    private SaveController _saveContoroller = new SaveController();
+    public GameData SavedData;
+
+    private PlayerStats Stats => Manager.Player.Stats;
+
+    // 하루가 마무리 될 때, 즉 베이스캠프로 돌아올 때 발생
+    public event Action OnDayCompleted;
+
+    private void Awake()
+    {
+        Inven = new Inventory();
+        ItemBox = new ItemBoxData();
+
+        _saveContoroller.InitPath();
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void GameStart()
+    {
+        GameData data = _saveContoroller.LoadGameData();
+        SavedData = data;
+
+        Manager.Sound.BgmPlay(null);
+
+        if (data == null)
+        {
+            InitGameData();
+            IsGetSubStory["6001"] = true;
+            IsGetDiary["7001"] = true;
+            IsInBaseCamp = false;
+            SelectedSceneName = "Tutorial";
+            SelectedMapName = "버려진 폐건물";
+            Manager.Player.Stats.InitStats();
+            ChangeScene("Tutorial");
+        }
+        else
+        {
+            LoadSaveData(data);
+        }
+    }
+
+    public bool IsSaved()
+    {
+        if(SavedData == null)
+        {
+            SavedData = _saveContoroller.LoadGameData();
+        }
+
+        return SavedData != null;
+    }
+
+    public void ChangeScene(string sceneName)
+    {
+        Manager.Player.Stats.CurrentNearby = null;
+
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void DayComplete()
+    {
+        foreach(string key in IsUsedObject.Keys.ToArray())
+        {
+            IsUsedObject[key] = false;
+        }
+
+        IsInBaseCamp = true;
+
+        Stats.Buff.Value = PlayerBuffs.Nomal;
+        Stats.ChangeHunger(-40);
+        Stats.ChangeThirst(-30);
+        Stats.ChangeMentality(-15);
+
+        BarricadeHp -= 20;
+
+        Day++;
+
+        MoveInvenItemToItemBox();
+
+        OnDayCompleted?.Invoke();
+
+        SaveGameData();
+    }
+
+    private void MoveInvenItemToItemBox()
+    {
+        foreach (Slot slot in Inven.SlotList)
+        {
+            if (slot.CurItem == null) continue;
+
+            int itemCount = slot.ItemCount;
+
+            for (int i = 0; i < itemCount; i++)
+            {
+                ItemBox.AddItem(slot.CurItem);
+                slot.RemoveItem();
+            }
+        }
+
+        if(Stats.Weapon.Value != null)
+        {
+            ItemBox.AddItem(Stats.Weapon.Value);
+            Stats.Weapon.Value = null;
+        }
+
+        if(Stats.Armor.Value != null)
+        {
+            ItemBox.AddItem(Stats.Armor.Value);
+            Stats.Armor.Value = null;
+        }
+    }
+
+    public void SaveGameData()
+    {
+        _saveContoroller.SaveGameData();
+    }
+
+    private void InitGameData()
+    {
+        Manager.Player.Stats = new PlayerStats();
+
+        Inven = new Inventory();
+        ItemBox = new ItemBoxData();
+
+        IsRepairObject = new Dictionary<string, bool>();
+        IsUsedObject = new Dictionary<string, bool>();
+        foreach (string str in Manager.Data.RefairData.Values.Keys.ToArray())
+        {
+            IsRepairObject[str] = false;
+            IsUsedObject[str] = false;
+        }
+
+        IsGetSubStory = new Dictionary<string, bool>();
+        foreach (string str in Manager.Data.CollectionData.Values.Keys.ToArray())
+        {
+            IsGetSubStory[str] = false;
+        }
+
+        IsTalkDialogue = new Dictionary<string, bool>();
+        foreach (string str in Manager.Data.PlayerDialogueData.Values.Keys.ToArray())
+        {
+            IsTalkDialogue[str] = false;
+        }
+
+        IsInBaseCamp = false;
+        SelectedSceneName = "Tutorial";
+    }
+
+    public void LoadSaveData(GameData data)
+    {
+        InitGameData();
+
+        Manager.Player.Stats = data.stats;
+        Manager.Player.Stats.Weapon = new Stat<Item>();
+        Manager.Player.Stats.Armor = new Stat<Item>();
+
+        if (!string.IsNullOrEmpty(data.WeaponData.Id))
+        {
+            Manager.Player.Stats.Weapon.Value = Instantiate(Manager.Data.ItemData.Values[data.WeaponData.Id]);
+            Manager.Player.Stats.Weapon.Value.durabilityValue = data.WeaponData.Durability;
+        }
+
+        if (!string.IsNullOrEmpty(data.ArmorData.Id))
+        {
+            Manager.Player.Stats.Armor.Value = Instantiate(Manager.Data.ItemData.Values[data.ArmorData.Id]);
+            Manager.Player.Stats.Weapon.Value.durabilityValue = data.ArmorData.Durability;
+        }
+
+        foreach (ItemSaveData value in data.InvenData)
+        {
+            Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
+            item.durabilityValue = value.Durability;
+
+            Inven.AddItem(item);
+        }
+
+        foreach (ItemSaveData value in data.ItemBoxData)
+        {
+            Item item = Instantiate(Manager.Data.ItemData.Values[value.Id]);
+            item.durabilityValue = value.Durability;
+
+            ItemBox.AddItem(item);
+        }
+
+        IsRepairObject = data.IsRepairObject;
+        IsUsedObject = data.IsUsedObject;
+        IsGetSubStory = data.IsGetSubStory;
+        IsTalkDialogue = data.IsTalkDialogue;
+        IsGetDiary = data.IsGetDiary;
+
+        IsInBaseCamp = data.IsInBaseCamp;
+        SelectedSceneName = data.SelectedMapName;
+
+        Day = data.Day;
+
+        if (IsInBaseCamp)
+        {
+            ChangeScene("BaseCamp");
+        }
+        else
+        {
+            ChangeScene(SelectedSceneName);
+        }
+    }
+
+    public void SetText(string text)
+    {
+        _text.text = text;
+    }
+}

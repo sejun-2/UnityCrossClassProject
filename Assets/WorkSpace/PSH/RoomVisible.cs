@@ -1,0 +1,21 @@
+using UnityEngine;
+
+public class RoomVisible : MonoBehaviour
+{
+    private Collider collider;       // 방마다 트리거
+    [SerializeField] GameObject dark;         // 방마다 어둠 오브젝트
+    public string targetTag = "Interactable";
+
+    private void Start()
+    {
+        collider = GetComponent<Collider>();
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            dark.SetActive(false);
+        }
+    }
+    //한 번 방문한 방은 다시 어두워지지 않음 으로 일단 구현함
+}
