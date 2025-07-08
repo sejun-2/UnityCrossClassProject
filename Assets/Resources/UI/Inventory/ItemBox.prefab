@@ -356,6 +356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSound: {fileID: 8300000, guid: 12f7440c11b658347ac68afac95e70c9, type: 3}
+  _closeSound: {fileID: 8300000, guid: af51ad96613342b40afe9d7558f2ef47, type: 3}
   _categorySlotsPrefab: {fileID: 2179500103477867439, guid: 9b8d5510931d93f469b21e742c6bc46e,
     type: 3}
   _itemSlotsPrefab: {fileID: 2179500103477867439, guid: 43efbe3d8afc82a419d1b8913c10acbb,

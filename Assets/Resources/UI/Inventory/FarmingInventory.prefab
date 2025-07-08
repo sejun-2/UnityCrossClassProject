@@ -226,12 +226,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e248416a04302dd4b8791dfa863de4a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveSound: {fileID: 8300000, guid: 12f7440c11b658347ac68afac95e70c9, type: 3}
   _itemSlotsPrefab: {fileID: 2179500103477867439, guid: f26de28d05fb56642b5c0a52f2c8c12c,
     type: 3}
   _slotUIPrefab: {fileID: 4287079269926146491, guid: 0ce077ccadfab2d418771f2b42572be6,
     type: 3}
-  _invenOpenSound: {fileID: 0}
-  _invenCloseSound: {fileID: 0}
+  _invenOpenSound: {fileID: 8300000, guid: 1b78db68b2c836e408078acc8e42c510, type: 3}
+  _invenCloseSound: {fileID: 8300000, guid: ed50e0370b6b2914e90643528b0556a3, type: 3}
 --- !u!114 &8995204400100761499
 MonoBehaviour:
   m_ObjectHideFlags: 0

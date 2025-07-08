@@ -135,6 +135,7 @@ public class MainMenuPopUp : BaseUI
     // 타이틀 씬으로 이동하는 메서드
     public void ChageTitleScene()
     {
+        Manager.Player.Stats.IsControl.Value = false;
         SceneChanger.ChageScene(sceneName: "TitleScene");
     }
 
