@@ -10,6 +10,8 @@ public partial class PlayerStats
 
 public class PlayerAttack : MonoBehaviour
 {
+    [SerializeField] private AudioClip _attackSound;
+
     private Animator _animator;
 
     private void Awake()
@@ -24,9 +26,9 @@ public class PlayerAttack : MonoBehaviour
         if (weapon == null || Manager.Player.Stats.IsAttack.Value) return;
 
         _animator.Play("BatAttack");
+        Manager.Sound.SfxPlay(_attackSound, transform);
 
         Manager.Player.Stats.IsAttack.Value = true;
-        Manager.Player.Stats.isFarming = true;
         StartCoroutine(AttackCoroutine(weapon.attackSpeed));
     }
 
@@ -38,10 +40,10 @@ public class PlayerAttack : MonoBehaviour
 
         Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
 
-        Debug.DrawRay(transform.position + Vector3.up, direction * weapon.attackRange * 10, Color.red, 1f);
-        RaycastHit[] hits = Physics.RaycastAll(transform.position + Vector3.up, direction, weapon.attackRange * 10, ~0, QueryTriggerInteraction.Collide);
+        Debug.DrawRay(transform.position + Vector3.up, direction * weapon.attackRange, Color.red, 1f);
+        RaycastHit hit;
 
-        foreach (RaycastHit hit in hits)
+        if(Physics.Raycast(transform.position + Vector3.up, direction, out hit, weapon.attackRange))
         {
             if (hit.collider.gameObject.CompareTag("Zombie"))
             {
@@ -49,11 +51,9 @@ public class PlayerAttack : MonoBehaviour
 
                 zombie.TakeDamage(weapon.attackValue);
 
-                weapon.durabilityValue--;
+                Manager.Player.Stats.Weapon.Value.durabilityValue--;
 
                 Debug.Log($"{hit.collider.gameObject.name}에게 {weapon.attackValue} 만큼의 데미지");
-
-                break;
             }
         }
     }
@@ -63,6 +63,5 @@ public class PlayerAttack : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         Manager.Player.Stats.IsAttack.Value = false;
-        Manager.Player.Stats.isFarming = false;
     }
 }

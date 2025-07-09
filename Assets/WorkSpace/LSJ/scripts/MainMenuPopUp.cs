@@ -13,8 +13,12 @@ public class MainMenuPopUp : BaseUI
     [Header("외부 메뉴 오브젝트")]
     [SerializeField] private GameObject Setting; // Inspector에서 Setting 오브젝트 연결
 
+    [SerializeField] private AudioClip _clickSound;
+    [SerializeField] private AudioClip _moveSound;
+
     private void Start()
     {
+        Manager.Sound.SfxPlay(_clickSound, Camera.main.transform);
         Debug.Log(GetEvent("TitlePopUp열림")); // UI가 시작될 때 로그를 출력합니다.
 
         menuButtons = new Button[]
@@ -52,6 +56,7 @@ public class MainMenuPopUp : BaseUI
             selectedIndex = 0;
             menuButtons[0].Select();
         }
+
     }
 
     private void OnDisable()
@@ -75,6 +80,8 @@ public class MainMenuPopUp : BaseUI
             if (menuButtons[selectedIndex] != null)
                 // 그 버튼을 선택(포커스) 상태로 만든다 (하이라이트 표시)
                 menuButtons[selectedIndex].Select();
+
+            Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
         }
 
         // 아래쪽 방향키가 눌렸을 때
@@ -86,15 +93,25 @@ public class MainMenuPopUp : BaseUI
             if (menuButtons[selectedIndex] != null)
                 // 그 버튼을 선택(포커스) 상태로 만든다 (하이라이트 표시)
                 menuButtons[selectedIndex].Select();
+
+            Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
         }
 
         // Z키가 눌렸을 때
         if (Input.GetKeyDown(KeyCode.Z))
         {
+            Manager.Sound.SfxPlay(_clickSound, Camera.main.transform);
             // 현재 선택된 버튼이 null이 아니면
             if (menuButtons[selectedIndex] != null)
                 // 그 버튼의 onClick 이벤트(즉, 클릭 효과)를 실행한다
                 menuButtons[selectedIndex].onClick.Invoke();
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Manager.Sound.SfxPlay(_clickSound, Camera.main.transform);
+            Manager.UI.PopUp.ClosePopUp();
         }
     }
 
@@ -118,6 +135,7 @@ public class MainMenuPopUp : BaseUI
     // 타이틀 씬으로 이동하는 메서드
     public void ChageTitleScene()
     {
+        Manager.Player.Stats.IsControl.Value = false;
         SceneChanger.ChageScene(sceneName: "TitleScene");
     }
 

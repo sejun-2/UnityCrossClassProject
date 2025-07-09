@@ -32,7 +32,7 @@ public class Item : ScriptableObject, IUsableID
         { 
             _durubilityValue = value;
             OnDurabilityChanged?.Invoke(value); 
-            if(_durubilityValue <= 0)
+            if(_durubilityValue <= 0 && (itemType == ItemType.Weapon || itemType == ItemType.Armor))
             {
                 DestroyItem();
             }
@@ -62,19 +62,28 @@ public class Item : ScriptableObject, IUsableID
         switch (itemType)
         {
             case ItemType.Weapon:
-                Manager.Player.Transform.GetComponent<PlayerEquipment>().EquipmentWeapon(this);
                 return true;
             case ItemType.Armor:
-                Manager.Player.Transform.GetComponent<PlayerEquipment>().EquipmentArmor(this);
                 return true;
             case ItemType.Consumable:
                 Manager.Player.Stats.ChangeHp(hpRecover);
                 Manager.Player.Stats.ChangeHunger(hungerRecover);
                 Manager.Player.Stats.ChangeThirst(thirstRecover);
                 Manager.Player.Stats.ChangeMentality(mentalRecover);
+                if(hpRecover > 0)
+                {
+                    AudioClip clip = Resources.Load<AudioClip>("Sound/Player_Bandage");
+                    Manager.Sound.SfxPlay(clip, Manager.Player.Transform);
+                }
+                else if(hungerRecover > 0)
+                {
+                    AudioClip clip = Resources.Load<AudioClip>("Sound/Player_Eat");
+                    Manager.Sound.SfxPlay(clip, Manager.Player.Transform);
+                }
+
                 return true;
             case ItemType.Tool:
-                return true;
+                return false;
             default:
                 return false;
         }
@@ -100,5 +109,8 @@ public class Item : ScriptableObject, IUsableID
         {
             Manager.Player.Stats.Armor.Value = null;
         }
+
+        AudioClip clip = Resources.Load<AudioClip>("Sound/Player_Breakitem");
+        Manager.Sound.SfxPlay(clip, Manager.Player.Transform);
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ZombieAttack : MonoBehaviour
 {
+    [SerializeField] AudioClip _zombieAttackSound;
+
     [SerializeField] private float _damage = 10f;
     [SerializeField] private float _attackCooldown = 3.9f;
     [SerializeField] private float _attackRange = 2f;
@@ -21,6 +23,7 @@ public class ZombieAttack : MonoBehaviour
     public void Attack()
     {
         _animator.Play("ZombieAttack");
+        Manager.Sound.SfxPlay(_zombieAttackSound, transform);
 
         StartCoroutine(AttackCoroutine(_attackCooldown));
     }
@@ -37,7 +40,7 @@ public class ZombieAttack : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        if(_zombie.CurrentState != Zombie.State.TakeDamage)
+        if(_zombie.CurrentState != Zombie.State.TakeDamage && _zombie.CurrentState != Zombie.State.Dead)
         {
             _zombie.StateChange(Zombie.State.Wait);
         }

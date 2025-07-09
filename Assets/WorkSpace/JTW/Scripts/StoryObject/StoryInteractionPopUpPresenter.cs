@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class StoryInteractionPopUpPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _closeSound;
+
     private Image _storyImage;
     private TextMeshProUGUI _descriptionText;
 

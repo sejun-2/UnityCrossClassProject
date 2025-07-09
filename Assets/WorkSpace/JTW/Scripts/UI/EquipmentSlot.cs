@@ -42,7 +42,7 @@ public class EquipmentSlot : MonoBehaviour
         }
     }
 
-    public void UpdateSlotData(Item item = null)
+    public void UpdateSlotData(Item item)
     {
         if (_itemImage != null)
         {
@@ -65,7 +65,7 @@ public class EquipmentSlot : MonoBehaviour
 
     }
 
-    public void UpdateDurabilityData(Item item = null)
+    public void UpdateDurabilityData(Item item)
     {
         if (_durabilitySlider == null) return;
 

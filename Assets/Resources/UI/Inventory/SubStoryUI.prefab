@@ -190,9 +190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19096be2c7d0a454d9399088e88b311a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _openSound: {fileID: 8300000, guid: 005720cbebc6f25489272ec945941858, type: 3}
   _itemSlotsPrefab: {fileID: 2179500103477867439, guid: 5a6959961764f504e9567b58846b010e,
     type: 3}
-  _slotUIPrefab: {fileID: 4287079269926146491, guid: 824524ba8458dd84999e78b106783edb,
+  _slotUIPrefab: {fileID: 1546692140693673260, guid: 7460d295fc33abe44afc1f8dd2e3c58a,
     type: 3}
 --- !u!1 &3946743947442789532
 GameObject:

@@ -17,7 +17,7 @@ public class TutorialFarming : MonoBehaviour, IInteractable
     {
         if (!_isInit)
         {
-            Item bat = Manager.Data.ItemData.Values["10014"];
+            Item bat = Instantiate(Manager.Data.ItemData.Values["10014"]);
             bat.durabilityValue = 1;
             _farmingInven.AddItem(bat);
             _isInit = true;

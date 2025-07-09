@@ -6,8 +6,13 @@ using UnityEngine;
 
 public class InventoryPresenter : BaseUI, IInventory
 {
+    [SerializeField] private AudioClip _moveSound;
+
     [SerializeField] private GameObject _itemSlotsPrefab;
     [SerializeField] private GameObject _slotUIPrefab;
+
+    [SerializeField] private AudioClip _invenOpenSound;
+    [SerializeField] private AudioClip _invenCloseSound;
 
     private Inventory _inven = new();
     private ItemSlotUIs _itemSlotUIs;
@@ -23,13 +28,22 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private void Update()
     {
+        if (Manager.Player.Stats.IsControl.Value) return;
+
         if (Input.GetKeyDown(KeyCode.X))
         {
             if (!IsTrade || (_tradeInvenDirection == Vector2.up || _tradeInvenDirection == Vector2.down))
             {
                 Manager.Player.Stats.isFarming = false;
+                if(!IsTrade || _tradeInvenDirection == Vector2.up)
+                {
+                    if(_invenCloseSound != null)
+                    {
+                        Manager.Sound.SfxPlay(_invenCloseSound, Manager.Player.Transform);
+                    }
+                }
+                Destroy(this.gameObject);
             }
-            Destroy(this.gameObject);
         }
 
         if (!_isActivate) return;
@@ -67,6 +81,10 @@ public class InventoryPresenter : BaseUI, IInventory
         {
             _inventoryForTrade = tradeInven;
             _tradeInvenDirection = tradeInvenDirection;
+        }
+        else
+        {
+            Manager.Sound.SfxPlay(_invenOpenSound, Manager.Player.Transform);
         }
         _panelSize = new Vector2(5, 2);
         InitInventory();
@@ -148,27 +166,36 @@ public class InventoryPresenter : BaseUI, IInventory
 
     private void MoveInventory()
     {
-        if (!_isActivate) return;
-
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        try
         {
-            ChangeSelectSlot(Vector2.right);
+            if (!_isActivate) return;
+
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                ChangeSelectSlot(Vector2.right);
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                ChangeSelectSlot(Vector2.left);
+            }
+
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                ChangeSelectSlot(Vector2.up);
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                ChangeSelectSlot(Vector2.down);
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Manager.Game.SetText(ex.Message);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            ChangeSelectSlot(Vector2.left);
-        }
-
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            ChangeSelectSlot(Vector2.up);
-        }
-
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            ChangeSelectSlot(Vector2.down);
-        }
+        
     }
 
     private void ChangeSelectSlot(Vector2 movePos)
@@ -192,6 +219,7 @@ public class InventoryPresenter : BaseUI, IInventory
 
         if (item != null)
         {
+            _itemSlotUIs.SlotUIs[_itemSlotUIs.SelectedSlotIndex].ItemImage.gameObject.SetActive(true);
             GetUI<TextMeshProUGUI>("ItemNameText").text = item.itemName;
             GetUI<TextMeshProUGUI>("ItemDescriptionText").text = item.description;
         }
@@ -204,6 +232,11 @@ public class InventoryPresenter : BaseUI, IInventory
 
     public void Activate(int index)
     {
+        if(_moveSound != null)
+        {
+            Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
+        }
+
         _isSwitchActivate = true;
 
         index = SetSelectIndex(index);
@@ -258,5 +291,10 @@ public class InventoryPresenter : BaseUI, IInventory
         }
 
         return 0;
+    }
+
+    public void DestroyInven()
+    {
+        Destroy(gameObject);
     }
 }

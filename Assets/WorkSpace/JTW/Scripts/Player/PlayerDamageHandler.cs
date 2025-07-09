@@ -6,6 +6,8 @@ public partial class PlayerStats
 {
     public Stat<bool> IsTakeDamage = new();
 
+    public Stat<bool> IsDied = new();
+
     internal void ReduceFatigue(float v)
     {
     }
@@ -13,6 +15,8 @@ public partial class PlayerStats
 
 public class PlayerDamageHandler : MonoBehaviour, IDamageable
 {
+    [SerializeField] AudioClip _hitSound;
+
     private PlayerStats Stats => Manager.Player.Stats;
     private Animator _animator;
 
@@ -26,11 +30,11 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
         if (Stats.CurHp.Value <= 0) return;
 
         Manager.Player.Stats.IsTakeDamage.Value = true;
-        Manager.Player.Stats.isFarming = true;
         StartCoroutine(TakeDamageCoroutine());
         _animator.Play("BatTakeDamage");
+        Manager.Sound.SfxPlay(_hitSound, transform);
 
-        if(Random.value < 0.1)
+        if (Random.value < 0.1)
         {
             Manager.Player.Stats.Buff.Value = PlayerBuffs.Fear;
         }
@@ -51,7 +55,10 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
 
     public void Die()
     {
-        Manager.Game.GameStart();
+        Manager.Player.Stats.IsDied.Value = true;
+        _animator.Play("Die");
+
+        StartCoroutine(DieCoroutine());
     }
 
     public IEnumerator TakeDamageCoroutine()
@@ -59,6 +66,13 @@ public class PlayerDamageHandler : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(1f);
 
         Manager.Player.Stats.IsTakeDamage.Value = false;
-        Manager.Player.Stats.isFarming = false;
+    }
+
+    public IEnumerator DieCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
+
+
+        Manager.Game.ChangeScene("GameOverScene");
     }
 }

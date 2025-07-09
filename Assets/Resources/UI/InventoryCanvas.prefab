@@ -92,7 +92,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5373233120436397630}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
@@ -114,3 +114,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025065272562157448f01287f450b276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bubbleTextSound: {fileID: 8300000, guid: 8d372b9d1a738c54fbe91b285bfc2236, type: 3}

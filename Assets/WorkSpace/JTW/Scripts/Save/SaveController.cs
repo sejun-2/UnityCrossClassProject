@@ -80,9 +80,14 @@ public class SaveController
         data.IsGetSubStory = Manager.Game.IsGetSubStory;
         data.IsUsedObject = Manager.Game.IsUsedObject;
         data.IsTalkDialogue = Manager.Game.IsTalkDialogue;
+        data.IsGetDiary = Manager.Game.IsGetDiary;
 
         data.IsInBaseCamp = Manager.Game.IsInBaseCamp;
-        data.SelectedMapName = Manager.Game.SelectedMapName;
+        data.SelectedMapName = Manager.Game.SelectedSceneName;
+
+        data.Day = Manager.Game.Day;
+
+        Manager.Game.SavedData = data;
 
         string json = JsonConvert.SerializeObject(data, Formatting.Indented);
         File.WriteAllText(_savePath, json);

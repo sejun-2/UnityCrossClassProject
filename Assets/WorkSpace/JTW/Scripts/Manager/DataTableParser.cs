@@ -30,6 +30,7 @@ public class DataTableParser<T> where T : IUsableID
             for (int j = 0; j < fields.Length; j++)
             {
                 fields[j] = fields[j].Trim().Trim('"').Trim('$');
+                fields[j] = fields[j].Replace("$", "");
             }
 
             

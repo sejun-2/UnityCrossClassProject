@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class DangerPopUpPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _closeSound;
+
     private TextMeshProUGUI _descriptoinText;
     private PlayerStats Stats => Manager.Player.Stats;
 
@@ -55,14 +57,23 @@ public class DangerPopUpPresenter : BaseUI
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
             Destroy(gameObject);
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            Manager.Player.BuffStats.ApplyBuff();
-            Manager.Game.IsInBaseCamp = false;
-            Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
+            if(Manager.Game.BarricadeHp <= 30)
+            {
+                Manager.Game.ChangeScene("GameOverScene");
+            }
+            else
+            {
+                Manager.Player.BuffStats.ApplyBuff();
+                Manager.Game.IsInBaseCamp = false;
+                Manager.Game.ChangeScene(Manager.Game.SelectedSceneName);
+            }
+
         }
     }
 }

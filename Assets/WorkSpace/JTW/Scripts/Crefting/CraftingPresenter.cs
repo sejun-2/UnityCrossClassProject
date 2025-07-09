@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class CraftingPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _completeSound;
+    [SerializeField] private AudioClip _closeSound;
+
     [SerializeField] private ItemSlotUIs _categorySlotUIsPrefab;
     [SerializeField] private ItemSlotUIs _needItemSlotUIsPrefab;
     [SerializeField] private ItemSlotUIs _itemSlotUIsPrefab;
@@ -50,6 +53,8 @@ public class CraftingPresenter : BaseUI
     {
         if (_resultUI != null) return;
 
+        if (Manager.Player.Stats.IsControl.Value) return;
+
         MoveInventory();
 
         if (Input.GetKeyDown(KeyCode.Z) && _canCraft && _isInResultItems)
@@ -58,6 +63,7 @@ public class CraftingPresenter : BaseUI
             Debug.Log($"{item.name} 아이템 제작");
 
             Manager.Game.ItemBox.AddItem(item);
+            Manager.Sound.SfxPlay(_completeSound, Manager.Player.Transform);
 
             foreach(NeedItem need in _needItemList[_categorySlots.SelectedSlotIndex][_selectedResultItemSlots.SelectedSlotIndex])
             {
@@ -74,7 +80,7 @@ public class CraftingPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            Debug.Log("ddddddddd");
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
             Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }
@@ -125,6 +131,7 @@ public class CraftingPresenter : BaseUI
 
     private void MoveInventory()
     {
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             ChangeSelectSlot(Vector2.right);

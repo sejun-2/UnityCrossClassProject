@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryCanvas : UICanvas<InventoryCanvas>
 {
+    [SerializeField] private AudioClip _bubbleTextSound;
+
     #region Inven,ItemBox,Farming
     public void ShowInven()
     {
@@ -118,12 +121,12 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
     private GameObject _bubble;
     private Coroutine _bubbleCoroutine;
 
-    public void ShowBubbleText(string dialogueId) => ShowBubbleText(new List<string>() { dialogueId });
+    public void ShowBubbleText(string dialogueId, bool isLoop = false) => ShowBubbleText(new List<string>() { dialogueId }, isLoop);
 
-    public void ShowBubbleText(List<string> dialogueIdList)
+    public void ShowBubbleText(List<string> dialogueIdList, bool isLoop = false)
     {
         if (dialogueIdList.Count <= 0) return;
-        if (Manager.Game.IsTalkDialogue[dialogueIdList[0]]) return;
+        if (!isLoop && Manager.Game.IsTalkDialogue[dialogueIdList[0]] && dialogueIdList[0] != "20013") return;
 
         if (_bubbleCoroutine != null)
         {
@@ -136,6 +139,8 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
 
     private IEnumerator BubbleTextCoroutine(List<string> dialogueIdList)
     {
+        Manager.Sound.SfxPlay(_bubbleTextSound, Manager.Player.Transform);
+
         foreach(string dialogueId in dialogueIdList)
         {
             Manager.Game.IsTalkDialogue[dialogueId] = true;
@@ -200,5 +205,61 @@ public class InventoryCanvas : UICanvas<InventoryCanvas>
         GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/DangerPopUp");
 
         return Instantiate(prefab, transform);
+    }
+    
+    public void ShowDiaryUI()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/DiaryUI");
+
+        Instantiate(prefab, transform);
+    }
+
+    public GameObject ShowTutorialUI(Transform transform, Sprite sprite)
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/TutorialUI");
+
+        GameObject obj = Instantiate(prefab, base.transform);
+
+        if(sprite != null)
+        {
+            obj.GetComponent<Image>().sprite = sprite;
+        }
+
+        StartCoroutine(TutorialUICoroutine(obj, transform));
+
+        return obj;
+    }
+
+    private IEnumerator TutorialUICoroutine(GameObject obj, Transform transform)
+    {
+        RectTransform rt = obj.GetComponent<RectTransform>();
+
+        while(obj != null)
+        {
+            if (Manager.Player.Stats.isFarming)
+            {
+                obj.SetActive(false);
+            }
+            else
+            {
+                obj.SetActive(true);
+            }
+
+            Vector3 pos = transform.position;
+            pos.y = Manager.Player.Transform.position.y + 2;
+
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
+
+            rt.position = screenPos;
+
+            yield return null;
+        }
+    }
+
+    public void ShowExitPopUp()
+    {
+        GameObject prefab = Resources.Load<GameObject>($"UI/Inventory/ExitPopUp");
+
+        Instantiate(prefab, transform);
     }
 }

@@ -17,5 +17,14 @@ public class EndPopUp : BaseUI
         {
             Manager.UI.PopUp.ClosePopUp();
         }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
     }
 }

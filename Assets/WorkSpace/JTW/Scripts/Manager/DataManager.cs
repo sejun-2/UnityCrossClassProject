@@ -20,6 +20,7 @@ public class DataManager : Singleton<DataManager>
     private const string _collectionTableURL = "https://docs.google.com/spreadsheets/d/1ENjiapwS04BGDNb0deCfDL-jgbC6V_5IBS-3GkPyatM/export?format=csv&gid=0";
     private const string _playerDialogueTableURL = "https://docs.google.com/spreadsheets/d/1aMfYaGA6_9bvLPwBczY-up_UYgHt4Lg4W-OtRcmY-fU/export?format=csv&gid=0";
     private const string _storyInteractionTableURL = "https://docs.google.com/spreadsheets/d/1xXIKjSYGImAvAOTsWEFn2g5vRKb1eiMiiPU-nt60pd4/export?format=csv&gid=0";
+    private const string _diaryTableURL = "https://docs.google.com/spreadsheets/d/15TfyXgmTGZIF4K_6F0N08yQnAkPemsNydSO5vhFJfSU/export?format=csv&gid=0";
 
     public DataTableParser<Item> ItemData;
     public DataTableParser<CraftingData> CraftingData;
@@ -30,6 +31,7 @@ public class DataManager : Singleton<DataManager>
     public DataTableParser<CollectionData> CollectionData;
     public DataTableParser<PlayerDialogueData> PlayerDialogueData;
     public DataTableParser<StoryInteractionData> StoryInteractionData;
+    public DataTableParser<DiaryData> DiaryData;
 
     private void Awake()
     {
@@ -42,6 +44,7 @@ public class DataManager : Singleton<DataManager>
         StartCoroutine(DownloadStoryRoutine());
         StartCoroutine(DownloadPlayerDialogueRoutine());
         StartCoroutine(DownloadStoryInteractionRoutine());
+        StartCoroutine(DownloadDiaryRoutine());
     }
 
     #region DownloadItem
@@ -322,8 +325,6 @@ public class DataManager : Singleton<DataManager>
 
             if (string.IsNullOrEmpty(words[0])) return null;
 
-            Debug.Log(words[0]);
-
             story.ID = words[0];
             Manager.Game.IsGetSubStory[words[0]] = false;
             string iconName = words[1].Trim();
@@ -397,6 +398,39 @@ public class DataManager : Singleton<DataManager>
         });
 
         StoryInteractionData.Load(dataCsv);
+    }
+
+    #endregion
+
+    #region DownloadDiary
+
+    IEnumerator DownloadDiaryRoutine()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(_diaryTableURL);
+        yield return request.SendWebRequest();
+        string dataCsv = request.downloadHandler.text;
+
+        DiaryData = new DataTableParser<DiaryData>(words =>
+        {
+            DiaryData diary = new();
+
+            diary.Id = words[0];
+            Manager.Game.IsGetDiary[words[0]] = false;
+
+            diary.Name = words[1];
+            diary.Description = words[3];
+
+            for (int i = 5; i < 7; i++)
+            {
+                if (string.IsNullOrEmpty(words[i])) break;
+
+                diary.PlayerDialogueIndexList.Add(words[i]);
+            }
+
+            return diary;
+        });
+
+        DiaryData.Load(dataCsv);
     }
 
     #endregion

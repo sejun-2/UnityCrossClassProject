@@ -1,28 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingPopUp : BaseUI
 {
     [Header("탭 버튼")]
     [SerializeField] private Button SoundButton;
-    [SerializeField] private Button LanguageButton;
 
     [Header("패널")]
     [SerializeField] private GameObject SoundPanel;
-    [SerializeField] private GameObject LanguagePanel;
 
     [Header("슬라이더")]
     [SerializeField] public Slider MasterVolume;
     [SerializeField] public Slider BgmVolume;
     [SerializeField] public Slider SfxVolume;
 
+    [SerializeField] private TextMeshProUGUI _masterText;
+    [SerializeField] private TextMeshProUGUI _bgmText;
+    [SerializeField] private TextMeshProUGUI _sfxText;
+
+    [SerializeField] private AudioClip _moveSound;
+    [SerializeField] private AudioClip _clickSound;
+
     [Header("사운드 패널 내 네비게이션")]
     [SerializeField] private Selectable[] SoundSelectables; // MasterVolume, BgmVolume, SfxVolume 등
-    [Header("언어 패널 내 네비게이션")]
-    [SerializeField] private Selectable[] LanguageSelectables; // 언어 관련 버튼 등
 
     [Header("메인 메뉴 참조")]
     [SerializeField] private MainMenuPopUp mainMenuPopUp; // Inspector에서 MainMenuPopUp 연결
@@ -30,19 +35,39 @@ public class SettingPopUp : BaseUI
     int selectedIndex = 0;  // 현재 선택된 버튼의 인덱스
     private Selectable[] currentSelectables;
 
+    private GameObject _inGamePanel;
+
     private void OnEnable()
     {
         // Setting 창이 열릴 때 첫 탭 활성화 및 첫 요소 포커스
         SwitchTab(0);
+
+        _inGamePanel = GetUI("InGamePanel");
+
+        if (SceneManager.GetActiveScene().name == "TitleScene")
+        {
+            _inGamePanel.SetActive(false);
+        }
+        else
+        {
+            _inGamePanel.SetActive(true);
+        }
     }
 
     private void Start()
     {
         Debug.Log(GetEvent("SettingPopUp열림")); // SettingMenu UI가 시작될 때 로그를 출력합니다.
 
+        _masterText = GetUI<TextMeshProUGUI>("MasterText");
+        _bgmText = GetUI<TextMeshProUGUI>("BgmText");
+        _sfxText = GetUI<TextMeshProUGUI>("SfxText");
+
+        MasterVolume.value = Manager.Sound.MasterVolume * 100;
+        BgmVolume.value = Manager.Sound.BgmVolume * 100;
+        SfxVolume.value = Manager.Sound.SfxVolume * 100;
+
         // 탭 버튼 클릭 이벤트 연결 (마우스 클릭용, 키보드는 Z키로 처리)
         SoundButton.onClick.AddListener(() => SwitchTab(0));
-        LanguageButton.onClick.AddListener(() => SwitchTab(1));
 
         // 최초 사운드 탭 활성화
         SwitchTab(0);
@@ -52,14 +77,10 @@ public class SettingPopUp : BaseUI
     {
         bool isSound = tabIndex == 0;
         SoundPanel.SetActive(isSound);
-        LanguagePanel.SetActive(!isSound);
 
-        // 탭 버튼 하이라이트(선택) 효과
-        SoundButton.interactable = !isSound;
-        LanguageButton.interactable = isSound;
 
         // 현재 선택 가능한 UI 배열 교체
-        currentSelectables = isSound ? SoundSelectables : LanguageSelectables;
+        currentSelectables = SoundSelectables;
         selectedIndex = 0;
         if (currentSelectables != null && currentSelectables.Length > 0 && currentSelectables[0] != null)
         {
@@ -75,11 +96,13 @@ public class SettingPopUp : BaseUI
         // 위/아래 방향키로 선택 이동
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
+            Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
             selectedIndex = (selectedIndex - 1 + currentSelectables.Length) % currentSelectables.Length;
             SelectCurrent();
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
             selectedIndex = (selectedIndex + 1) % currentSelectables.Length;
             SelectCurrent();
         }
@@ -97,10 +120,6 @@ public class SettingPopUp : BaseUI
                 {
                     SwitchTab(0);
                 }
-                else if (btn == LanguageButton)
-                {
-                    SwitchTab(1);
-                }
                 else
                 {
                     btn.onClick.Invoke();
@@ -111,23 +130,39 @@ public class SettingPopUp : BaseUI
         // x키로 팝업 닫기
         if (Input.GetKeyDown(KeyCode.X))
         {
-            OnCloseSetting();
-
+            Manager.Sound.SfxPlay(_clickSound, Camera.main.transform);
+            Manager.UI.PopUp.ClosePopUp();
         }
 
         // 사운드 값 실시간 반영
         if (MasterVolume != null && BgmVolume != null && SfxVolume != null && Manager.Sound != null)
         {
-            Manager.Sound.MasterVolume = MasterVolume.value;
-            Manager.Sound.BgmVolume = BgmVolume.value;
-            Manager.Sound.SfxVolume = SfxVolume.value;
+            Manager.Sound.MasterVolume = MasterVolume.value / 100;
+            Manager.Sound.BgmVolume = BgmVolume.value / 100;
+            Manager.Sound.SfxVolume = SfxVolume.value / 100;
+
+            string masterText = (Mathf.Round(Manager.Sound.MasterVolume * 100)).ToString();
+            string bgmText = (Mathf.Round(Manager.Sound.BgmVolume * 100)).ToString();
+            string sfxText = (Mathf.Round(Manager.Sound.SfxVolume * 100)).ToString();
+
+            if(masterText != _masterText.text || bgmText != _bgmText.text || sfxText != _sfxText.text)
+            {
+                Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
+            }
+
+
+            _masterText.text = masterText;
+            _bgmText.text = bgmText;
+            _sfxText.text = sfxText;
         }
     }
 
     private void SelectCurrent()
     {
         if (currentSelectables[selectedIndex] != null)
+        {
             EventSystem.current.SetSelectedGameObject(currentSelectables[selectedIndex].gameObject);
+        }
     }
 
     // X버튼, ESC 등에서 호출

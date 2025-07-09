@@ -20,7 +20,10 @@ public class GameData
     public Dictionary<string, bool> IsUsedObject = new Dictionary<string, bool>();
     public Dictionary<string, bool> IsGetSubStory = new Dictionary<string, bool>();
     public Dictionary<string, bool> IsTalkDialogue = new Dictionary<string, bool>();
+    public Dictionary<string, bool> IsGetDiary = new Dictionary<string, bool>();
 
     public bool IsInBaseCamp;
     public string SelectedMapName;
+
+    public int Day;
 }

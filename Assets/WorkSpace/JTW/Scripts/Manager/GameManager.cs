@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
+    [SerializeField] private TextMeshProUGUI _text;
+
     public Inventory Inven;
     public ItemBoxData ItemBox;
 
@@ -14,13 +17,19 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, bool> IsUsedObject = new Dictionary<string, bool>();
     public Dictionary<string, bool> IsGetSubStory = new Dictionary<string, bool>();
     public Dictionary<string, bool> IsTalkDialogue = new Dictionary<string, bool>();
+    public Dictionary<string, bool> IsGetDiary = new Dictionary<string, bool>();
 
     public bool IsInBaseCamp = true;
+    public string SelectedSceneName = "";
     public string SelectedMapName = "";
+
 
     public float BarricadeHp = 100;
 
+    public int Day = 1;
+
     private SaveController _saveContoroller = new SaveController();
+    public GameData SavedData;
 
     private PlayerStats Stats => Manager.Player.Stats;
 
@@ -33,16 +42,26 @@ public class GameManager : Singleton<GameManager>
         ItemBox = new ItemBoxData();
 
         _saveContoroller.InitPath();
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void GameStart()
     {
         GameData data = _saveContoroller.LoadGameData();
+        SavedData = data;
+
+        Manager.Sound.BgmPlay(null);
 
         if (data == null)
         {
             InitGameData();
             IsGetSubStory["6001"] = true;
+            IsGetDiary["7001"] = true;
+            IsInBaseCamp = false;
+            SelectedSceneName = "Tutorial";
+            SelectedMapName = "버려진 폐건물";
             Manager.Player.Stats.InitStats();
             ChangeScene("Tutorial");
         }
@@ -50,6 +69,16 @@ public class GameManager : Singleton<GameManager>
         {
             LoadSaveData(data);
         }
+    }
+
+    public bool IsSaved()
+    {
+        if(SavedData == null)
+        {
+            SavedData = _saveContoroller.LoadGameData();
+        }
+
+        return SavedData != null;
     }
 
     public void ChangeScene(string sceneName)
@@ -74,6 +103,8 @@ public class GameManager : Singleton<GameManager>
         Stats.ChangeMentality(-15);
 
         BarricadeHp -= 20;
+
+        Day++;
 
         MoveInvenItemToItemBox();
 
@@ -143,7 +174,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         IsInBaseCamp = false;
-        SelectedMapName = "Tutorial";
+        SelectedSceneName = "Tutorial";
     }
 
     public void LoadSaveData(GameData data)
@@ -186,9 +217,12 @@ public class GameManager : Singleton<GameManager>
         IsUsedObject = data.IsUsedObject;
         IsGetSubStory = data.IsGetSubStory;
         IsTalkDialogue = data.IsTalkDialogue;
+        IsGetDiary = data.IsGetDiary;
 
         IsInBaseCamp = data.IsInBaseCamp;
-        SelectedMapName = data.SelectedMapName;
+        SelectedSceneName = data.SelectedMapName;
+
+        Day = data.Day;
 
         if (IsInBaseCamp)
         {
@@ -196,7 +230,12 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            ChangeScene(SelectedMapName);
+            ChangeScene(SelectedSceneName);
         }
+    }
+
+    public void SetText(string text)
+    {
+        _text.text = text;
     }
 }

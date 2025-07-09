@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class ItemBoxPresenter : BaseUI, IInventory
 {
+    [SerializeField] private AudioClip _moveSound;
+    [SerializeField] private AudioClip _closeSound;
+
     [SerializeField] private GameObject _categorySlotsPrefab;
     [SerializeField] private GameObject _itemSlotsPrefab;
 
@@ -44,11 +47,15 @@ public class ItemBoxPresenter : BaseUI, IInventory
     private void Update()
     {
         if (_dangerPopUp != null) return;
+        if (Manager.Player.Stats.IsControl.Value) return;
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
+
             if (IsTrade)
             {
+                _inventoryForTrade.DestroyInven();
                 Manager.UI.Inven.ShowMapUI();
             }
             else
@@ -71,7 +78,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
             {
                 Manager.Player.BuffStats.ApplyBuff();
                 Manager.Game.IsInBaseCamp = false;
-                Manager.Game.ChangeScene(Manager.Game.SelectedMapName);
+                Manager.Game.SaveGameData();
+                Manager.Game.ChangeScene(Manager.Game.SelectedSceneName);
             }
         }
 
@@ -135,6 +143,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
         _categorySlots = Instantiate(_categorySlotsPrefab, _categoryPanel.transform).GetComponent<ItemSlotUIs>();
         _categorySlots.SetPanelSize(new Vector2(4, 1));
+        _categorySlots.SetLineCount(4);
         for(int i = 0; i < 4; i++)
         {
             _categorySlots.AddSlotUI(maxItemCount:0);
@@ -146,6 +155,7 @@ public class ItemBoxPresenter : BaseUI, IInventory
         {
             _itemSlotsList.Add(Instantiate(_itemSlotsPrefab, _itemSlotsPanel.transform).GetComponent<ItemSlotUIs>());
             _itemSlotsList[i].SetPanelSize(new Vector2(4, 4));
+            _itemSlotsList[i].SetLineCount(4);
             _itemSlotsList[i].AcceptTypeList = _acceptTypeLists[i];
             _itemSlotsList[i].gameObject.SetActive(false);
         }
@@ -368,6 +378,8 @@ public class ItemBoxPresenter : BaseUI, IInventory
 
     public void Activate(int index)
     {
+        Manager.Sound.SfxPlay(_moveSound, Camera.main.transform);
+
         if (_isInItemSlots)
         {
             index = SetSelectIndex(_selectedItemSlots, index);
@@ -435,5 +447,10 @@ public class ItemBoxPresenter : BaseUI, IInventory
         }
 
         return 0;
+    }
+
+    public void DestroyInven()
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MapUIPresenter : BaseUI
 {
+    [SerializeField] private AudioClip _closeSound;
+
     [SerializeField] private GameObject _itemSlotUIsPrefab;
 
     private GameObject _mapSlotsPanel;
@@ -23,13 +25,15 @@ public class MapUIPresenter : BaseUI
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            Manager.Game.SelectedMapName = _mapPoints[_selectedMapIndex].SceneName;
+            Manager.Game.SelectedMapName = _mapPoints[_selectedMapIndex].MapName;
+            Manager.Game.SelectedSceneName = _mapPoints[_selectedMapIndex].SceneName;
             Manager.UI.Inven.ShowTradeItemBox();
             Destroy(gameObject);
         }
 
         if (Input.GetKeyDown(KeyCode.X))
         {
+            Manager.Sound.SfxPlay(_closeSound, Camera.main.transform);
             Manager.Player.Stats.isFarming = false;
             Destroy(gameObject);
         }

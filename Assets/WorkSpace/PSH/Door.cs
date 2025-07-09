@@ -3,6 +3,7 @@ using UnityEngine;
 public class Door : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject linkedDarkness;
+    [SerializeField] private GameObject linkedDarkness2;
 
     private bool _isOpen = false;
 
@@ -27,6 +28,8 @@ public class Door : MonoBehaviour, IInteractable
             Manager.Sound.SfxPlay(audioClip1, transform, .5f);
             if (linkedDarkness != null)           
                 linkedDarkness.SetActive(false);
+            if (linkedDarkness2 != null)
+                linkedDarkness2.SetActive(false);
 
         }
         else

@@ -6,24 +6,27 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/WorkSpace/JTW/Demo2/Scene/TitleScene.unity
-    guid: 702cf79ef6ee6ad4989c361733cd8c8c
+    path: Assets/WorkSpace/JTW/Demo3/Scene/StartScene.unity
+    guid: 29370571d3feff84fa38d8439ef9515b
   - enabled: 1
-    path: Assets/WorkSpace/JTW/Demo2/Scene/Tutorial.unity
-    guid: 0ee673fe070d48047839f1193edf2d6c
+    path: Assets/WorkSpace/JTW/Demo3/Scene/TitleScene.unity
+    guid: c886d7923d2edd947b0576a7821456eb
   - enabled: 1
-    path: Assets/WorkSpace/JTW/Demo2/Scene/BaseCamp.unity
-    guid: b527b339a503de545b6121e44a52426d
+    path: Assets/WorkSpace/JTW/Demo3/Scene/Tutorial.unity
+    guid: 416142d520c2d3443a4e39c497c936b8
   - enabled: 1
-    path: Assets/WorkSpace/JTW/Demo2/Scene/Hospital.unity
-    guid: f2f6d913d606a074eab9a7369ebd3df2
+    path: Assets/WorkSpace/JTW/Demo3/Scene/BaseCamp.unity
+    guid: 90fe94f7aa5522f4b853308b5339b4fc
   - enabled: 1
-    path: Assets/WorkSpace/JTW/Demo2/Scene/School.unity
-    guid: c3636b293086ab347a3a8af74f591584
+    path: Assets/WorkSpace/JTW/Demo3/Scene/Hospital.unity
+    guid: 4c18ef22e3024304eb24a0c07ea078d3
   - enabled: 1
-    path: Assets/WorkSpace/LSJ/TitleScene.unity
-    guid: 14f7b5a61f5992a4da63acfabc5b1b13
+    path: Assets/WorkSpace/JTW/Demo3/Scene/School.unity
+    guid: 2379f42efdd226a4081056edf719f7f9
   - enabled: 1
-    path: Assets/WorkSpace/LSJ/New Scene.unity
-    guid: 87567ecd5faf8844198fdf343390be9d
+    path: Assets/WorkSpace/JTW/Demo3/Scene/GameOverScene.unity
+    guid: 81debc066434d0c43b27707e67def6d4
+  - enabled: 1
+    path: Assets/WorkSpace/JTW/Demo3/Scene/SchoolObject.unity
+    guid: c49fa6c4bd8c95a4ca23f37441ab4d4a
   m_configObjects: {}
