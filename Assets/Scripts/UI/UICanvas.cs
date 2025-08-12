@@ -17,7 +17,7 @@ public class UICanvas<T> : MonoBehaviour where T : MonoBehaviour
                 return _instance;
 
             T prefab = Resources.Load<T>($"UI/{typeof(T).Name}");   // Resources 폴더에서 T 타입의 프리팹을 로드합니다.
-            return Instantiate(prefab);
+            return Instantiate(prefab); // 프리팹을 인스턴스화하여 반환합니다.
         }
     }
 }

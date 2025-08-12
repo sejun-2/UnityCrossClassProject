@@ -534,10 +534,11 @@ public class PlayerInteraction : MonoBehaviour
 
     private IEnumerator NotRotateAndInteract()
     {
+        IInteractable interactable = Manager.Player.Stats.CurrentNearby;
 
         yield return wait1Sec;
 
-        Manager.Player.Stats.CurrentNearby.Interact();
+        interactable.Interact();
 
         Manager.Player.Stats.isFarming = false;
     }
